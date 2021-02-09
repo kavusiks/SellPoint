@@ -1,10 +1,10 @@
-# SellPoint Frontend
+# [SellPoint](../README.md) > Frontend
 
-Implemented using [React](https://reactjs.org/) and [TypeScript](https://www.typescriptlang.org/).
+This folder contains the SellPoint frontend. Implemented using [React](https://reactjs.org/) and [TypeScript](https://www.typescriptlang.org/).
 
 ## Getting Started
 
-Requires [Yarn](https://yarnpkg.com/).
+Requires [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/).
 
 To install all dependencies run
 ```bash
