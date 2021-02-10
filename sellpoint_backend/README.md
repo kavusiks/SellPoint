@@ -20,7 +20,7 @@ $ source venv/bin/activate
 $ python manage.py runserver
 ```
 
-If running Windows use `venv\bin\activate` instead of `source venv/bin/activate`.
+If running Windows use `venv\bin\activate` instead of `source venv/bin/activate`. Remember to activate 
 
 This will launch the app at [http://localhost:8000](http://localhost:8000). Django admin panel available at [http://localhost:8000/admin](http://localhost:8000/admin).
 
@@ -43,6 +43,14 @@ $ python manage.py makemigrations
 $ python manage.py migrate
 ```
 
+## Run tests
+
+To run tests run
+```bash
+$ python manage.py test
+```
+
 ## Further Reading
 
  - [Django](https://www.djangoproject.com/start/)
+ - [Django Testing](https://docs.djangoproject.com/en/3.1/topics/testing/overview/)
