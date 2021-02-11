@@ -4,8 +4,8 @@
 
 *.sqlite3
 
-/venv
-/env
+**/venv
+**/env
 
 # dependencies
 */node_modules
