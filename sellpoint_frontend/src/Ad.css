@@ -1,0 +1,25 @@
+.page {
+  margin-left: 2%;
+}
+
+.parent {
+  display: block;
+  width: 30%;
+}
+
+.Adimage {
+  display: block;
+  width: 100%;
+  height: auto;
+  }
+
+.title{
+  
+}
+
+.price {
+}
+
+.description {
+  margin-right: 40%;
+}
