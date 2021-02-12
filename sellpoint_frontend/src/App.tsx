@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from "react";
-import "./App.css";
 import { Button } from "react-bootstrap";
-import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
-import Form from 'react-bootstrap/Form'
-import FormControl from 'react-bootstrap/FormControl'
+import "./App.css";
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+
 
 
 const App: FunctionComponent = () => {
@@ -46,7 +47,9 @@ const App: FunctionComponent = () => {
     </div>
 
     </div>
+
   );
 };
+
 
 export default App;
