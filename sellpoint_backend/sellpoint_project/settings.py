@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sellpoint_app.apps.SellpointAppConfig',
+    'sellpoint_auth.apps.SellpointAuthConfig',
     'rest_framework'
 ]
 
@@ -80,7 +80,7 @@ TEMPLATES = [
     },
 ]
 
-AUTH_USER_MODEL = 'sellpoint_app.User'
+AUTH_USER_MODEL = 'sellpoint_auth.User'
 WSGI_APPLICATION = 'sellpoint_project.wsgi.application'
 
 
