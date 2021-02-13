@@ -1,7 +1,7 @@
-export interface AuthRefreshTokens {
-    access: string
+export interface AuthAccessToken {
+    access: string;
 }
 
-export interface AuthLoginTokens extends AuthRefreshTokens {
+export interface AuthAccessRefreshToken extends AuthAccessToken {
     refresh: string;
 }

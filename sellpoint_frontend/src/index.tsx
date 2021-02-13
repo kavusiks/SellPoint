@@ -4,7 +4,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { SessionContextProvider } from "./context/session";
+import { SessionContextProvider } from "./context/Session";
 
 ReactDOM.render(
   <React.StrictMode>
