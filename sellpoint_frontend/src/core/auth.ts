@@ -101,7 +101,7 @@ class AuthenticationService {
   }
 
   isLoggedIn(): boolean {
-    return !!cookies.get(COOKIE_ACCESS_TOKEN);
+    return !!cookies.get(COOKIE_REFRESH_TOKEN);
   }
 
   getAccessToken(): string {
