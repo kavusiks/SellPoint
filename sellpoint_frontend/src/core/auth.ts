@@ -32,7 +32,7 @@ class AuthenticationService {
         }
 
         // Log out the user if we are forbidden from refreshing or logging in
-        if (error.config.url === "/auth/token" || error.config.url === "/auth/refresh") {
+        if (error.config.url === "auth/token/" || error.config.url === "auth/refresh/") {
           this.logOut();
 
           return new Promise((resolve, reject) => reject(error));
