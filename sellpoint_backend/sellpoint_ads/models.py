@@ -1,7 +1,11 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+import os
 #from sellpoint_auth import User
+
+def get_image_path(instance, filename):
+    return os.path.join('photos', str(instance.id), filename)
 
 class Category(models.Model):
     name = models.CharField(max_length=200, unique=True, blank=False)
@@ -15,7 +19,7 @@ class Ad(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     is_sold = models.BooleanField(_('Is sold'), default=False)
     #location =
-    #image = models.ImageField(_(""), upload_to=None, height_field=None, width_field=None, max_length=None)
+    image = models.ImageField(_("Image for one ad"), upload_to=get_image_path, height_field=None, width_field=None, max_length=None, null=True, blank=True)
     #owner = models.ForeignKey(User, on_delete=models.CASCADE)
     
 
