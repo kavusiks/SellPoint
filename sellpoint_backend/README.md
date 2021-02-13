@@ -1,6 +1,6 @@
 # [SellPoint](../README.md) > Backend
 
-This folder the SellPoint backend. Implemented using Django.
+This folder the SellPoint backend. Implemented using Django. Endpoints are outlined [here](./ENDPOINTS.md).
 
 ## Getting Started
 
