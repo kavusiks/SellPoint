@@ -1,21 +1,9 @@
 import React, { FunctionComponent } from "react";
-import "./Ad.css";
 
-interface Props{
-    //Kommer til å endre dette til å referer til ad i databasen
-    price?: number,
-    image?: string,
-    description?: string,
-    title?: string,
+import {Ad} from '../models/ad' 
+import AdAPI from '../core/api/adAPI'
 
-    //Kommer til å endre dette til å referere til en bruker i databasen
-    user?: string
-
-}
-
-
-
-const Ad: React.FC<Props> = ({price, title, image, description}) => {
+const AdComponent: React.FC<Ad> = ({price, title, image, description}) => {
     return (
       <div className="page">
           <div className="parent">
@@ -33,4 +21,4 @@ const Ad: React.FC<Props> = ({price, title, image, description}) => {
     );
   };
   
-  export default Ad;
+  export default AdComponent;
