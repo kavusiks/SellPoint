@@ -7,5 +7,5 @@ urlpatterns = [
          name='token_obtain_pair'),
     path('refresh/', jwt_views.TokenRefreshView.as_view(),
          name='token_refresh'),
-    path('api/register', RegisterApi.as_view())
+    path('register/', RegisterApi.as_view())
 ]
