@@ -1,9 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { Button, Col, Container, Form } from "react-bootstrap";
+//import { Link } from 'react-router-dom';
 
 
 
-const CreateUser: FunctionComponent = () => {
+export const CreateUserForm: FunctionComponent = () => {
   return (
     <div>
       <Container>
@@ -52,4 +53,4 @@ const CreateUser: FunctionComponent = () => {
 };
 
 
-export default CreateUser;
+export default CreateUserForm;

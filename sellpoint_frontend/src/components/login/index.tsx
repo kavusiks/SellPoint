@@ -3,13 +3,14 @@ import { Container, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from 'react-bootstrap/Form';
 import styled from "styled-components";
+import { Link } from 'react-router-dom';
 
 const CenteredRow = styled(Row)`
 align-items: center;
 justify-content:
 `
 
-const LoginForm: FunctionComponent = () => {
+export const LoginForm: FunctionComponent = () => {
   return (
     <Container>
       <Form>
@@ -36,9 +37,11 @@ const LoginForm: FunctionComponent = () => {
           </Button>
         </Row>
         <Row>
+        <Link to ={'/createUser'}>
           <Button variant="primary" type="submit">
           Create User
           </Button>
+          </Link>
         </Row>
       </Form>
     </Container>
