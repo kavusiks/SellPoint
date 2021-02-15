@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sellpoint_auth.apps.SellpointAuthConfig',
-    'rest_framework'
+    'rest_framework',
+    #'sellpoint_auth' #usikker
 ]
 
 REST_FRAMEWORK = {
