@@ -2,10 +2,9 @@ import React, { FunctionComponent } from "react";
 
 import "./App.css";
 //import {Switch, Route, Router } from "react-router-dom";
-import { LoginForm }  from "./components/login"
+import { LoginForm } from "./components/login";
 import { CreateUserForm } from "./components/create_user";
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const App: FunctionComponent = () => {
   return (
@@ -14,16 +13,12 @@ const App: FunctionComponent = () => {
       <p>Velkommen!</p>
 
       <Router>
-      <Switch>
-        <Route exact path="/" component ={LoginForm} />
-        <Route path="/createUser" component = {CreateUserForm} /> 
-
-
-      </Switch>
-    </Router>
+        <Switch>
+          <Route path="/login" component={LoginForm} exact />
+          <Route path="/signup" component={CreateUserForm} exact />
+        </Switch>
+      </Router>
     </div>
-
-
   );
 };
 
