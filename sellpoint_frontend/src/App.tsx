@@ -8,6 +8,7 @@ const App: FunctionComponent = () => {
       <AdComponent title="hei" price={2}/>
    </div>
   );
+  
 };
 
 export default App;
