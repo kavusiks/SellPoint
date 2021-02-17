@@ -93,7 +93,7 @@ export const LoginForm: FunctionComponent<FormProps> = ({ setError }: FormProps)
         <StyledButton variant="primary" type="submit">
           Logg inn
         </StyledButton>
-        <StyledButton variant="secondary" href="/signup">
+        <StyledButton variant="secondary" href="/register">
           Opprett konto
         </StyledButton>
       </CenteredRow>
