@@ -6,25 +6,36 @@ import UserAPI from "../core/api/user";
 
 export const useProviderValue = (): Session => {
   const [user, setUser] = useState<User | undefined>(undefined);
-  const [redirectPath, setRedirectPath] = useState<string | undefined>(undefined);
+  const [redirectPath, setRedirectPathState] = useState<string | undefined>(undefined);
 
-  const updateSelfUser = () => new Promise<void>((resolve, reject) => {
-    if (!AuthenticationService.isLoggedIn()) {
-      setUser(undefined);
-      resolve();
+  const updateSelfUser = () =>
+    new Promise<void>((resolve, reject) => {
+      if (!AuthenticationService.isLoggedIn()) {
+        setUser(undefined);
+        resolve();
+        return;
+      }
+
+      UserAPI.getSelfUser()
+        .then((user) => {
+          setUser(user);
+          resolve();
+        })
+        .catch((error) => {
+          setUser(undefined);
+          reject(error);
+        });
+    });
+
+  const setRedirectPath = (redirectPath: string | undefined) => {
+    // This ensures that we can never want to redirect someone to
+    // an authentication endpoint when authenticating
+    if (redirectPath === "/login" || redirectPath === "/signup") {
       return;
     }
 
-    UserAPI.getSelfUser()
-      .then((user) => {
-        setUser(user);
-        resolve();
-      })
-      .catch((error) => {
-        setUser(undefined);
-        reject(error);
-      });
-  });
+    setRedirectPathState(redirectPath);
+  };
 
   useEffect(() => {
     if (!AuthenticationService.isLoggedIn()) {
@@ -32,10 +43,16 @@ export const useProviderValue = (): Session => {
     }
 
     updateSelfUser();
-  }, []);
+  }, []); // By setting dependencies to none this is ran only once
 
   const isAuthenticated = AuthenticationService.isLoggedIn();
-  return { isAuthenticated, user, redirectPath, updateSelfUser, setRedirectPath };
+  return {
+    isAuthenticated,
+    user,
+    redirectPath,
+    updateSelfUser,
+    setRedirectPath,
+  };
 };
 
 const SessionContext = createContext<Session | undefined>(undefined);

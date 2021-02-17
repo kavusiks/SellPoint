@@ -61,12 +61,17 @@ class AuthenticationService {
     );
   }
 
-  async signUp(user: User, password: string) {
-    const response = await client.post("auth/register/", {
+  async signUp(user: User, password: string, logIn = false, remember = false): Promise<void> {
+    await client.post("auth/register/", {
       ...user,
       password: password,
     });
-    return response.data;
+    
+    if (!logIn) {
+      return;
+    }
+
+    await this.login(user.email, password, remember);
   }
 
   async login(email: string, password: string, remember: boolean): Promise<AuthAccessRefreshToken> {
