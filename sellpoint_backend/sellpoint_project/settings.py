@@ -25,6 +25,7 @@ SECRET_KEY = 'm$_ywnjkhfe9o=%w85$^pin2a41b+xx%*o$*3@+x^^647ntv!4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+CORS_ORIGIN_ALLOW_ALL = DEBUG
 
 ALLOWED_HOSTS = []
 
@@ -37,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sellpoint_auth.apps.SellpointAuthConfig',
     'rest_framework',
-    #'sellpoint_auth' #usikker
+    'corsheaders',
+    'sellpoint_auth.apps.SellpointAuthConfig',
 ]
 
 REST_FRAMEWORK = {
@@ -56,6 +57,7 @@ SIMPLE_JWT = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
