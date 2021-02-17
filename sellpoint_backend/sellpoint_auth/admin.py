@@ -1,10 +1,14 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User
+from .models import User, Address
 from django.utils.translation import ugettext_lazy as _
 
+class AddressInline(admin.StackedInline):
+    model = Address
 
 class UserAdmin(BaseUserAdmin):
+    inlines = (AddressInline, )
+    
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (_('Personal info'), {
