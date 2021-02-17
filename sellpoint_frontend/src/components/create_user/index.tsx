@@ -40,12 +40,16 @@ export const CreateUserForm: FunctionComponent = () => {
       line1: address1,
       line2: address2,
     };
+    
     const user: User = {
       email: email,
       first_name: firstName,
       last_name: lastName,
       address: address,
     };
+
+    console.log(user);
+
     AuthenticationService.signUp(user, password1)
       .then((tokens) => {
         console.log("Authenticated successfully! Received tokens!");

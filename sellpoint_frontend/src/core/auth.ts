@@ -63,10 +63,8 @@ class AuthenticationService {
 
   async signUp(user: User, password: string) {
     const response = await client.post("auth/register/", {
-      email: user.email,
+      ...user,
       password: password,
-      first_name: user.first_name,
-      last_name: user.last_name,
     });
     return response.data;
   }
