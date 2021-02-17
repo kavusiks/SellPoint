@@ -10,25 +10,22 @@ export interface ProtectedRouteProps extends RouteProps {
 
 export const ProtectedRoute: FunctionComponent<ProtectedRouteProps> = (props) => {
   const currentLocation = useLocation();
+  const pathname = currentLocation.pathname;
 
   useEffect(() => {
     if (!props.isAuthenticated) {
-      const pathname = currentLocation.pathname;
       props.setRedirectPathOnAuthentication(pathname);
     }
-  }, [currentLocation.pathname, props]);
+  }, [currentLocation.pathname, pathname, props]);
 
-  let redirectPath = props.redirectPathOnAuthentication;
   if (!props.isAuthenticated) {
-    redirectPath = props.authenticationPath;
+    const renderComponent = () => (
+      <Redirect to={{ pathname: props.authenticationPath }} />
+    );
+    return <Route {...props} component={renderComponent} render={undefined} />;
   }
 
-  if (redirectPath !== currentLocation.pathname) {
-    const renderComponent = () => <Redirect to={{ pathname: redirectPath }} />;
-    return <Route {...props} component={renderComponent} render={undefined} />;
-  } else {
-    return <Route {...props} />;
-  }
+  return <Route {...props} />;
 };
 
 export default ProtectedRoute;
