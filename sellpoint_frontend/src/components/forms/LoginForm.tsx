@@ -49,35 +49,35 @@ export const LoginForm: FunctionComponent<FormProps> = ({ setError }: FormProps)
 
   return (
     <Form noValidate validated={validated} onSubmit={onSubmit}>
-        <Form.Group controlId="form-login-email">
-          <Form.Label>
-            <p>Emailaddresse</p>
-          </Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Emailaddresse"
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <Form.Control.Feedback type="invalid">
-            Vennligst skriv inn din emailaddresse!
-          </Form.Control.Feedback>
-        </Form.Group>
+      <Form.Group controlId="form-login-email">
+        <Form.Label>
+          <p>Emailaddresse</p>
+        </Form.Label>
+        <Form.Control
+          type="email"
+          placeholder="Emailaddresse"
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <Form.Control.Feedback type="invalid">
+          Vennligst skriv inn din emailaddresse!
+        </Form.Control.Feedback>
+      </Form.Group>
 
-        <Form.Group controlId="form-login-password">
-          <Form.Label>
-            <p>Passord</p>
-          </Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Passord"
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <Form.Control.Feedback type="invalid">
-            Vennligst skriv inn ditt passord!
-          </Form.Control.Feedback>
-        </Form.Group>
+      <Form.Group controlId="form-login-password">
+        <Form.Label>
+          <p>Passord</p>
+        </Form.Label>
+        <Form.Control
+          type="password"
+          placeholder="Passord"
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <Form.Control.Feedback type="invalid">
+          Vennligst skriv inn ditt passord!
+        </Form.Control.Feedback>
+      </Form.Group>
 
       <LeftCenterRow noGutters>
         <Form.Group controlId="form-login-remember">

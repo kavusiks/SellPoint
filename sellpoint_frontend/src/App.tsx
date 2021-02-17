@@ -17,19 +17,19 @@ const App: FunctionComponent = () => {
   };
 
   return (
-      <Router>
-        <Switch>
-          <ProtectedRoute
-            {...protectedRouteProps}
-            path="/success"
-            component={LoggedInExample}
-            exact
-          />
+    <Router>
+      <Switch>
+        <ProtectedRoute
+          {...protectedRouteProps}
+          path="/success"
+          component={LoggedInExample}
+          exact
+        />
 
-          <Route path="/login" component={LoginPage} exact />
-          <Route path="/register" component={RegisterPage} exact />
-        </Switch>
-      </Router>
+        <Route path="/login" component={LoginPage} exact />
+        <Route path="/register" component={RegisterPage} exact />
+      </Switch>
+    </Router>
   );
 };
 

@@ -1,10 +1,12 @@
 import React, { FunctionComponent } from "react";
 import { Container } from "react-bootstrap";
 import { RegisterForm } from "../components/forms/RegisterForm";
-import { CenteredRow, FormContainer, useErrorState } from "../components/styled";
+import { CenteredRow, FormContainer, useAuthenticationPage, useErrorState } from "../components/styled";
 
 const RegisterPage: FunctionComponent = () => {
   const { error, setError } = useErrorState();
+
+  useAuthenticationPage();
 
   return (
     <Container fluid>

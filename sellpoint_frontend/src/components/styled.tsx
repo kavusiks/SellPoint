@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Container, Row } from "react-bootstrap";
+import { useHistory } from "react-router";
 import styled from "styled-components";
+import { useSessionContext } from "../context/Session";
 
 export const addShadow = (comp: React.ComponentType<any>): any => {
   return styled(comp)`
@@ -48,4 +50,15 @@ export const useErrorState = (): ErrorState => {
   };
 
   return { error: makeErrorComponent(), setError };
+};
+
+export const useAuthenticationPage = (): void => {
+  const session = useSessionContext();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (session.user) {
+      history.push("/success");
+    }
+  }, [history, session.user]);
 };

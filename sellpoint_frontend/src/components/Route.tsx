@@ -19,9 +19,7 @@ export const ProtectedRoute: FunctionComponent<ProtectedRouteProps> = (props) =>
   }, [currentLocation.pathname, pathname, props]);
 
   if (!props.isAuthenticated) {
-    const renderComponent = () => (
-      <Redirect to={{ pathname: props.authenticationPath }} />
-    );
+    const renderComponent = () => <Redirect to={{ pathname: props.authenticationPath }} />;
     return <Route {...props} component={renderComponent} render={undefined} />;
   }
 

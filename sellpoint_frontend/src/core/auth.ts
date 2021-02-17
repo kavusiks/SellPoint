@@ -66,7 +66,7 @@ class AuthenticationService {
       ...user,
       password: password,
     });
-    
+
     if (!logIn) {
       return;
     }
@@ -79,10 +79,10 @@ class AuthenticationService {
 
     // Ensure we actually received the tokens. This is not the case if for example the log in is invalid
     if (response.data.refresh && response.data.access) {
-      let opts: CookieSetOptions = { path: "/" };
+      let opts: CookieSetOptions = { path: "/", sameSite: "lax" };
 
       // We do not set a max age on this token, since it will expire server side
-      cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, { path: "/", sameSite: "lax" });
+      cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, opts);
 
       if (remember) {
         // If we wish to remember log in we have to set the expiry of the cookie. When no
@@ -103,7 +103,7 @@ class AuthenticationService {
     const refreshToken = this.getRefreshToken(); // Will verify that we are in fact logged in aswell
     const response = await client.post("auth/refresh/", { refresh: refreshToken });
     if (response.data.access) {
-      cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, { path: "/" });
+      cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, { path: "/", sameSite: "lax" });
     }
 
     return response.data;

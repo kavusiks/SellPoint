@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Button, Container } from "react-bootstrap";
-import { Redirect, useHistory } from "react-router";
+import { useHistory } from "react-router";
 import { useSessionContext } from "../context/Session";
 import AuthenticationService from "../core/auth";
 
@@ -9,10 +9,6 @@ const LoggedInExample: FunctionComponent = () => {
   const session = useSessionContext();
   const history = useHistory();
 
-  if (!session.user) {
-    return <Redirect to="/login" />;
-  }
-
   const logOut = () => {
     AuthenticationService.logOut();
     session.updateSelfUser().then(() => history.push("/login"));
@@ -20,7 +16,7 @@ const LoggedInExample: FunctionComponent = () => {
 
   return (
     <Container>
-      <h1>{session.user.email}</h1>
+      <h1>{session.user ? session.user.email : "Loading..."}</h1>
       <Button variant="primary" onClick={logOut}>
         Logg Ut
       </Button>
