@@ -4,8 +4,7 @@ import { Redirect, useHistory } from "react-router";
 import { useSessionContext } from "../context/Session";
 import AuthenticationService from "../core/auth";
 
-// This is just an example component and should be removed. No
-// such components should be present in this file.
+// This is just an example component and should be removed
 const LoggedInExample: FunctionComponent = () => {
   const session = useSessionContext();
   const history = useHistory();
