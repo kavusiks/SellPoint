@@ -79,7 +79,7 @@ class AuthenticationService {
       let opts: CookieSetOptions = { path: "/" };
 
       // We do not set a max age on this token, since it will expire server side
-      cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, { path: "/" });
+      cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, { path: "/", sameSite: "lax" });
 
       if (remember) {
         // If we wish to remember log in we have to set the expiry of the cookie. When no

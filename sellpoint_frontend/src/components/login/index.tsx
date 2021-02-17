@@ -3,10 +3,11 @@ import { Alert, Container, Button, Form } from "react-bootstrap";
 import { useSessionContext } from "../../context/Session";
 import AuthenticationService from "../../core/auth";
 import { CenteredRow } from "../styled";
-import UserAPI from "../../core/api/user";
+import { useHistory } from "react-router";
 
 export const LoginForm: FunctionComponent = () => {
   const session = useSessionContext();
+  const history = useHistory();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [remember, setRemember] = useState<boolean>(false);
@@ -18,11 +19,16 @@ export const LoginForm: FunctionComponent = () => {
       return null;
     }
 
-    return <Alert variant="warning">{error}</Alert>;
+    return (
+      <CenteredRow>
+        <Alert style={{ margin: "10px" }} variant="danger">
+          {error}
+        </Alert>
+      </CenteredRow>
+    );
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("Submitting with " + email + ", " + password);
     setValidated(true);
 
     e.preventDefault();
@@ -35,13 +41,18 @@ export const LoginForm: FunctionComponent = () => {
 
     AuthenticationService.login(email, password, remember)
       .then((tokens) => {
-        console.log("Authenticated successfully! Received tokens!");
-        console.log(tokens);
-        
-        session.updateSelfUser();
+        session
+          .updateSelfUser()
+          .then(() => history.push("/success"))
+          .catch((error) => setError("En error oppstod!"));
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response.status === 401) {
+          setError("Feil brukernavn eller passord!");
+          return;
+        }
+
+        setError("En error oppstod!");
       });
   };
 
@@ -93,9 +104,9 @@ export const LoginForm: FunctionComponent = () => {
               Logg inn
             </Button>
           </CenteredRow>
+          {makeError()}
         </Form>
       </Container>
-      {makeError()}
     </>
   );
 };

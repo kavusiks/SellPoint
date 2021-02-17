@@ -8,6 +8,12 @@ from .user_manager import UserManager
 PHONE_REGEX = RegexValidator(
     regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
 
+class Address(models.Model):
+    line1 = models.CharField(max_length=150)
+    line2 = models.CharField(max_length=150)
+    postalcode = models.CharField(max_length=10)
+    city = models.CharField(max_length=150)
+    country = models.CharField(max_length=150)
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
@@ -37,6 +43,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, null=True, blank=True)
 
     objects = UserManager()
 

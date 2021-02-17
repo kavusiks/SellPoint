@@ -1,29 +1,31 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { Redirect, Route, RouteProps, useLocation } from "react-router";
 
 export interface ProtectedRouteProps extends RouteProps {
   isAuthenticated: boolean;
   authenticationPath: string;
   redirectPathOnAuthentication: string;
-  setRedirectPathOnAuthentication: (path: string) => void;
+  setRedirectPathOnAuthentication: (path: string | undefined) => void;
 }
 
 export const ProtectedRoute: FunctionComponent<ProtectedRouteProps> = (props) => {
   const currentLocation = useLocation();
+  const pathname = currentLocation.pathname;
 
-  let redirectPath = props.redirectPathOnAuthentication;
+  useEffect(() => {
+    if (!props.isAuthenticated) {
+      props.setRedirectPathOnAuthentication(pathname);
+    }
+  }, [currentLocation.pathname, pathname, props]);
+
   if (!props.isAuthenticated) {
-    const pathname = currentLocation.pathname;
-    props.setRedirectPathOnAuthentication(pathname);
-    redirectPath = props.authenticationPath;
+    const renderComponent = () => (
+      <Redirect to={{ pathname: props.authenticationPath }} />
+    );
+    return <Route {...props} component={renderComponent} render={undefined} />;
   }
 
-  if (redirectPath !== currentLocation.pathname) {
-    const renderComponent = () => <Redirect to={{ pathname: redirectPath }} />;
-    return <Route {...props} component={renderComponent} render={undefined} />;
-  } else {
-    return <Route {...props} />;
-  }
+  return <Route {...props} />;
 };
 
 export default ProtectedRoute;
