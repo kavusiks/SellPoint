@@ -7,12 +7,20 @@ from django.contrib.auth.hashers import make_password
 
 
 class AddressSerializer(serializers.ModelSerializer):
+    """
+    Serializes an address, excluding the user field
+    """
     class Meta:
         model = Address
         fields = ('line1', 'line2', 'postalcode', 'city', 'country')
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the register endpoint. Accepts the data we need to
+    create a user.
+    """
+
     address = AddressSerializer()
 
     class Meta:
@@ -24,15 +32,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        user = User.objects.create(email=validated_data['email'],
-                                   password=validated_data['password'],
-                                   first_name=validated_data['first_name'],
-                                   last_name=validated_data['last_name'])
+        user = User.objects.create_user(validated_data['email'],
+                                        password=validated_data['password'],
+                                        first_name=validated_data['first_name'],
+                                        last_name=validated_data['last_name'])
         Address.objects.create(user=user, **validated_data['address'])
         return user
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for returning a user. Includes all fields except password
+    and id
+    """
+
     address = AddressSerializer()
 
     class Meta:

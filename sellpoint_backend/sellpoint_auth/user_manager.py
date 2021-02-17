@@ -1,6 +1,10 @@
 from django.contrib.auth.base_user import BaseUserManager
 
+
 class UserManager(BaseUserManager):
+    """
+    Custom user manager to use email instead of username
+    """
 
     use_in_migrations = True
 
