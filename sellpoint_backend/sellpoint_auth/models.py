@@ -61,6 +61,6 @@ class Address(models.Model):
 
     line1 = models.CharField(max_length=150)
     line2 = models.CharField(max_length=150, null=True, blank=True)
-    postalcode = models.CharField(max_length=10)
+    postalcode = models.PositiveSmallIntegerField()
     city = models.CharField(max_length=150)
     country = models.CharField(max_length=150)
