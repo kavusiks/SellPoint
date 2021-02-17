@@ -8,24 +8,33 @@ export const useProviderValue = (): Session => {
   const [user, setUser] = useState<User | undefined>(undefined);
   const [redirectPath, setRedirectPath] = useState<string | undefined>(undefined);
 
-  const updateSelfUser = () => {
+  const updateSelfUser = () => new Promise<void>((resolve, reject) => {
     if (!AuthenticationService.isLoggedIn()) {
       setUser(undefined);
+      resolve();
       return;
     }
 
-    UserAPI.getSelfUser().then(user => setUser(user)).catch(error => setUser(undefined));
-  }
+    UserAPI.getSelfUser()
+      .then((user) => {
+        setUser(user);
+        resolve();
+      })
+      .catch((error) => {
+        setUser(undefined);
+        reject(error);
+      });
+  });
 
   useEffect(() => {
     if (!AuthenticationService.isLoggedIn()) {
       return;
     }
 
-    // TODO: Pull own user from API and update user state
-  });
+    updateSelfUser();
+  }, []);
 
-  const isAuthenticated = !!user;
+  const isAuthenticated = AuthenticationService.isLoggedIn();
   return { isAuthenticated, user, redirectPath, updateSelfUser, setRedirectPath };
 };
 
