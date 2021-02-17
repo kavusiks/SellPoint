@@ -4,9 +4,11 @@ from .views import SelfAPIView, RegisterAPIView
 
 urlpatterns = [
     path('token/', jwt_views.TokenObtainPairView.as_view(),
-         name='token_obtain_pair'),
+         name='token-obtain'),
     path('refresh/', jwt_views.TokenRefreshView.as_view(),
-         name='token_refresh'),
-    path('register/', RegisterAPIView.as_view()),
-    path('self/', SelfAPIView.as_view()),
+         name='token-refresh'),
+    path('register/', RegisterAPIView.as_view(),
+         name='user-register'),
+    path('self/', SelfAPIView.as_view(),
+         name='user-self'),
 ]
