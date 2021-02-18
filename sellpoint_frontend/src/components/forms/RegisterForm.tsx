@@ -7,11 +7,27 @@ import User, { Address } from "../../models/user";
 import { CenteredRow } from "../styled";
 import { AddressFormPart, FormProps } from "./FormParts";
 
+/**
+ * The props for the {@link RegisterForm}
+ */
 export interface RegisterFormProps extends FormProps {
+  /**
+   * If the user should be logged in automatically after registering,
+   * if registration is successful.
+   */
   logIn?: boolean;
+  /**
+   * If the user should stay logged in. This option will not do anything
+   * unless `logIn` is set to `true`.
+   */
   rememberLogIn?: boolean;
 }
 
+/**
+ * A form for registering a new user
+ *
+ * @param props - The props
+ */
 export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
   setError,
   logIn,

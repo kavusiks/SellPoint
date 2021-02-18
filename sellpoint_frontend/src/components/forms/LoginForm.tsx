@@ -11,6 +11,12 @@ const StyledButton = styled(Button)`
   margin: 10px;
 `;
 
+/**
+ * A form for logging in. Handles input validation and authentication
+ * automatically.
+ *
+ * @param props - The props
+ */
 export const LoginForm: FunctionComponent<FormProps> = ({ setError }: FormProps) => {
   const session = useSessionContext();
   const history = useHistory();
