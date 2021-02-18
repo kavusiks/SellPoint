@@ -40,6 +40,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [address, setAddress] = useState<Address | undefined>(undefined);
   const [validated, setValidated] = useState<boolean>(false);
 
@@ -60,6 +61,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
       email: email,
       first_name: firstName,
       last_name: lastName,
+      phone_number: "+47" + phoneNumber,
       address: address,
     };
 
@@ -129,6 +131,18 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
           placeholder="Passord"
           onChange={(e) => setConfirmPassword(e.target.value)}
           isInvalid={validated && password !== confirmPassword}
+          required
+        />
+      </Form.Group>
+
+      <Form.Group controlId="form-signup-confirm-phonenumber">
+        <Form.Label>Telefonnummer</Form.Label>
+        <Form.Control
+          type="number"
+          placeholder="Telefonnummer"
+          onChange={(e) => setPhoneNumber("+47" + e.target.value)}
+          isInvalid={validated && (phoneNumber.length < 8)}
+          //isValid = {phoneNumber.length >= 8} 
           required
         />
       </Form.Group>
