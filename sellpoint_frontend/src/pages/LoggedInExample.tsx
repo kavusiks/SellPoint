@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Button, ButtonGroup, ButtonToolbar, Container } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { useSessionContext } from "../context/Session";
 import AuthenticationService from "../core/auth";
@@ -14,12 +14,26 @@ const LoggedInExample: FunctionComponent = () => {
     session.updateSelfUser().then(() => history.push("/login"));
   };
 
+  const myProfile = () => {
+    session.updateSelfUser().then(() => history.push("/profile"));
+  };
+
   return (
     <Container>
       <h1>{session.user ? session.user.email : "Loading..."}</h1>
-      <Button variant="primary" onClick={logOut}>
-        Logg Ut
-      </Button>
+
+      <ButtonToolbar aria-label="Toolbar with button groups">
+        <ButtonGroup className="mr-2" aria-label="First group">
+          <Button variant="primary" onClick={logOut}>
+            Logg Ut
+          </Button>
+        </ButtonGroup>
+        <ButtonGroup className="mr-2" aria-label="Second group">
+          <Button variant="primary" onClick={myProfile}>
+            Min profil
+          </Button>
+        </ButtonGroup>
+      </ButtonToolbar>
     </Container>
   );
 };

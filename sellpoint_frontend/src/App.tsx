@@ -5,6 +5,7 @@ import { useSessionContext } from "./context/Session";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import LoggedInExample from "./pages/LoggedInExample";
+import Profile from "./pages/Profile";
 
 const App: FunctionComponent = () => {
   const session = useSessionContext();
@@ -23,6 +24,13 @@ const App: FunctionComponent = () => {
           {...protectedRouteProps}
           path="/success"
           component={LoggedInExample}
+          exact
+        />
+        
+        <ProtectedRoute
+          {...protectedRouteProps}
+          path="/profile"
+          component={Profile}
           exact
         />
 
