@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { Button, Col, Form } from "react-bootstrap";
+import { Button, Col, Form, InputGroup } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { useSessionContext } from "../../context/Session";
 import AuthenticationService from "../../core/auth";
@@ -137,14 +137,17 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
 
       <Form.Group controlId="form-signup-confirm-phonenumber">
         <Form.Label>Telefonnummer</Form.Label>
+        <InputGroup>
+        <InputGroup.Prepend><InputGroup.Text id="basic-addon1">+47</InputGroup.Text></InputGroup.Prepend>
         <Form.Control
-          type="number"
+          type="text"
           placeholder="Telefonnummer"
-          onChange={(e) => setPhoneNumber("+47"+e.target.value)}
+          onChange={(e) => setPhoneNumber("+47" + e.target.value)}
           isInvalid={validated && (phoneNumber.length < 8)}
           //isValid = {phoneNumber.length >= 8} 
           required
         />
+        </InputGroup>
       </Form.Group>
 
       <AddressFormPart onChange={setAddress} />
