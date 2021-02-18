@@ -1,7 +1,19 @@
+/**
+ * Access token container
+ */
 export interface AuthAccessToken {
-    access: string;
+  /**
+   * An access `Bearer` token
+   */
+  access: string;
 }
 
+/**
+ * Access and refresh token container
+ */
 export interface AuthAccessRefreshToken extends AuthAccessToken {
-    refresh: string;
+  /**
+   * A token that can be used to refresh the access token
+   */
+  refresh: string;
 }

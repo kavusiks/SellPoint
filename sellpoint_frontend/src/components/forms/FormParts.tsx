@@ -40,7 +40,7 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
   const [line2, setLine2] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [country, setCountry] = useState<string>("");
-  const [postalcode, setPostalcode] = useState<number>(7030);
+  const [postalcode, setPostalcode] = useState<string>("");
 
   // Since useEffect is called when its dependencies change, this will
   // be called whenever a field is updated
@@ -91,11 +91,9 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
         <Form.Group as={Col} controlId="form-address-zip-code" style={{ maxWidth: "200px" }}>
           <Form.Label>Postkode</Form.Label>
           <Form.Control
-            type="number"
-            min="0"
-            step="1"
+            type="text"
             placeholder="7030"
-            onChange={(e) => setPostalcode(+e.target.value)}
+            onChange={(e) => setPostalcode(e.target.value)}
             required
           />
         </Form.Group>

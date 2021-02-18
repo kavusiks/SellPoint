@@ -4,6 +4,11 @@ import React, { FunctionComponent, createContext, useContext, useState, useEffec
 import AuthenticationService from "../core/auth";
 import UserAPI from "../core/api/user";
 
+/**
+ * Creates a session with initial values from outside providers
+ *
+ * @returns The created {@link Session}
+ */
 export const useProviderValue = (): Session => {
   const [user, setUser] = useState<User | undefined>(undefined);
   const [redirectPath, setRedirectPathState] = useState<string | undefined>(undefined);
@@ -37,13 +42,14 @@ export const useProviderValue = (): Session => {
     setRedirectPathState(redirectPath);
   };
 
+  // Load the initial user if we are logged in
   useEffect(() => {
     if (!AuthenticationService.isLoggedIn()) {
       return;
     }
 
     updateSelfUser();
-  }, []); // By setting dependencies to none this is ran only once
+  }, []); // By setting dependencies to none this is ran only once.
 
   const isAuthenticated = AuthenticationService.isLoggedIn();
   return {
@@ -58,11 +64,24 @@ export const useProviderValue = (): Session => {
 const SessionContext = createContext<Session | undefined>(undefined);
 SessionContext.displayName = "SessionContext";
 
+/**
+ * Context provider for the {@link Session} context. Any child of this
+ * component will have access to session data.
+ *
+ * @param props - Any props, passed directly to the Provider component
+ */
 export const SessionContextProvider: FunctionComponent = (props: any) => {
   const value = useProviderValue();
   return <SessionContext.Provider value={value} {...props} />;
 };
 
+/**
+ * Hook for getting the current session context. Must be called from
+ * a component that is a child (Does not have to be a direct child)
+ * of a {@link SessionContextProvider}.
+ *
+ * @returns The current {@link Session}
+ */
 export const useSessionContext = (): Session => {
   const context = useContext(SessionContext);
   if (context === undefined) {
