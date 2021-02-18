@@ -61,7 +61,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
       email: email,
       first_name: firstName,
       last_name: lastName,
-      phone_number: "+47" + phoneNumber,
+      phone_number: phoneNumber,
       address: address,
     };
 
@@ -140,7 +140,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
         <Form.Control
           type="number"
           placeholder="Telefonnummer"
-          onChange={(e) => setPhoneNumber("+47" + e.target.value)}
+          onChange={(e) => setPhoneNumber("+47"+e.target.value)}
           isInvalid={validated && (phoneNumber.length < 8)}
           //isValid = {phoneNumber.length >= 8} 
           required
