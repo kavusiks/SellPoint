@@ -67,12 +67,12 @@ Register a new user
   "email": "your@email.com",
   "first_name": "First Name",
   "last_name": "Last Name",
-  "phone_number": "Phone Number",
+  "phone_number": "+4799999999",
   "password": "Password",
   "address": {
     "line1": "Address line 1",
     "line2": "Address line 2 (Optional)",
-    "postalcode": 1234,
+    "postalcode": "1234",
     "city": "City",
     "country": "Country"
   }
@@ -87,12 +87,12 @@ Register a new user
     "email": "your@email.com",
     "first_name": "First Name",
     "last_name": "Last Name",
-    "phone_number": "Phone Number",
+    "phone_number": "+4799999999",
     "last_login": null,
     "address": {
       "line1": "Address line 1",
       "line2": "Address line 2 (Optional)",
-      "postalcode": 1234,
+      "postalcode": "1234",
       "city": "City",
       "country": "Country"
     }
@@ -117,7 +117,7 @@ Fetch information about the currently logged in user.
   "address": {
     "line1": "Address line 1",
     "line2": "Address line 2 (Optional)",
-    "postalcode": 1234,
+    "postalcode": "1234",
     "city": "City",
     "country": "Country"
   }
