@@ -2,5 +2,9 @@ import axios from "axios";
 
 export const API_URL = "http://localhost:8000/";
 
-const client = axios.create({baseURL: API_URL})
+/**
+ * Creates an axios instance with a set base URL
+ */
+const client = axios.create({ baseURL: API_URL });
+
 export default client;

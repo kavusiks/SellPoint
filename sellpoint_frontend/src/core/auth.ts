@@ -9,6 +9,11 @@ const COOKIE_REFRESH_MAX_AGE = 7689600; // Refresh token is valid for 90 days
 
 const cookies = new Cookies();
 
+/**
+ * Abstraction of authentication endpoints. Handles storing authentication
+ * token cookies and such. Automatically adds Authorization headers, and
+ * updates access token.
+ */
 class AuthenticationService {
   constructor() {
     // Add interceptor that automatically adds authorization header to requests
@@ -61,6 +66,16 @@ class AuthenticationService {
     );
   }
 
+  /**
+   * Create a new user
+   *
+   * @param user - The user to create
+   * @param password - The password for the user
+   * @param logIn - If login should happen automatically if creating the
+   * user is sucessful
+   * @param remember - If logIn is set to true, and we successfully log in,
+   * should the user stay logged in across sessions
+   */
   async signUp(user: User, password: string, logIn = false, remember = false): Promise<void> {
     await client.post("auth/register/", {
       ...user,
@@ -74,6 +89,13 @@ class AuthenticationService {
     await this.login(user.email, password, remember);
   }
 
+  /**
+   * Authenticate using the given email and password
+   *
+   * @param email - The email of the user
+   * @param password - The password of the user
+   * @param remember - If we should store the refresh token across sessions
+   */
   async login(email: string, password: string, remember: boolean): Promise<AuthAccessRefreshToken> {
     const response = await client.post("auth/token/", { email: email, password: password });
 
@@ -99,20 +121,18 @@ class AuthenticationService {
     return response.data;
   }
 
-  async refreshAccessToken(): Promise<AuthAccessToken> {
-    const refreshToken = this.getRefreshToken(); // Will verify that we are in fact logged in aswell
-    const response = await client.post("auth/refresh/", { refresh: refreshToken });
-    if (response.data.access) {
-      cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, { path: "/", sameSite: "lax" });
-    }
-
-    return response.data;
-  }
-
+  /**
+   * @returns If there is a user currently logged in, determined by
+   * whether the {@link COOKIE_REFRESH_TOKEN} cookie exists
+   */
   isLoggedIn(): boolean {
     return !!cookies.get(COOKIE_REFRESH_TOKEN);
   }
 
+  /**
+   * @returns The current access token. Makes no guarantees that this
+   * token is not expired.
+   */
   getAccessToken(): string {
     const cookie = cookies.get(COOKIE_ACCESS_TOKEN);
     if (!cookie) {
@@ -122,6 +142,10 @@ class AuthenticationService {
     return cookie;
   }
 
+  /**
+   * @returns The current refresh token. Makes no guarantees that this
+   * token is not expired.
+   */
   getRefreshToken(): string {
     const cookie = cookies.get(COOKIE_REFRESH_TOKEN);
     if (!cookie) {
@@ -131,9 +155,22 @@ class AuthenticationService {
     return cookie;
   }
 
+  /**
+   * Removes the access and refresh token cookies
+   */
   logOut() {
     cookies.remove(COOKIE_REFRESH_TOKEN);
     cookies.remove(COOKIE_ACCESS_TOKEN);
+  }
+
+  private async refreshAccessToken(): Promise<AuthAccessToken> {
+    const refreshToken = this.getRefreshToken(); // Will verify that we are in fact logged in aswell
+    const response = await client.post("auth/refresh/", { refresh: refreshToken });
+    if (response.data.access) {
+      cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, { path: "/", sameSite: "lax" });
+    }
+
+    return response.data;
   }
 }
 
