@@ -2,14 +2,37 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Col, Form } from "react-bootstrap";
 import { Address } from "../../models/user";
 
+/**
+ * Props for a form
+ */
 export interface FormProps {
+  /**
+   * Called whenever an error occurs
+   *
+   * @param error - The error message
+   */
   setError: (error: string) => void;
 }
 
+/**
+ * Props for the Address form part
+ */
 export interface AddressFormPartProps {
+  /**
+   * Called whenever the address changes
+   *
+   * @param address - The new address
+   */
   onChange: (address: Address) => void;
 }
 
+/**
+ * Utility component, simplifying accepting an address as an input
+ * by abstracting out those fields and directly passing an {@link Address}
+ * to the #onChange() function.
+ *
+ * @param props - The props
+ */
 export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
   onChange,
 }: AddressFormPartProps) => {

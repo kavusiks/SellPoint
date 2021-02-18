@@ -36,6 +36,14 @@ To run tests run
 $ yarn test
 ```
 
+## Documentation
+
+Generate documentation page by running
+```bash
+$ yarn typedoc --out docs src
+```
+This will generate HTML files in [/docs](./docs).
+
 ## Further Reading
 
  - [React](https://reactjs.org/)
