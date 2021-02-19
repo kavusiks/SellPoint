@@ -4,7 +4,7 @@ import { Button, Col, Form } from "react-bootstrap";
 import { Ad } from "../models/ad";
 
 
-export const CreateAd: FunctionComponent<Ad> = () => {
+export const CreateAd: FunctionComponent<any> = () => {
 
     const [title, setTitle] = useState<string>("");
     const [price, setPrice] = useState<number>(0);

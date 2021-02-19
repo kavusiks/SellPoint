@@ -13,6 +13,9 @@ export const AdComponent: React.FC = ({match}:any) => {
     const [price, setPrice] = useState<number>();
     const [description, setDescription] = useState<string>("");
 
+    //Placeholderimage can be set here
+    const [img, setImg] = useState<string>("https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg");
+
     useEffect(() => {
         fetchItem()
     }, []);
@@ -24,12 +27,15 @@ export const AdComponent: React.FC = ({match}:any) => {
         setTitle(item.title);
         setPrice(item.price);
         setDescription(item.description);
+        if (item.img != null){
+            setImg("http://127.0.0.1:8000" + item.img);
+        }
     }
 
     return (
       <div className="page">
           <div className="parent">
-              <img alt="alternatetext" src={"https://via.placeholder.com/350x280/FFB6C1/000000"} className="Adimage"/>
+              <img alt="alternatetext" src={img} className="Adimage"/>
           </div>
           <div className="description">
               

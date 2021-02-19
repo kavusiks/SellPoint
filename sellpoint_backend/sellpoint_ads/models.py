@@ -23,8 +23,10 @@ class Ad(models.Model):
     is_sold = models.BooleanField(_('Is sold'), default=False)
     #location =
     #owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    #image = 
+    img = models.ImageField(_("Image for one ad"), null=True, blank=True)
 
+
+#Må finne ut av hvordan man bruker dette
 class Image(models.Model):
     image = models.ImageField(_("Image for one ad"), upload_to=get_image_path, height_field=None, width_field=None, max_length=None, null=True, blank=True)
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)

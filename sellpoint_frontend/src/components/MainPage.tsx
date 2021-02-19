@@ -1,12 +1,13 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import SmallAd from "./SmallAd";
 import { Link } from 'react-router-dom';
+import {Ad} from '../models/ad';
 
 export const MainPage: FunctionComponent = () => {
 
     
 
-    const [items, setItems] = useState<Array<any>>([]);
+    const [items, setItems] = useState<Array<Ad>>([]);
 
     useEffect (() => {
         fetchItems();
@@ -21,15 +22,21 @@ export const MainPage: FunctionComponent = () => {
 
     return(
         <div>
-            <h1>Hovedside</h1>
-            
-            
-            {items.map(item => 
-                <h1 key={item.id}>
+            {items
+            .filter(item => item.is_sold === false)
+            .map(item => 
+                <p key={item.id}>
                     <Link to={`/${item.id}`}>
-                        {item.title}
+
+                        {/* Have to send the values of "item" to SmallAd */}
+                        <SmallAd 
+                        title={item.title}
+                        price={item.price}
+                        img={item.img}
+                        />
+
                     </Link>
-                </h1>)}
+                </p>)}
             
         </div>
 
