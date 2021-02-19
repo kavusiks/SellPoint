@@ -6,21 +6,29 @@ import { useSessionContext } from "../context/Session";
 
 /**
  * Simple spinner for when something is loading
- * 
+ *
  * @param props - The props
  */
 export const DefaultSpinner: FunctionComponent = (props) => {
   return (
-    <Spinner
-      as="span"
-      animation="border"
-      size="sm"
-      role="status"
-      aria-hidden="true"
-    >
+    <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true">
       <span className="sr-only">{props.children}</span>
     </Spinner>
   );
+};
+
+/**
+ * Formats a date to a human readable string
+ *
+ * @param date - The date to format
+ */
+export const formatDate = (date: Date | undefined): string => {
+  if (!date) {
+    return "-";
+  }
+
+  const dateRewrap = new Date(date.toLocaleString());
+  return `${dateRewrap.toLocaleDateString()} ${dateRewrap.toLocaleTimeString()}`;
 };
 
 /**
@@ -71,6 +79,15 @@ export const CenteredRow = styled(Row)`
 export const LeftCenterRow = styled(Row)`
   justify-content: flex-start;
   align-items: center;
+`;
+
+/**
+ * A {@link Row} (CSS Flexbox) with all components vertically top-aligned
+ * and horizontally left-aligned.
+ */
+export const LeftTopRow = styled(Row)`
+  justify-content: flex-start;
+  align-items: flex-start;
 `;
 
 /**

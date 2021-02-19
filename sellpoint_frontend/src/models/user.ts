@@ -49,6 +49,10 @@ export default interface User {
    */
   last_login?: Date;
   /**
+   * When the user was created
+   */
+  date_joined?: Date;
+  /**
    * The user's {@link Address}
    */
   address: Address;
