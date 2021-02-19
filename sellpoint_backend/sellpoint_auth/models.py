@@ -14,6 +14,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     Modified user to use email as USERNAME_FIELD, instead of a separate username
     """
+    class Meta:
+        verbose_name = _("User")
 
     email = models.EmailField(
         _('email address'), unique=True, max_length=255, blank=False)
@@ -55,6 +57,8 @@ class Address(models.Model):
     """
     A user's address, with a one-to-one relationship to User model
     """
+    class Meta:
+        verbose_name = _("Address")
 
     user = models.OneToOneField(
         User, primary_key=True, on_delete=models.CASCADE)
