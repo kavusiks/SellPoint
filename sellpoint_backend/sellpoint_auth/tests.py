@@ -48,7 +48,6 @@ class UserModelTestCase(TestCase):
         self.assertEqual(address.postalcode, "1234")
         self.assertEqual(address.city, "SomeCity")
         self.assertEqual(address.country, "Norway")
-    
 
 
 class UserAuthenticateTestCase(APITestCase):
@@ -169,11 +168,12 @@ class UserRegisterTestCase(APITestCase):
     """
     Simple test case to test user registration on API level
     """
+
     def test_create_valid_user(self):
         """
         Ensure that a valid user can be created
         """
-        
+
         url = reverse("user-register")
 
         data = {
@@ -181,7 +181,7 @@ class UserRegisterTestCase(APITestCase):
             "first_name": "First Name",
             "last_name": "Last Name",
             "phone_number": "+4799998878",
-            "password": "Password",
+            "password": "!123Passw0rd@",
             "address": {
                 "line1": "Address line 1",
                 "line2": "Address line 2 (Optional)",
@@ -189,24 +189,21 @@ class UserRegisterTestCase(APITestCase):
                 "city": "City",
                 "country": "Country"
             }
-            }
-        
+        }
 
         response = self.client.post(url, data, format="json")
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Verifying that the user was created sucessfully and added to the database
         body = response.data
+
         created_user = body.get("user")
+
+        self.assertEqual(data["email"], created_user["email"])
+
         added_user = User.objects.get(email=created_user.get("email"))
-        self.assertTrue(added_user != None)
-
-
-
-
-
-
+        self.assertTrue(added_user)
 
     def test_create_user_invalid_phone_number(self):
         """
@@ -228,17 +225,16 @@ class UserRegisterTestCase(APITestCase):
                 "city": "City",
                 "country": "Country"
             }
-            }
-        
+        }
 
         response = self.client.post(url, data, format="json")
-        
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Verifying that the user was not created and not added to the database
-        self.assertEqual(User.objects.filter(email="valid@mail.com").count(), 0)
+        with self.assertRaises(User.DoesNotExist):
+            User.objects.get(email="valid@mail.com")
 
-    
     def test_create_user_invalid_email(self):
         """
         Ensure that only phonenumbers with prefix "+" is accepted when creating an user
@@ -259,11 +255,12 @@ class UserRegisterTestCase(APITestCase):
                 "city": "City",
                 "country": "Country"
             }
-            }
-        
+        }
+
         response = self.client.post(url, data, format="json")
-        
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Verifying that the user was not created and not added to the database
-        self.assertEqual(User.objects.filter(email="valid@mail.com").count(), 0)
+        with self.assertRaises(User.DoesNotExist):
+            User.objects.get(email="invalidmail.com")
