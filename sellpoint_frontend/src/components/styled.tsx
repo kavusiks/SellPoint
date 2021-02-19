@@ -1,8 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { Alert, Container, Row } from "react-bootstrap";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { Alert, Container, Row, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 import { useSessionContext } from "../context/Session";
+
+/**
+ * Simple spinner for when something is loading
+ * 
+ * @param props - The props
+ */
+export const DefaultSpinner: FunctionComponent = (props) => {
+  return (
+    <Spinner
+      as="span"
+      animation="border"
+      size="sm"
+      role="status"
+      aria-hidden="true"
+    >
+      <span className="sr-only">{props.children}</span>
+    </Spinner>
+  );
+};
 
 /**
  * Creates a styled component with a box shadow
@@ -68,7 +87,7 @@ export interface ErrorState {
    *
    * @param error - The error message, or undefined
    */
-  setError: (error: string | undefined) => void;
+  setError: (error: string | React.ReactNode | undefined) => void;
 }
 
 /**
@@ -79,7 +98,7 @@ export interface ErrorState {
  * @returns a newly created {@link ErrorState}
  */
 export const useErrorState = (): ErrorState => {
-  const [error, setError] = useState<string | undefined>(undefined);
+  const [error, setError] = useState<string | React.ReactNode | undefined>(undefined);
 
   const makeErrorComponent = () => {
     if (!error) {

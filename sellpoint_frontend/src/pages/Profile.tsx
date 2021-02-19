@@ -1,60 +1,83 @@
 import React, { FunctionComponent } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container } from "react-bootstrap";
 import { useHistory } from "react-router";
-import { CenteredRow } from "../components/styled";
+import { CenteredRow, DefaultSpinner, FormContainer, LeftCenterRow } from "../components/styled";
 import { useSessionContext } from "../context/Session";
-import AuthenticationService from "../core/auth";
+import User from "../models/user";
+import default_avatar from "../static/profile_picture_holder.png";
 
+interface ProfileFieldProps {
+  title: string;
+  value: string | React.ReactNode;
+}
 
-// This is just an example component and should be removed
-const LoggedInExample: FunctionComponent = () => {
+interface ProfileDisplayProps {
+  user: User;
+}
+
+const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({ user }: ProfileDisplayProps) => {
+  return (
+    <>
+      <LeftCenterRow xs={10}>
+        <Col xs={2}>
+          <img style={{ width: "100%", height: "auto" }} alt="Profilbilde" src={default_avatar} />
+        </Col>
+
+        <Col xs={8}>
+          <Container>
+            <LeftCenterRow>
+              <h2>{user.first_name + " " + user.last_name}</h2>
+            </LeftCenterRow>
+
+            <LeftCenterRow>
+              <p>Email: {user.email}</p>
+            </LeftCenterRow>
+
+            <LeftCenterRow>
+              <p>Telefonnummer: {user.phone_number}</p>
+            </LeftCenterRow>
+
+            <LeftCenterRow>
+              <p>
+                Adresse: {user.address.line1}
+                <br /> {user.address.line2}
+              </p>
+            </LeftCenterRow>
+
+            <LeftCenterRow>
+              <p>
+                {user.address.postalcode} {user.address.city} {user.address.country}
+              </p>
+            </LeftCenterRow>
+          </Container>
+        </Col>
+      </LeftCenterRow>
+    </>
+  );
+};
+
+const Profile: FunctionComponent = () => {
   const session = useSessionContext();
   const history = useHistory();
 
-
   const goBack = () => {
-    //AuthenticationService.logOut();
     session.updateSelfUser().then(() => history.push("/success"));
   };
 
   return (
-    <Container>
-      <h1>Min profil</h1>
-      <CenteredRow>
-          <img alt="profilepicture" style={{width: 100}} src={String('profile_picture_holder.png')}/>
-      </CenteredRow>
-      <CenteredRow>
-      <h2>
-        Navn: {session.user ? session.user.first_name : "Loading..."}{" "}
-        {session.user ? session.user.last_name : "Loading..."}
-      </h2>
-      </CenteredRow>
-      <CenteredRow>
-      <h3>Email: {session.user ? session.user.email : "Loading..."}</h3>
-      </CenteredRow>
-      <CenteredRow>
-      <h3>Telefonnummer: {session.user ? session.user.phone_number : "Loading..."}</h3>
-      </CenteredRow>
-      <CenteredRow>
-      <h3>
-        Adresse: {session.user ? session.user.address.line1 : "Loading..."}, Adresse2:{" "}
-        {session.user ? session.user.address.line2 : "Loading..."}
-      </h3>
-      </CenteredRow>
-      <CenteredRow>
-      <h3>
-        {session.user ? session.user.address.postalcode : "Loading..."}{" "}
-        {session.user ? session.user.address.city : "Loading..."}{" "}
-        {session.user ? session.user.address.country : "Loading..."}
-      </h3>
-      </CenteredRow>
+    <Container fluid>
+      <CenteredRow noGutters>
+        <FormContainer style={{ maxWidth: "80%", width: "auto" }}>
+          <h1>Min profil</h1>
+          {session.user ? <ProfileDisplay user={session.user} /> : <DefaultSpinner />}
 
-      <Button variant="primary" onClick={goBack}>
-        Tilbake
-      </Button>
+          <Button style={{ marginTop: "10px" }} variant="primary" onClick={goBack}>
+            Tilbake
+          </Button>
+        </FormContainer>
+      </CenteredRow>
     </Container>
-    
   );
 };
 
-export default LoggedInExample;
+export default Profile;

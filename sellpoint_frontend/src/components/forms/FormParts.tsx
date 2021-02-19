@@ -11,7 +11,7 @@ export interface FormProps {
    *
    * @param error - The error message
    */
-  setError: (error: string) => void;
+  setError: (error: string | React.ReactNode) => void;
 }
 
 /**

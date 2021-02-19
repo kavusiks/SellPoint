@@ -6,6 +6,7 @@ import AuthenticationService from "../../core/auth";
 import User, { Address } from "../../models/user";
 import { CenteredRow } from "../styled";
 import { AddressFormPart, FormProps } from "./FormParts";
+import { readDjangoError } from "../../core/client";
 
 /**
  * The props for the {@link RegisterForm}
@@ -65,8 +66,6 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
       address: address,
     };
 
-    console.log(user);
-
     AuthenticationService.signUp(user, password, logIn, rememberLogIn)
       .then(() => {
         session
@@ -75,7 +74,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
           .catch((error) => setError("En uforventet error oppstod!"));
       })
       .catch((error) => {
-        setError(error.response ? error.response.message : "En uforventet error oppstod!");
+        setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
       });
   };
 
@@ -135,7 +134,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
         />
       </Form.Group>
 
-      <Form.Group controlId="form-signup-confirm-phonenumber">
+      <Form.Group controlId="form-signup-phonenumber">
         <Form.Label>Telefonnummer</Form.Label>
         <InputGroup>
         <InputGroup.Prepend><InputGroup.Text id="basic-addon1">+47</InputGroup.Text></InputGroup.Prepend>
@@ -144,7 +143,6 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
           placeholder="Telefonnummer"
           onChange={(e) => setPhoneNumber("+47" + e.target.value)}
           isInvalid={validated && (phoneNumber.length < 8)}
-          //isValid = {phoneNumber.length >= 8} 
           required
         />
         </InputGroup>
