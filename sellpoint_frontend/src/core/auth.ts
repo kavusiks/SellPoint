@@ -3,11 +3,9 @@ import { AuthAccessRefreshToken, AuthAccessToken } from "../models/auth";
 import User from "../models/user";
 import Cookies, { CookieSetOptions } from "universal-cookie";
 
-const COOKIE_ACCESS_TOKEN = "sp_auth_access";
-const COOKIE_REFRESH_TOKEN = "sp_auth_refresh";
+export const COOKIE_ACCESS_TOKEN = "sp_auth_access";
+export const COOKIE_REFRESH_TOKEN = "sp_auth_refresh";
 const COOKIE_REFRESH_MAX_AGE = 7689600; // Refresh token is valid for 90 days
-
-const cookies = new Cookies();
 
 /**
  * Abstraction of authentication endpoints. Handles storing authentication
@@ -15,7 +13,11 @@ const cookies = new Cookies();
  * updates access token.
  */
 class AuthenticationService {
+  cookies: Cookies;
+
   constructor() {
+    this.cookies = new Cookies();
+
     // Add interceptor that automatically adds authorization header to requests
     client.interceptors.request.use((config) => {
       if (this.isLoggedIn()) {
@@ -32,7 +34,7 @@ class AuthenticationService {
         return response;
       },
       async (error) => {
-        if (!this.isLoggedIn() || error.response.status !== 401) {
+        if (!this.isLoggedIn() || !error.response || error.response.status !== 401) {
           return new Promise((resolve, reject) => reject(error));
         }
 
@@ -104,7 +106,7 @@ class AuthenticationService {
       let opts: CookieSetOptions = { path: "/", sameSite: "lax" };
 
       // We do not set a max age on this token, since it will expire server side
-      cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, opts);
+      this.cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, opts);
 
       if (remember) {
         // If we wish to remember log in we have to set the expiry of the cookie. When no
@@ -115,7 +117,7 @@ class AuthenticationService {
         };
       }
 
-      cookies.set(COOKIE_REFRESH_TOKEN, response.data.refresh, opts);
+      this.cookies.set(COOKIE_REFRESH_TOKEN, response.data.refresh, opts);
     }
 
     return response.data;
@@ -126,7 +128,7 @@ class AuthenticationService {
    * whether the {@link COOKIE_REFRESH_TOKEN} cookie exists
    */
   isLoggedIn(): boolean {
-    return !!cookies.get(COOKIE_REFRESH_TOKEN);
+    return !!this.cookies.get(COOKIE_REFRESH_TOKEN);
   }
 
   /**
@@ -134,12 +136,7 @@ class AuthenticationService {
    * token is not expired.
    */
   getAccessToken(): string {
-    const cookie = cookies.get(COOKIE_ACCESS_TOKEN);
-    if (!cookie) {
-      throw new Error("Not logged in!");
-    }
-
-    return cookie;
+    return this.cookies.get(COOKIE_ACCESS_TOKEN);
   }
 
   /**
@@ -147,7 +144,7 @@ class AuthenticationService {
    * token is not expired.
    */
   getRefreshToken(): string {
-    const cookie = cookies.get(COOKIE_REFRESH_TOKEN);
+    const cookie = this.cookies.get(COOKIE_REFRESH_TOKEN);
     if (!cookie) {
       throw new Error("Not logged in!");
     }
@@ -159,15 +156,15 @@ class AuthenticationService {
    * Removes the access and refresh token cookies
    */
   logOut() {
-    cookies.remove(COOKIE_REFRESH_TOKEN);
-    cookies.remove(COOKIE_ACCESS_TOKEN);
+    this.cookies.remove(COOKIE_REFRESH_TOKEN);
+    this.cookies.remove(COOKIE_ACCESS_TOKEN);
   }
 
   private async refreshAccessToken(): Promise<AuthAccessToken> {
     const refreshToken = this.getRefreshToken(); // Will verify that we are in fact logged in aswell
     const response = await client.post("auth/refresh/", { refresh: refreshToken });
     if (response.data.access) {
-      cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, { path: "/", sameSite: "lax" });
+      this.cookies.set(COOKIE_ACCESS_TOKEN, response.data.access, { path: "/", sameSite: "lax" });
     }
 
     return response.data;
