@@ -1,6 +1,7 @@
 import { Console } from "console";
 import React, { FunctionComponent, useState } from "react";
 import { Button, Col, Form } from "react-bootstrap";
+import client from "../core/client";
 import { Ad } from "../models/ad";
 
 
@@ -11,13 +12,18 @@ export const CreateAd: FunctionComponent<any> = () => {
     const [description, setDescription] = useState<string>("");
     
     //Hva skal man putte bilde som?
-    const [image, setImage] = useState<string>("");
+    const [image, setImage] = useState<string>();
 
     
 
+    
 
     //Trenger å fikse en onSubmit
-    const onSubmit = () =>{
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) =>{
+
+        e.preventDefault();
+
+        console.log("Submit")
 
         
 
@@ -28,16 +34,21 @@ export const CreateAd: FunctionComponent<any> = () => {
             image: image,
           };
         
-        console.log(ad);
-
-
+          
+          await client.post("ad-create/", {
+            
+            title: ad.title,
+            price: ad.price,
+            description: ad.description,
+            img : ad.image
+          });
 
     }
-
+    
     
 
     return (
-      <Form>
+      <Form onSubmit={onSubmit}>
             
         <Form.Group as={Col} controlId="create-ad-title">
             <Form.Label>Tittel</Form.Label>
@@ -75,7 +86,7 @@ export const CreateAd: FunctionComponent<any> = () => {
                 label="Legg til bilde" 
 
                 //Skal man sette onChange på image?
-                
+                // onChange={(e) => setImage(e.target.value)}
             />
         </Form.Group>
 
