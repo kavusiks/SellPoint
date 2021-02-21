@@ -8,6 +8,7 @@ from rest_framework.response import Response
 def apiOverview(request):
     api_urls = {
         'List': '/ad-list',
+        'NotSoldList:': 'ad-all-list/',
         'Detail View': '/ad-detail/<str:pk>', 
         'Create': '/ad-create/',
         'Update': '/ad-update/<str:pk>', #Only user access
@@ -33,6 +34,7 @@ def adDetail(request, pk):
     ads = Ad.objects.get(id=pk)
     serializer = AdSerializer(ads, many=False)
     return Response(serializer.data)
+
 
 @api_view(['POST'])
 def adCreate(request):
