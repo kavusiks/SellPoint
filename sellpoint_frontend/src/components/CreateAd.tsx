@@ -1,8 +1,9 @@
 import { Console } from "console";
 import React, { FunctionComponent, useState } from "react";
-import { Button, Col, Form } from "react-bootstrap";
+import { Button, Col, Form} from "react-bootstrap";
 import client from "../core/client";
 import { Ad } from "../models/ad";
+import AdService from "../core/ad"
 
 
 export const CreateAd: FunctionComponent<any> = () => {
@@ -13,19 +14,20 @@ export const CreateAd: FunctionComponent<any> = () => {
     
     //Hva skal man putte bilde som?
     const [image, setImage] = useState<string>();
+    const [validated, setValidated] = useState<boolean>(false);
 
     
-
-    
-
-    //Trenger å fikse en onSubmit
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) =>{
 
+        setValidated(true);
         e.preventDefault();
-
-        console.log("Submit")
-
-        
+    
+        const form = e.target as HTMLFormElement;
+        if (!form.checkValidity()) {
+          e.stopPropagation();
+          return;
+        }
+    
 
         const ad: Ad = {
             title: title,
@@ -34,32 +36,23 @@ export const CreateAd: FunctionComponent<any> = () => {
             image: image,
           };
         
-          
-          await client.post("ad-create/", {
-            
-            title: ad.title,
-            price: ad.price,
-            description: ad.description,
-            img : ad.image
-          });
+        AdService.createAd(ad);
 
     }
-    
-    
 
     return (
-      <Form onSubmit={onSubmit}>
+      <Form noValidate validated={validated} onSubmit={onSubmit}>
             
         <Form.Group as={Col} controlId="create-ad-title">
             <Form.Label>Tittel</Form.Label>
             <Form.Control
+                autoFocus
                 type="text"
                 placeholder="Tittel"
                 onChange={(e) => setTitle(e.target.value)}
                 required
             />
         </Form.Group>
-
         <Form.Group as={Col} controlId="create-ad-price">
             <Form.Label>Pris</Form.Label>
             <Form.Control
@@ -69,8 +62,7 @@ export const CreateAd: FunctionComponent<any> = () => {
                 required
             />
         </Form.Group>
-
-        <Form.Group as={Col} controlId="create-ad-description">
+´        <Form.Group as={Col} controlId="create-ad-description">
             <Form.Label>Beskrivelse</Form.Label>
             <Form.Control
                 as="textarea"
@@ -86,7 +78,7 @@ export const CreateAd: FunctionComponent<any> = () => {
                 label="Legg til bilde" 
 
                 //Skal man sette onChange på image?
-                // onChange={(e) => setImage(e.target.value)}
+                onChange={(e: any) => setImage(e.target.files[0])}
             />
         </Form.Group>
 
