@@ -3,7 +3,7 @@ import React, { FunctionComponent, useState } from "react";
 import { Button, Col, Form} from "react-bootstrap";
 import client from "../core/client";
 import { Ad } from "../models/ad";
-import AdService from "../core/ad"
+import AdService from "../core/adService"
 
 
 export const CreateAd: FunctionComponent<any> = () => {
@@ -13,7 +13,7 @@ export const CreateAd: FunctionComponent<any> = () => {
     const [description, setDescription] = useState<string>("");
     
     //Hva skal man putte bilde som?
-    const [image, setImage] = useState<string>();
+    const [image, setImage] = useState<string>("");
     const [validated, setValidated] = useState<boolean>(false);
 
     
@@ -33,10 +33,19 @@ export const CreateAd: FunctionComponent<any> = () => {
             title: title,
             price: price,
             description: description,
-            image: image,
+            img: image,
           };
         
         AdService.createAd(ad);
+        const uploadData = new FormData();
+        uploadData.append('title', title);
+
+        uploadData.append('description', description);
+        uploadData.append('img',image);
+        fetch('http://localhost:8000/ad-create/',{
+            method: 'POST',
+            body: uploadData
+        })
 
     }
 
@@ -74,8 +83,8 @@ export const CreateAd: FunctionComponent<any> = () => {
         </Form.Group>
 
         <Form.Group as={Col} controlId="create-ad-image">
-            <Form.File 
-                label="Legg til bilde" 
+            <input
+                type="file"
 
                 //Skal man sette onChange på image?
                 onChange={(e: any) => setImage(e.target.files[0])}
