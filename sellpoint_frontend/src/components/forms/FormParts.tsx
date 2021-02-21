@@ -62,6 +62,8 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
         <Form.Label>Addresselinje 1</Form.Label>
         <Form.Control
           type="text"
+          pattern="^[a-zA-Z\p{L}0-9]+$"
+          minLength={4}
           placeholder="Høyskoleringen 4"
           onChange={(e) => setLine1(e.target.value)}
           required
@@ -72,6 +74,8 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
         <Form.Label>Addresselinje 2</Form.Label>
         <Form.Control
           type="text"
+          pattern="^[a-zA-Z\p{L}0-9]+$"
+          minLength={4}
           placeholder="Leilighet 301"
           onChange={(e) => setLine2(e.target.value)}
         />
@@ -82,6 +86,8 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
           <Form.Label>Land</Form.Label>
           <Form.Control
             type="text"
+            pattern="^[a-zA-Z\p{L}]+$"
+            minLength={4}
             placeholder="Norge"
             onChange={(e) => setCountry(e.target.value)}
             required
@@ -92,6 +98,9 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
           <Form.Label>Postkode</Form.Label>
           <Form.Control
             type="text"
+            pattern="[0-9]*"
+            maxLength={4}
+            minLength={4}
             placeholder="7030"
             onChange={(e) => setPostalcode(e.target.value)}
             required
@@ -104,6 +113,8 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
           <Form.Label>By</Form.Label>
           <Form.Control
             type="text"
+            pattern="^[a-zA-Z\p{L}]+$"
+            minLength={4}
             placeholder="Trondheim"
             onChange={(e) => setCity(e.target.value)}
             required
