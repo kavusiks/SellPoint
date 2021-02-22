@@ -62,7 +62,7 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
         <Form.Label>Addresselinje 1</Form.Label>
         <Form.Control
           type="text"
-          pattern="^[a-zA-Z\p{L}0-9]+$"
+          pattern="^[a-zA-Z\p{L}0-9\s]+$"
           minLength={4}
           placeholder="Høyskoleringen 4"
           onChange={(e) => setLine1(e.target.value)}
@@ -74,7 +74,7 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
         <Form.Label>Addresselinje 2</Form.Label>
         <Form.Control
           type="text"
-          pattern="^[a-zA-Z\p{L}0-9]+$"
+          pattern="^[a-zA-Z\p{L}0-9\s]+$"
           minLength={4}
           placeholder="Leilighet 301"
           onChange={(e) => setLine2(e.target.value)}
