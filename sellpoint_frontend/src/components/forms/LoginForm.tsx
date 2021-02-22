@@ -60,6 +60,7 @@ export const LoginForm: FunctionComponent<FormProps> = ({ setError }: FormProps)
           <p>Emailaddresse</p>
         </Form.Label>
         <Form.Control
+          autoFocus
           type="email"
           placeholder="Emailaddresse"
           onChange={(e) => setEmail(e.target.value)}

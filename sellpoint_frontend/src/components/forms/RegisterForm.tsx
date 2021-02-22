@@ -7,6 +7,11 @@ import User, { Address } from "../../models/user";
 import { CenteredRow } from "../styled";
 import { AddressFormPart, FormProps } from "./FormParts";
 import { readDjangoError } from "../../core/client";
+import styled from "styled-components";
+
+const StyledButton = styled(Button)`
+  margin: 10px;
+`;
 
 /**
  * The props for the {@link RegisterForm}
@@ -84,7 +89,10 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
         <Form.Group as={Col} controlId="form-signup-first-name">
           <Form.Label>Fornavn</Form.Label>
           <Form.Control
+            autoFocus
             type="text"
+            pattern="^[a-zA-Z\p{L}]+$"
+            minLength={2}
             placeholder="Ola"
             onChange={(e) => setFirstName(e.target.value)}
             required
@@ -95,6 +103,8 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
           <Form.Label>Etternavn</Form.Label>
           <Form.Control
             type="text"
+            pattern="^[a-zA-Z\p{L}]+$"
+            minLength={2}
             placeholder="Nordmann"
             onChange={(e) => setLastName(e.target.value)}
             required
@@ -106,6 +116,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
         <Form.Label>Email</Form.Label>
         <Form.Control
           type="email"
+          minLength={7}
           placeholder="example@gmail.com"
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -117,6 +128,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
         <Form.Control
           type="password"
           placeholder="Passord"
+          minLength={8}
           onChange={(e) => setPassword(e.target.value)}
           isInvalid={validated && password !== confirmPassword}
           required
@@ -128,6 +140,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
         <Form.Control
           type="password"
           placeholder="Passord"
+          minLength={8}
           onChange={(e) => setConfirmPassword(e.target.value)}
           isInvalid={validated && password !== confirmPassword}
           required
@@ -137,23 +150,30 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
       <Form.Group controlId="form-signup-phonenumber">
         <Form.Label>Telefonnummer</Form.Label>
         <InputGroup>
-        <InputGroup.Prepend><InputGroup.Text id="basic-addon1">+47</InputGroup.Text></InputGroup.Prepend>
-        <Form.Control
-          type="text"
-          placeholder="Telefonnummer"
-          onChange={(e) => setPhoneNumber("+47" + e.target.value)}
-          isInvalid={validated && (phoneNumber.length < 8)}
-          required
-        />
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">+47</InputGroup.Text>
+          </InputGroup.Prepend>
+          <Form.Control
+            type="text"
+            pattern="[0-9]*"
+            minLength={8}
+            maxLength={17}
+            placeholder="Telefonnummer"
+            onChange={(e) => setPhoneNumber("+47" + e.target.value)}
+            required
+          />
         </InputGroup>
       </Form.Group>
 
       <AddressFormPart onChange={setAddress} />
 
       <CenteredRow noGutters>
-        <Button variant="primary" type="submit">
+        <StyledButton variant="secondary" href="/login">
+          Tilbake
+        </StyledButton>
+        <StyledButton variant="primary" type="submit">
           Registrer
-        </Button>
+        </StyledButton>
       </CenteredRow>
     </Form>
   );
