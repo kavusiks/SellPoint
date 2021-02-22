@@ -1,0 +1,15 @@
+.ad {
+  margin: 10px;
+}
+
+.ad .small {
+  max-width: 300px;
+}
+
+.ad .large {
+  max-width: 75%;
+}
+
+.ad .image {
+  width: 100%;
+}
