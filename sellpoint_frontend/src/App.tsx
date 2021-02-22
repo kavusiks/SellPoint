@@ -26,13 +26,8 @@ const App: FunctionComponent = () => {
           component={LoggedInExample}
           exact
         />
-        
-        <ProtectedRoute
-          {...protectedRouteProps}
-          path="/profile"
-          component={ProfilePage}
-          exact
-        />
+
+        <ProtectedRoute {...protectedRouteProps} path="/profile" component={ProfilePage} exact />
 
         <Route path="/login" component={LoginPage} exact />
         <Route path="/register" component={RegisterPage} exact />
