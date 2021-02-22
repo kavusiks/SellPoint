@@ -5,30 +5,74 @@ import Nav from "react-bootstrap/Nav";
 import { Button } from "react-bootstrap";
 import "./index.css";
 import { useSessionContext } from "../../context/Session";
+import AuthenticationService from "../../core/auth";
+import { useHistory, useLocation } from "react-router";
+
+interface PathAwareButtonProps {
+  href: string;
+  variant: string;
+  children?: React.ReactNode;
+}
+
+/**
+ * A button component which will be enabled/disabled depending on the
+ * current pathname, e. g. if this button redirects to /profile and
+ * the current path is /profile the button will be disabled.
+ */
+const PathAwareButton: FunctionComponent<PathAwareButtonProps> = ({
+  href,
+  variant,
+  children,
+}: PathAwareButtonProps) => {
+  const currentLocation = useLocation();
+  const pathname = currentLocation.pathname;
+
+  // Check if the current path is the one this button redirects to. If it
+  // is, we can disable this button as it'd would do nothing
+  if (pathname !== href) {
+    return (
+      <Button className="button" href={href} variant={variant}>
+        {children}
+      </Button>
+    );
+  }
+
+  return (
+    <Button className="button" variant={variant} disabled>
+      {children}
+    </Button>
+  );
+};
 
 const Navigationbar: FunctionComponent = () => {
   const session = useSessionContext();
+  const history = useHistory();
 
   const makeButtons = () => {
     if (!session.isAuthenticated) {
       return (
         <>
-          <Button className="button" href="/register" variant="outline-secondary">
+          <PathAwareButton href="/register" variant="outline-secondary">
             Opprett bruker
-          </Button>
-          <Button className="button" href="/login" variant="outline-success">
+          </PathAwareButton>
+          <PathAwareButton href="/login" variant="outline-success">
             Logg Inn
-          </Button>
+          </PathAwareButton>
         </>
       );
     }
 
+    const logOut = () => {
+      AuthenticationService.logOut();
+      session.updateSelfUser().then(() => history.push("/login"));
+    };
+
     return (
       <>
-        <Button className="button" href="/profile" variant="outline-secondary">
+        <PathAwareButton href="/profile" variant="outline-secondary">
           Din Profil
-        </Button>
-        <Button className="button" variant="outline-primary">
+        </PathAwareButton>
+        <Button className="button" onClick={logOut} variant="outline-primary">
           Logg Ut
         </Button>
       </>
