@@ -32,7 +32,6 @@ const App: FunctionComponent = () => {
         <ProtectedRoute {...protectedRouteProps} path="/success" component={LoggedInExample} exact/>
         <ProtectedRoute {...protectedRouteProps} path="/profile" component={ProfilePage} exact />
         <Route path="/:id" component={AdComponent}/>
- 
       </Switch>
     </Router>
   );  

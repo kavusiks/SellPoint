@@ -4,6 +4,7 @@ import { Button, Col, Form} from "react-bootstrap";
 import client from "../core/client";
 import { Ad } from "../models/ad";
 import AdService from "../core/adService"
+import axios from "axios";
 
 
 export const CreateAd: FunctionComponent<any> = () => {
@@ -13,7 +14,7 @@ export const CreateAd: FunctionComponent<any> = () => {
     const [description, setDescription] = useState<string>("");
     
     //Hva skal man putte bilde som?
-    const [image, setImage] = useState<string>("");
+    const [image, setImage] = useState<any>();
     const [validated, setValidated] = useState<boolean>(false);
 
     
@@ -27,7 +28,6 @@ export const CreateAd: FunctionComponent<any> = () => {
           e.stopPropagation();
           return;
         }
-    
 
         const ad: Ad = {
             title: title,
@@ -35,17 +35,14 @@ export const CreateAd: FunctionComponent<any> = () => {
             description: description,
             img: image,
           };
+          
+          console.log(title)
+          console.log(price)
+          console.log(description)
+          console.log(image.name)
         
         AdService.createAd(ad);
-        const uploadData = new FormData();
-        uploadData.append('title', title);
 
-        uploadData.append('description', description);
-        uploadData.append('img',image);
-        fetch('http://localhost:8000/ad-create/',{
-            method: 'POST',
-            body: uploadData
-        })
 
     }
 

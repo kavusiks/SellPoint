@@ -21,15 +21,10 @@ const SmallAd: React.FC<Ad> = (props) => {
     }
         
     return(
-    <div className="container bootstrap snipets">
-        <div className="col-xs-6 col-md-4">
-        <div className="product tumbnail thumbnail-3"><a href="#"><img src={img} alt=""></img></a>
-            <div className="caption">
-                <h6><a href="#">{props.title}</a></h6><span className="price">
-                </span><span className="price">{props.price} kr</span>
-            </div>
-        </div>
-        </div>
+    <div className="container">
+        <img className="image" src={img} alt=""></img>
+        <div className="title">{props.title}</div>
+        <div className="price">{props.price} kr</div>
     </div>
     );
 };

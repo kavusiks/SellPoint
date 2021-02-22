@@ -9,7 +9,7 @@ class AdService {
             title: ad.title,
             price: ad.price,
             description: ad.description,
-            img : ad.image
+            img : ad.image,
           });
 
     }

@@ -17,13 +17,11 @@ const Navigationbar: FunctionComponent = () => {
         <Navbar.Brand href="/" className = "sellpointFont">Sellpoint</Navbar.Brand>
         
         <Nav className="mr-auto">
-          <Nav.Link href="/create-ad">Lag annonse</Nav.Link>
-          <Nav.Link href="#features">Sett link 2</Nav.Link>
-          <Nav.Link href="#pricing">Sett link 3</Nav.Link>
+          <Nav.Link href="/create-ad">Ny annonse</Nav.Link>
         </Nav>
         
         <Form inline>
-          <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+          <Button href='/register' variant="outline-success" >Opprett bruker</Button>
           <Button href='/login' variant="outline-success" >Logg inn</Button>
         </Form>
 
