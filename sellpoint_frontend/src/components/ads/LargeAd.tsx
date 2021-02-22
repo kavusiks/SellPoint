@@ -3,6 +3,7 @@ import { CenteredRow, LeftCenterRow, ShadowedContainer } from "../styled";
 import { AdComponentProps } from "./Ads";
 import { Carousel, Image } from "react-bootstrap";
 import { AdImage } from "../../models/ad";
+import "./ads.css";
 
 interface AdImageProps {
   image: AdImage;
@@ -10,15 +11,13 @@ interface AdImageProps {
 
 const AdImageComponent: FunctionComponent<AdImageProps> = ({ image }: AdImageProps) => {
   return (
-    <Carousel.Item>
-      <Image className="image" src={image.url} alt={image.description} />
+    <>
+      <Image className="ad-image-item d-block w-100" src={image.url} alt={image.description} />
 
-      {image.description ? (
-        <Carousel.Caption>
-          <p>{image.description}</p>
-        </Carousel.Caption>
-      ) : null}
-    </Carousel.Item>
+      <Carousel.Caption className="ad-image-description">
+        <h3>{image.description ?? "Bilde " + image.id}</h3>
+      </Carousel.Caption>
+    </>
   );
 };
 
@@ -26,7 +25,7 @@ const AdImagePlaceholder: FunctionComponent = () => {
   return (
     <Carousel.Item>
       <Image
-        className="image"
+        className="d-block w-100"
         src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
         alt="Ingen bilder"
       />
@@ -42,7 +41,9 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
     return !!ad.thumbnail && ad.thumbnail.url === img.url;
   };
 
-  const makeImages = () => {
+  // At first this returned the Carousel.Item components directly,
+  // but that didn't work at all for some reason.
+  const makeCarouselComponents = () => {
     const images = [];
 
     if (!ad.images) {
@@ -67,11 +68,17 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
 
   return (
     <ShadowedContainer className="ad large">
-      <CenteredRow>
-        <Carousel>{makeImages()}</Carousel>
+      <CenteredRow noGutters>
+        <Carousel interval={null} slide={false}>
+          {makeCarouselComponents().map((component, idx) => {
+            return <Carousel.Item key={idx}>{component}</Carousel.Item>;
+          })}
+        </Carousel>
       </CenteredRow>
-      <LeftCenterRow>
+      <LeftCenterRow noGutters>
         <h1>{ad.title}</h1>
+      </LeftCenterRow>
+      <LeftCenterRow noGutters>
         <p>
           <strong>Pris:</strong> {ad.price},-
           <br />

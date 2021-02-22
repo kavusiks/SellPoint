@@ -14,10 +14,10 @@ export const MainPage: FunctionComponent = () => {
   return (
     <div>
       {items
-        .filter((item) => item.is_sold === false)
+        .filter((item) => !item.is_sold)
         .map((item) => (
           <p key={item.id}>
-            <Link to={`/${item.id}`}>
+            <Link to={`/ad/${item.id}`}>
               <SmallAd ad={item} />
             </Link>
           </p>

@@ -36,7 +36,7 @@ const Navigationbar: FunctionComponent = () => {
   };
 
   return (
-    <Navbar className="navbar" bg="light" variant="light">
+    <Navbar bg="light" variant="light">
       <Navbar.Brand href="/" className="logo">
         Sell<strong>Point</strong>
       </Navbar.Brand>

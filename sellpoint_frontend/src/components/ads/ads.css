@@ -1,15 +1,33 @@
 .ad {
   margin: 10px;
+  padding: 10px;
 }
 
-.ad .small {
-  max-width: 300px;
+.ad.small {
+  max-width: 400px;
 }
 
-.ad .large {
+.ad.large {
   max-width: 75%;
 }
 
-.ad .image {
+.ad.small .image {
   width: 100%;
+  border-radius: 5px;
+}
+
+.ad.large .ad-image-item {
+  height: 500px;
+}
+
+.ad.large .ad-image-description {
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.164);
+}
+
+.ad.large .ad-image-description > p,
+.ad.large .ad-image-description > h1,
+.ad.large .ad-image-description > h2,
+.ad.large .ad-image-description > h3 {
+  color: white !important;
 }

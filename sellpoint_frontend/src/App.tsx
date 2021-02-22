@@ -25,11 +25,13 @@ const App: FunctionComponent = () => {
       <Navigationbar />
       <Switch>
         <Route path="/" exact component={MainPage} />
+
         <Route path="/ad/create" exact component={CreateAdPage} />
+        <Route path="/ad/:id" component={AdViewPage} />
+
         <Route path="/login" component={LoginPage} exact />
         <Route path="/register" component={RegisterPage} exact />
         <ProtectedRoute {...protectedRouteProps} path="/profile" component={ProfilePage} exact />
-        <Route path="/ad/:id" component={AdViewPage} />
       </Switch>
     </Router>
   );
