@@ -29,9 +29,10 @@ const App: FunctionComponent = () => {
         <Route path="/create-ad" exact component={CreateAd}/>
         <Route path="/login" component={LoginPage} exact />
         <Route path="/register" component={RegisterPage} exact />
-        <Route path="/:id" component={AdComponent}/>
         <ProtectedRoute {...protectedRouteProps} path="/success" component={LoggedInExample} exact/>
         <ProtectedRoute {...protectedRouteProps} path="/profile" component={ProfilePage} exact />
+        <Route path="/:id" component={AdComponent}/>
+ 
       </Switch>
     </Router>
   );  
