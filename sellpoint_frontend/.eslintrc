@@ -12,16 +12,23 @@
     ],
     "plugins": [
         "react",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "eslint-plugin-tsdoc"
     ],
     "rules": {
         "react/prop-types": 0,
         "react/display-name": 2,
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/ban-ts-ignore": 0
+        "@typescript-eslint/ban-ts-ignore": 0,
+        "tsdoc/syntax": "warn"
     },
     "env": {
         "jest": true,
         "browser": true
+    },
+    "parserOptions": {
+        "project": "./tsconfig.json",
+        "ecmaVersion": 2018,
+        "sourceType": "module"
     }
 }

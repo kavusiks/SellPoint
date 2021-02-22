@@ -6,6 +6,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+p {
+  color: gray;
+  margin: 0px;
+}
+
+h1,
+h2,
+h3 {
+  color: rgb(100, 100, 100);
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
