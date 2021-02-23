@@ -1,0 +1,54 @@
+image: node:latest
+
+stages:
+  - install
+  - build
+  - test
+  - lint
+
+cache:
+  key: $CI_PROJECT_ID
+  policy: pull
+  untracked: true
+
+frontend-install:
+  stage: install
+  before_script:
+    - cd sellpoint_frontend
+  script:
+    - echo 'Installing dependencies...'
+    - yarn install
+  cache:
+    key: $CI_PROJECT_ID
+    policy: pull-push
+    paths:
+      - "sellpoint_frontend/.yarn"
+      - "sellpoint_frontend/node_modules"
+      - "sellpoint_frontend/packages/*/node_modules"
+
+frontend-build:
+  stage: build
+  before_script:
+    - cd sellpoint_frontend
+  script: yarn build
+
+frontend-test:
+  stage: test
+  before_script:
+    - cd sellpoint_frontend
+  script: yarn test
+
+backend-test:
+  stage: test
+  image: python:latest
+  before_script:
+    - cd sellpoint_backend
+  script:
+    - pip install -r requirements.txt
+    - python manage.py test
+
+frontend-lint:
+  stage: lint
+  before_script:
+    - cd sellpoint_frontend
+  script: yarn lint
