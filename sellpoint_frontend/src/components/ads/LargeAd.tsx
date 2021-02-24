@@ -12,7 +12,7 @@ interface AdImageProps {
 const AdImageComponent: FunctionComponent<AdImageProps> = ({ image }: AdImageProps) => {
   return (
     <>
-      <Image className="ad-image-item d-block w-100" src={image.url} alt={image.description} />
+      <Image className="ad-image-item d-block" src={image.url} alt={image.description} />
 
       <Carousel.Caption className="ad-image-description">
         <h3>{image.description}</h3>
