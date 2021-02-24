@@ -23,13 +23,11 @@ const AdImageComponent: FunctionComponent<AdImageProps> = ({ image }: AdImagePro
 
 const AdImagePlaceholder: FunctionComponent = () => {
   return (
-    <Carousel.Item>
-      <Image
-        className="d-block w-100"
-        src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
-        alt="Ingen bilder"
-      />
-    </Carousel.Item>
+    <Image
+      className="d-block w-100"
+      src="https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+      alt="Ingen bilder"
+    />
   );
 };
 
@@ -46,7 +44,7 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   const makeCarouselComponents = () => {
     const images = [];
 
-    if (!ad.images) {
+    if (!ad.images || ad.images?.length === 0) {
       images.push(<AdImagePlaceholder />);
       return images;
     }
