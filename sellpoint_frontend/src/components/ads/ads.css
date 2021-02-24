@@ -3,30 +3,27 @@
   padding: 10px;
 }
 
-.ad.small {
-  width: 100%;
-  height: 100%;
+.ad.small .image {
+  max-width: 100%;
+  max-height: 100%;
+  height: 200px;
+  border-radius: 5px;
 }
 
 .ad.large {
   max-width: 75%;
 }
 
-.ad.small .image {
-  height: 200px;
-  border-radius: 5px;
-}
-
 .ad.large .ad-image-item {
-  height: 500px;
-}
+  max-width: 100%;
+  max-height: 500px;
+  border-radius: 5px;
+  }
 
 .ad.large .ad-image-description {
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.164);
 }
-
-
 
 .ad.large .ad-image-description > p,
 .ad.large .ad-image-description > h1,
