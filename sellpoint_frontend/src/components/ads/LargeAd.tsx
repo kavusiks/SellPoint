@@ -10,7 +10,6 @@ interface AdImageProps {
 }
 
 const AdImageComponent: FunctionComponent<AdImageProps> = ({ image }: AdImageProps) => {
-
   return (
     <>
       <Image className="ad-image-item d-block" src={image.url} alt={image.description} />
@@ -89,18 +88,12 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
             <strong>Telefonnummer: </strong> {ad.owner?.phone_number}
             <br />
             <strong>E-mail: </strong> {ad.owner?.email}
-          <br />
-          <br />
-          {ad.description}
+            <br />
+            <br />
+            {ad.description}
           </div>
         </p>
-        
       </LeftCenterRow>
-
-      
-
-
-
       {children}
     </ShadowedContainer>
   );
