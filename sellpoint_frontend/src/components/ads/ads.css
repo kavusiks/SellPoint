@@ -18,19 +18,19 @@
   max-width: 100%;
   max-height: 500px;
   border-radius: 5px;
-  }
+}
 
 .ad.large .ad-image-description {
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.164);
 }
 
-.ad.info{
+.ad.info {
   font-size: 18px;
 }
 
-.ad.title{
-  font-size: 25px
+.ad.title {
+  font-size: 25px;
 }
 
 .ad.large .ad-image-description > p,

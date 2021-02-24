@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
-import { CenteredRow, LeftCenterRow, ShadowedContainer, RightCenterRow } from "../styled";
+import { CenteredRow, LeftCenterRow, ShadowedContainer } from "../styled";
 import { AdComponentProps } from "./Ads";
-import { Carousel, Image, Button } from "react-bootstrap";
+import { Carousel, Image } from "react-bootstrap";
 import { AdImage } from "../../models/ad";
 import "./ads.css";
 

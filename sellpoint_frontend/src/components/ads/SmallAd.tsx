@@ -23,7 +23,9 @@ const SmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }: AdCompon
         <p>{ad.price},-</p>
       </LeftCenterRow>
       {children}
-      <RightCenterRow noGutters><p>{formatDate(ad.created_at)}</p></RightCenterRow>
+      <RightCenterRow noGutters>
+        <p>{formatDate(ad.created_at)}</p>
+      </RightCenterRow>
     </ShadowedContainer>
   );
 };
