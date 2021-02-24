@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Ignores the folder created when storing images and such
+sellpoint_backend/media
+
 **/__pycache__
 
 *.sqlite3
