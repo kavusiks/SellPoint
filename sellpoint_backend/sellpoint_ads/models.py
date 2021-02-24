@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from sellpoint_auth.models import User
 import os
 from django.urls import reverse
+from sellpoint_project.settings import BASE_URL
 
 
 def get_image_path(instance, filename):
@@ -31,6 +32,19 @@ class Ad(models.Model):
     thumbnail = models.ForeignKey(
         'Image', on_delete=models.RESTRICT, related_name="thumbnail_for", null=True, blank=True)
 
+    def get_images(self):
+        return self.image_set.all()
+
+    def get_thumbnail(self):
+        if self.thumbnail:
+            return self.thumbnail
+
+        images = self.get_images()
+        if images:
+            return images[0]
+
+        return None
+
 
 class Image(models.Model):
     image = models.ImageField(upload_to=get_image_path,
@@ -39,4 +53,4 @@ class Image(models.Model):
     description = models.CharField(max_length=256, blank=True, null=True)
 
     def get_url(self):
-        return reverse("ads-image", args=[self.id])
+        return BASE_URL + reverse("ad-detail-image", args=[self.id])

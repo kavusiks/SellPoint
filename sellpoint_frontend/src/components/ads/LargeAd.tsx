@@ -15,7 +15,7 @@ const AdImageComponent: FunctionComponent<AdImageProps> = ({ image }: AdImagePro
       <Image className="ad-image-item d-block w-100" src={image.url} alt={image.description} />
 
       <Carousel.Caption className="ad-image-description">
-        <h3>{image.description ?? "Bilde " + image.id}</h3>
+        <h3>{image.description}</h3>
       </Carousel.Caption>
     </>
   );

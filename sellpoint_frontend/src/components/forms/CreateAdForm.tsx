@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { Button, Col, Form } from "react-bootstrap";
+import { Button, Col, Form, Image } from "react-bootstrap";
 import { useHistory } from "react-router";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
@@ -12,10 +12,21 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
   const [title, setTitle] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
-
-  //Hva skal man putte bilde som?
-  const [image, setImage] = useState<any>();
+  const [imagePath, setImagePath] = useState<File | undefined>(undefined);
   const [validated, setValidated] = useState<boolean>(false);
+
+  const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImagePath(e.target.files ? e.target.files[0] : undefined);
+  };
+
+  const renderImage = () => {
+    if (!imagePath) {
+      return null;
+    }
+
+    const preview = URL.createObjectURL(imagePath);
+    return <Image style={{ maxWidth: "100%" }} src={preview} alt="Bilde" />;
+  };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     setValidated(true);
@@ -27,17 +38,27 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
       return;
     }
 
-    const ad: Ad = {
+    const tempAd: Ad = {
       title: title,
       price: price,
       description: description,
     };
 
-    AdAPI.createAd(ad)
-      .then(() => {
-        // TODO: Redirect user to view his/her own ad once created. Update API to
-        // return ID of newly created listing?
-        history.push(`/`);
+    AdAPI.createAd(tempAd)
+      .then((ad) => {
+        if (!ad.id) {
+          setError("where my id >:(!");
+          return;
+        }
+
+        if (!imagePath) {
+          history.push(`/ad/${ad.id}`);
+          return;
+        }
+
+        AdAPI.addImage(ad.id, imagePath).then((img) => {
+          history.push(`/ad/${ad.id}`);
+        });
       })
       .catch((error) => {
         setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
@@ -77,11 +98,8 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
         />
       </Form.Group>
       <Form.Group as={Col} controlId="create-ad-image">
-        <input
-          type="file"
-          //Skal man sette onChange på image?
-          onChange={(e: any) => setImage(e.target.files[0])}
-        />
+        <Form.File label="Last opp bilde" onChange={updateImage} />
+        {renderImage()}
       </Form.Group>
       <Button variant="primary" type="submit">
         Publiser annonsen

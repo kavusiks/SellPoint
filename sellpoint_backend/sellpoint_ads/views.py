@@ -1,17 +1,14 @@
+from django.http.response import HttpResponse, HttpResponseBadRequest
 from rest_framework import generics
-from .serializers import AdCreateSerializer, AdSerializer
-from .models import Ad
-from rest_framework.decorators import api_view
+from .serializers import AdCreateSerializer, AdSerializer, ImageSerializer
+from .models import Ad, Image
+from .renderers import JPEGRenderer, PNGRenderer
+from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 
-class AdCreateAPIView(generics.GenericAPIView):
-    """
-    REST API view for registering a new user. Supports POST
-    requests
-    """
-
+class AdCreateAPIView(generics.CreateAPIView):
     serializer_class = AdCreateSerializer
     permission_classes = [IsAuthenticated]
 
@@ -21,10 +18,22 @@ class AdCreateAPIView(generics.GenericAPIView):
 
         ad = serializer.save()
 
-        return Response({
-            "ad": AdSerializer(ad, context=self.get_serializer_context()).data,
-            "message": "Ad created successfully!",
-        })
+        return Response(AdSerializer(ad, context=self.get_serializer_context()).data)
+
+
+class AdImageCreateAPIView(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        try:
+            image_file = request.data['image']
+            description = request.data.get('description')
+            ad = Ad.objects.get(id=kwargs["id"])
+        except KeyError:
+            return HttpResponseBadRequest()
+
+        image = Image.objects.create(
+            image=image_file, ad=ad, description=description)
+        return Response(ImageSerializer(image).data)
+
 
 @api_view(['GET'])
 def ad_not_sold_list(request):
@@ -43,5 +52,12 @@ def ad_all_list(request):
 @api_view(['GET'])
 def ad_detail(request, pk):
     ads = Ad.objects.get(id=pk)
-    serializer = AdCreateSerializer(ads, many=False)
+    serializer = AdSerializer(ads, many=False)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+@renderer_classes((JPEGRenderer, PNGRenderer,))
+def ad_image_detail(request, pk):
+    image = Image.objects.get(id=pk)
+    return Response(image.image)

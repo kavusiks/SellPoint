@@ -32,10 +32,9 @@ class AdCreateSerializer(serializers.ModelSerializer):
 
 class AdSerializer(serializers.ModelSerializer):
     owner = LimitedUserSerializer()
-    thumbnail = ImageSerializer(required=False)
-    images = ImageSerializer(many=True, required=False)
+    thumbnail = ImageSerializer(source="get_thumbnail", required=False)
+    images = ImageSerializer(source="get_images", many=True, required=False)
 
     class Meta:
         model = Ad
         fields = "__all__"
-        depth = 1
