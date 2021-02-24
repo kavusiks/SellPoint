@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
-import { CenteredRow, LeftCenterRow, ShadowedContainer } from "../styled";
+import { CenteredRow, LeftCenterRow, ShadowedContainer, RightCenterRow } from "../styled";
 import { AdComponentProps } from "./Ads";
-import { Carousel, Image } from "react-bootstrap";
+import { Carousel, Image, Button } from "react-bootstrap";
 import { AdImage } from "../../models/ad";
 import "./ads.css";
 
@@ -10,6 +10,7 @@ interface AdImageProps {
 }
 
 const AdImageComponent: FunctionComponent<AdImageProps> = ({ image }: AdImageProps) => {
+
   return (
     <>
       <Image className="ad-image-item d-block" src={image.url} alt={image.description} />
@@ -74,16 +75,32 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
         </Carousel>
       </CenteredRow>
       <LeftCenterRow noGutters>
-        <h1>{ad.title}</h1>
+        <div className="ad title">
+          <h1>{ad.title}</h1>
+        </div>
       </LeftCenterRow>
       <LeftCenterRow noGutters>
         <p>
-          <strong>Pris:</strong> {ad.price},-
+          <div className="ad info">
+            <strong>Pris:</strong> {ad.price},-
+            <br />
+            <strong>Selger: </strong> {ad.owner?.first_name} {ad.owner?.last_name}
+            <br />
+            <strong>Telefonnummer: </strong> {ad.owner?.phone_number}
+            <br />
+            <strong>E-mail: </strong> {ad.owner?.email}
           <br />
           <br />
           {ad.description}
+          </div>
         </p>
+        
       </LeftCenterRow>
+
+      
+
+
+
       {children}
     </ShadowedContainer>
   );

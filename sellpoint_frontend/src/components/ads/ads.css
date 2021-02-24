@@ -25,6 +25,14 @@
   background: rgba(0, 0, 0, 0.164);
 }
 
+.ad.info{
+  font-size: 18px;
+}
+
+.ad.title{
+  font-size: 25px
+}
+
 .ad.large .ad-image-description > p,
 .ad.large .ad-image-description > h1,
 .ad.large .ad-image-description > h2,
