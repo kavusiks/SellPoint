@@ -55,14 +55,20 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
     // until after the first submission attempt
     setValidated(true);
 
+    console.log("DEBUG #1");
+
     e.preventDefault();
 
     const form = e.target as HTMLFormElement;
     if (!form.checkValidity() || !address || password !== confirmPassword) {
+      console.log(form.checkValidity());
+      console.log(address);
+      console.log(password !== confirmPassword);
       e.stopPropagation();
       return;
     }
 
+    console.log("DEBUG #2");
     const user: User = {
       email: email,
       first_name: firstName,
@@ -76,9 +82,15 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
         session
           .updateSelfUser()
           .then(() => history.push(logIn ? session.redirectPath ?? "/" : "/login"))
-          .catch((error) => setError("En uforventet error oppstod!"));
+          .catch((error) => {
+            setPassword("");
+            setConfirmPassword("");
+            setError("En uforventet error oppstod!");
+          });
       })
       .catch((error) => {
+        setPassword("");
+        setConfirmPassword("");
         setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
       });
   };
@@ -129,6 +141,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
           type="password"
           placeholder="Passord"
           minLength={8}
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
           isInvalid={validated && password !== confirmPassword}
           required
@@ -141,6 +154,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
           type="password"
           placeholder="Passord"
           minLength={8}
+          value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           isInvalid={validated && password !== confirmPassword}
           required
@@ -169,7 +183,7 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
 
       <CenteredRow noGutters>
         <StyledButton variant="secondary" href="/login">
-          Tilbake
+          Log Inn
         </StyledButton>
         <StyledButton variant="primary" type="submit">
           Registrer

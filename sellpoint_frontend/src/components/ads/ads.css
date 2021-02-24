@@ -1,0 +1,41 @@
+.ad {
+  margin: 10px;
+  padding: 10px;
+}
+
+.ad.small .image {
+  max-width: 100%;
+  max-height: 100%;
+  height: 200px;
+  border-radius: 5px;
+}
+
+.ad.large {
+  max-width: 75%;
+}
+
+.ad.large .ad-image-item {
+  max-width: 100%;
+  max-height: 500px;
+  border-radius: 5px;
+}
+
+.ad.large .ad-image-description {
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.164);
+}
+
+.ad.info {
+  font-size: 18px;
+}
+
+.ad.title {
+  font-size: 25px;
+}
+
+.ad.large .ad-image-description > p,
+.ad.large .ad-image-description > h1,
+.ad.large .ad-image-description > h2,
+.ad.large .ad-image-description > h3 {
+  color: white !important;
+}

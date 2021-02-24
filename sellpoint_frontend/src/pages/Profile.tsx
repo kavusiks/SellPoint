@@ -10,7 +10,7 @@ const ProfilePage: FunctionComponent = () => {
   const history = useHistory();
 
   const goBack = () => {
-    session.updateSelfUser().then(() => history.push("/success"));
+    session.updateSelfUser().then(() => history.push("/"));
   };
 
   return (

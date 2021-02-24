@@ -82,6 +82,16 @@ export const LeftCenterRow = styled(Row)`
 `;
 
 /**
+ * A {@link Row} (CSS Flexbox) with all components vertically centered
+ * and horizontally right-aligned.
+ */
+export const RightCenterRow = styled(Row)`
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+
+/**
  * A {@link Row} (CSS Flexbox) with all components vertically top-aligned
  * and horizontally left-aligned.
  */
@@ -134,7 +144,7 @@ export const useErrorState = (): ErrorState => {
 
 /**
  * Utility function for authentication pages. Automatically redirects
- * a user to `/success` if they are already authenticated, and attempt
+ * a user to `/` if they are already authenticated, and attempt
  * to load this user, or the user is loaded while they are on this page.
  */
 export const useAuthenticationPage = (): void => {
@@ -143,7 +153,7 @@ export const useAuthenticationPage = (): void => {
 
   useEffect(() => {
     if (session.user) {
-      history.push("/success");
+      history.push("/");
     }
   }, [history, session.user]);
 };
