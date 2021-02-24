@@ -1,5 +1,11 @@
 import React, { FunctionComponent } from "react";
-import { LeftCenterRow, CenteredRow, ShadowedContainer } from "../styled";
+import {
+  LeftCenterRow,
+  RightCenterRow,
+  CenteredRow,
+  ShadowedContainer,
+  formatDate,
+} from "../styled";
 import { AdComponentProps } from "./Ads";
 import { Image } from "react-bootstrap";
 import "./ads.css";
@@ -17,6 +23,7 @@ const SmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }: AdCompon
         <p>{ad.price},-</p>
       </LeftCenterRow>
       {children}
+      <RightCenterRow noGutters><p>{formatDate(ad.created_at)}</p></RightCenterRow>
     </ShadowedContainer>
   );
 };
