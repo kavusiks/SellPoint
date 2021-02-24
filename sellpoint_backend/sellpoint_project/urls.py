@@ -1,4 +1,4 @@
-"""sellpoint_backend URL Configuration
+"""sellpoint_project URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -14,8 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
+admin.site.site_header = "SellPoint Administration"
+admin.site.site_title = "SellPoint"
+admin.site.index_title = "Administration"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path('', include('sellpoint_ads.urls')),
+    path('auth/', include('sellpoint_auth.urls'))
+
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+

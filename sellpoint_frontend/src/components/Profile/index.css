@@ -1,0 +1,13 @@
+.profile-display h2 {
+    margin-left: 0.5em;
+}
+
+.profile-display .title p {
+  margin: 0.5em;
+  color: rgb(100, 100, 100);
+}
+
+.profile-display .value p {
+  margin: 0.5em;
+  color: rgb(50, 50, 50);
+}
