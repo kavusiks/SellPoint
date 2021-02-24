@@ -1,11 +1,10 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
-import { Container, Row } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import AdAPI from "../core/api/ad";
 import { Ad } from "../models/ad";
 import SmallAd from "./ads/SmallAd";
-import { CenteredRow } from "./styled";
 
 const AdContainer = styled(Row)`
   flex-wrap: wrap;
