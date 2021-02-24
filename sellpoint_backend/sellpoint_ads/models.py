@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from sellpoint_auth.models import User
 import os
+from django.urls import reverse
 
 
 def get_image_path(instance, filename):
@@ -27,7 +28,8 @@ class Ad(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True)
     is_sold = models.BooleanField(default=False)
-    thumbnail = models.ForeignKey('Image', on_delete=models.RESTRICT, related_name="thumbnail_for", null=True, blank=True)
+    thumbnail = models.ForeignKey(
+        'Image', on_delete=models.RESTRICT, related_name="thumbnail_for", null=True, blank=True)
 
 
 class Image(models.Model):
@@ -35,3 +37,6 @@ class Image(models.Model):
                               height_field=None, width_field=None, max_length=None)
     ad = models.ForeignKey(Ad, on_delete=CASCADE)
     description = models.CharField(max_length=256, blank=True, null=True)
+
+    def get_url(self):
+        return reverse("ads-image", args=[self.id])

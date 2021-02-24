@@ -16,7 +16,7 @@ const App: FunctionComponent = () => {
   const protectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: session.isAuthenticated,
     authenticationPath: "/login",
-    redirectPathOnAuthentication: session.redirectPath ?? "/success",
+    redirectPathOnAuthentication: session.redirectPath ?? "/",
     setRedirectPathOnAuthentication: session.setRedirectPath,
   };
 

@@ -3,17 +3,17 @@ import client from "../client";
 
 class AdAPI {
   async getAllAds(): Promise<Ad[]> {
-    const response = await client.get(`ad-list/`);
+    const response = await client.get(`ad/list/`);
     return response.data;
   }
 
   async getById(id: number): Promise<Ad> {
-    const response = await client.get(`ad-detail/${id}`);
+    const response = await client.get(`ad/${id}/`);
     return response.data;
   }
 
   async createAd(ad: Ad): Promise<void> {
-    await client.post("ad-create/", {
+    await client.post("ad/create/", {
       title: ad.title,
       price: ad.price,
       description: ad.description,

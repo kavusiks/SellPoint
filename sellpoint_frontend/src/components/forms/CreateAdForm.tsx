@@ -37,7 +37,7 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
       .then(() => {
         // TODO: Redirect user to view his/her own ad once created. Update API to
         // return ID of newly created listing?
-        history.push(`/success`);
+        history.push(`/`);
       })
       .catch((error) => {
         setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");

@@ -4,11 +4,8 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.apiOverview, name='api-overview'),
-    path('ad-list/', views.adList, name="ad-list"),
-    path('ad-all-list/', views.adNotSoldList, name="ad-not-sold-list"),
-	path('ad-detail/<str:pk>/', views.adDetail, name="ad-detail"),
-	path('ad-create/', views.adCreate, name="ad-create"),
-	path('ad-update/<str:pk>/', views.adUpdate, name="ad-update"),
-	path('ad-delete/<str:pk>/', views.adDelete, name="ad-delete"),
+    path("create/", views.AdCreateAPIView.as_view(), name="ad-create"),
+    path('list/', views.ad_all_list, name="ad-list"),
+    path('list/not-sold/', views.ad_not_sold_list, name="ad-not-sold-list"),
+    path('<str:pk>/', views.ad_detail, name="ad-detail"),
 ]

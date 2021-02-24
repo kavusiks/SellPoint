@@ -1,21 +1,41 @@
 from rest_framework import serializers
-from .models import Ad, Category
+from .models import Ad, Image
+from sellpoint_auth.models import User
 
-class CategorySerializer(serializers.ModelSerializer):
+
+class LimitedUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category
-        fields = '__all__'
-        
-class AdSerializer(serializers.ModelSerializer):
-    category = serializers.StringRelatedField(many=False)
+        model = User
+        fields = ['email', 'first_name', 'last_name',
+                  'phone_number']
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    url = serializers.CharField(source="get_url", read_only=True)
+
+    class Meta:
+        model = Image
+        fields = ["id", "url", "description"]
+
+
+class AdCreateSerializer(serializers.ModelSerializer):
+    category = serializers.IntegerField(required=False)
+
     class Meta:
         model = Ad
-        fields = '__all__'
-        
+        fields = ['title', 'description', 'price', 'category']
+
+    def create(self, validated_data):
+        owner = self.context["request"].user
+        return Ad.objects.create(owner=owner, **validated_data)
 
 
+class AdSerializer(serializers.ModelSerializer):
+    owner = LimitedUserSerializer()
+    thumbnail = ImageSerializer(required=False)
+    images = ImageSerializer(many=True, required=False)
 
-
-
-    
-
+    class Meta:
+        model = Ad
+        fields = "__all__"
+        depth = 1
