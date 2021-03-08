@@ -79,8 +79,8 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
         </div>
       </LeftCenterRow>
       <LeftCenterRow noGutters>
-        <p>
-          <div className="ad info">
+        <div className="ad info">
+          <p>
             <strong>Pris:</strong> {ad.price},-
             <br />
             <strong>Selger: </strong> {ad.owner?.first_name} {ad.owner?.last_name}
@@ -91,8 +91,8 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
             <br />
             <br />
             {ad.description}
-          </div>
-        </p>
+          </p>
+        </div>
       </LeftCenterRow>
       {children}
     </ShadowedContainer>

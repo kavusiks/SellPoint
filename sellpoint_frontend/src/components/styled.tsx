@@ -90,7 +90,6 @@ export const RightCenterRow = styled(Row)`
   align-items: center;
 `;
 
-
 /**
  * A {@link Row} (CSS Flexbox) with all components vertically top-aligned
  * and horizontally left-aligned.
@@ -98,6 +97,15 @@ export const RightCenterRow = styled(Row)`
 export const LeftTopRow = styled(Row)`
   justify-content: flex-start;
   align-items: flex-start;
+`;
+
+/**
+ * A {@link Row} (CSS Flexbox) with all components vertically centered
+ * and horizontally spaced out.
+ */
+export const SpaceBetweenCenterRow = styled(Row)`
+  justify-content: space-between;
+  align-items: center;
 `;
 
 /**
