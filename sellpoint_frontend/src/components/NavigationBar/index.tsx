@@ -52,16 +52,18 @@ const Navigationbar: FunctionComponent = () => {
     if (!session.isAuthenticated) {
       return (
         <>
-          <PathAwareButton href="/register" variant="outline-secondary">
+          <PathAwareButton href="/register" variant="outline-secondary" >
             Opprett bruker
           </PathAwareButton>
+          
           <PathAwareButton href="/login" variant="outline-success">
             Logg Inn
           </PathAwareButton>
         </>
+
       );
     }
-
+    
     const logOut = () => {
       AuthenticationService.logOut();
       session.updateSelfUser().then(() => history.push("/login"));
@@ -69,6 +71,9 @@ const Navigationbar: FunctionComponent = () => {
 
     return (
       <>
+      <Nav className="mr-auto">
+        <Nav.Link href="/ad/create">Ny annonse</Nav.Link>
+        </Nav>
         <PathAwareButton href="/profile" variant="outline-secondary">
           Din Profil
         </PathAwareButton>
@@ -84,10 +89,6 @@ const Navigationbar: FunctionComponent = () => {
       <Navbar.Brand href="/" className="logo">
         Sell<strong>Point</strong>
       </Navbar.Brand>
-
-      <Nav className="mr-auto">
-        <Nav.Link href="/ad/create">Ny annonse</Nav.Link>
-      </Nav>
 
       {makeButtons()}
     </Navbar>
