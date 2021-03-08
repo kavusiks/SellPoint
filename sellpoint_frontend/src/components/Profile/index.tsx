@@ -57,40 +57,63 @@ export interface ProfileDisplayProps {
 
 /**
  * A component for displaying a {@link User}s profile
- * 
+ *
  * @param props - The props
  */
 export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
   user,
 }: ProfileDisplayProps) => {
-  return (
-    <LeftTopRow className="profile-display" xs={12}>
-      <Col xs={3}>
-        <img style={{ width: "100%", height: "auto" }} alt="Profilbilde" src={default_avatar} />
-      </Col>
+  if (!user.is_staff) {
+    return (
+      <LeftTopRow className="profile-display" xs={12}>
+        <Col xs={3}>
+          <img style={{ width: "100%", height: "auto" }} alt="Profilbilde" src={default_avatar} />
+        </Col>
 
-      <Col xs={9}>
-        <Container>
-          <LeftCenterRow>
-            <h2>{user.first_name + " " + user.last_name}</h2>
-          </LeftCenterRow>
+        <Col xs={9}>
+          <Container>
+            <LeftCenterRow>
+              <h2>{user.first_name + " " + user.last_name}</h2>
+            </LeftCenterRow>
 
-          <ProfileField title="Email">{user.email}</ProfileField>
-          <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
-          <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
-          <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
-          <ProfileField title="Addresse">
-            {user.address.line1}
-            {user.address.line2 ? (
-              <>
-                <br /> {user.address.line2}
-              </>
-            ) : null}
-            <br />
-            {user.address.postalcode} {user.address.city} {user.address.country}
-          </ProfileField>
-        </Container>
-      </Col>
-    </LeftTopRow>
-  );
+            <ProfileField title="Email">{user.email}</ProfileField>
+            <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
+            <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
+            <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
+            <ProfileField title="Addresse">
+              {user.address.line1}
+              {user.address.line2 ? (
+                <>
+                  <br /> {user.address.line2}
+                </>
+              ) : null}
+              <br />
+              {user.address.postalcode} {user.address.city} {user.address.country}
+            </ProfileField>
+          </Container>
+        </Col>
+      </LeftTopRow>
+    );
+  } else {
+    return (
+      <LeftTopRow className="profile-display" xs={12}>
+        <Col xs={3}>
+          <img style={{ width: "100%", height: "auto" }} alt="Profilbilde" src={default_avatar} />
+        </Col>
+
+        <Col xs={9}>
+          <Container>
+            <LeftCenterRow>
+              <h2>{user.first_name + " " + user.last_name}</h2>
+            </LeftCenterRow>
+
+            <ProfileField title="Email">{user.email}</ProfileField>
+            <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
+            <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
+            <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
+          </Container>
+        </Col>
+      </LeftTopRow>
+    );
+  }
 };

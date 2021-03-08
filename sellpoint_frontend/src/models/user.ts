@@ -56,4 +56,7 @@ export default interface User {
    * The user's {@link Address}
    */
   address: Address;
+
+
+  is_staff: boolean;
 }

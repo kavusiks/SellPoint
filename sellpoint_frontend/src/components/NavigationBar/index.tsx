@@ -7,6 +7,7 @@ import "./index.css";
 import { useSessionContext } from "../../context/Session";
 import AuthenticationService from "../../core/auth";
 import { useHistory, useLocation } from "react-router";
+import user from "../../core/api/user";
 
 interface PathAwareButtonProps {
   href: string;
@@ -67,21 +68,32 @@ const Navigationbar: FunctionComponent = () => {
       session.updateSelfUser().then(() => history.push("/login"));
     };
 
-
-    return (
-      <>
-        <Button className="button" href="http://127.0.0.1:8000/admin/" variant="outline-primary">
-          Adminpanel
-        </Button>
-        <PathAwareButton href="/profile" variant="outline-secondary">
-          Din Profil
-        </PathAwareButton>
-        <Button className="button" onClick={logOut} variant="outline-primary">
-          Logg Ut
-        </Button>
-        
-      </>
-    );
+    if (session.user?.is_staff) {
+      return (
+        <>
+          <Button className="button" href="http://127.0.0.1:8000/admin/" variant="outline-primary">
+            Adminpanel
+          </Button>
+          <PathAwareButton href="/profile" variant="outline-secondary">
+            Din Profil
+          </PathAwareButton>
+          <Button className="button" onClick={logOut} variant="outline-primary">
+            Logg Ut
+          </Button>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <PathAwareButton href="/profile" variant="outline-secondary">
+            Din Profil
+          </PathAwareButton>
+          <Button className="button" onClick={logOut} variant="outline-primary">
+            Logg Ut
+          </Button>
+        </>
+      );
+    }
   };
 
   return (
