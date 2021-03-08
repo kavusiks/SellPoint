@@ -67,14 +67,19 @@ const Navigationbar: FunctionComponent = () => {
       session.updateSelfUser().then(() => history.push("/login"));
     };
 
+
     return (
       <>
+        <Button className="button" href="http://127.0.0.1:8000/admin/" variant="outline-primary">
+          Adminpanel
+        </Button>
         <PathAwareButton href="/profile" variant="outline-secondary">
           Din Profil
         </PathAwareButton>
         <Button className="button" onClick={logOut} variant="outline-primary">
           Logg Ut
         </Button>
+        
       </>
     );
   };
