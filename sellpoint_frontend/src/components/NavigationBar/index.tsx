@@ -50,6 +50,8 @@ const Navigationbar: FunctionComponent = () => {
   const history = useHistory();
 
   const makeButtons = () => {
+    const buttons = [];
+
     if (!session.isAuthenticated) {
       return (
         <>
@@ -61,29 +63,16 @@ const Navigationbar: FunctionComponent = () => {
           </PathAwareButton>
         </>
       );
-    }
-
-    const logOut = () => {
-      AuthenticationService.logOut();
-      session.updateSelfUser().then(() => history.push("/login"));
-    };
-
-    if (session.user?.is_staff) {
-      return (
-        <>
+    } else {
+      if (session.user?.is_staff) {
+        buttons.push(
           <Button className="button" href="http://127.0.0.1:8000/admin/" variant="outline-primary">
             Adminpanel
-          </Button>
-          <PathAwareButton href="/profile" variant="outline-secondary">
-            Din Profil
-          </PathAwareButton>
-          <Button className="button" onClick={logOut} variant="outline-primary">
-            Logg Ut
-          </Button>
-        </>
-      );
-    } else {
-      return (
+          </Button>,
+        );
+      }
+
+      buttons.push(
         <>
           <PathAwareButton href="/profile" variant="outline-secondary">
             Din Profil
@@ -91,9 +80,15 @@ const Navigationbar: FunctionComponent = () => {
           <Button className="button" onClick={logOut} variant="outline-primary">
             Logg Ut
           </Button>
-        </>
+        </>,
       );
     }
+    return buttons;
+  };
+
+  const logOut = () => {
+    AuthenticationService.logOut();
+    session.updateSelfUser().then(() => history.push("/login"));
   };
 
   return (
