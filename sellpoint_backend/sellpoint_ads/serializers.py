@@ -28,7 +28,9 @@ class AdCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         owner = self.context["request"].user
         return Ad.objects.create(owner=owner, **validated_data)
-
+    
+    #def update(self, instance, validated_data)
+    
 
 class AdSerializer(serializers.ModelSerializer):
     owner = LimitedUserSerializer()
