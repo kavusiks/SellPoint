@@ -33,6 +33,24 @@ class AdImageCreateAPIView(generics.CreateAPIView):
         image = Image.objects.create(image=image_file, ad=ad, description=description)
         return Response(ImageSerializer(image).data)
 
+class AdUpdateAPIView(generics.CreateAPIView):
+    serializer_class = AdCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    #def put(self, request, *args,  **kwargs):
+
+class AdUserList(generics.ListCreateAPIView):
+
+    queryset = Ad.objects.all()
+    serializer_class = AdSerializer
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        loggedInUser = self.context["request"].user
+        ads = self.get_queryset().filter(owner = loggedInUser)
+        serializer = AdSerializer(ads, many=True)
+        return Response(serializer.data)
+
 
 @api_view(["GET"])
 def ad_not_sold_list(request):
