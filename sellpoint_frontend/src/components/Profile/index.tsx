@@ -4,6 +4,7 @@ import { formatDate, LeftCenterRow, LeftTopRow } from "../styled";
 import User from "../../models/user";
 import default_avatar from "../../static/profile_picture_holder.png";
 import "./index.css";
+import { useSessionContext } from "../../context/Session";
 
 /**
  * Props for a profile field
@@ -63,23 +64,23 @@ export interface ProfileDisplayProps {
 export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
   user,
 }: ProfileDisplayProps) => {
-  if (!user.is_staff) {
-    return (
-      <LeftTopRow className="profile-display" xs={12}>
-        <Col xs={3}>
-          <img style={{ width: "100%", height: "auto" }} alt="Profilbilde" src={default_avatar} />
-        </Col>
+  const session = useSessionContext();
 
-        <Col xs={9}>
-          <Container>
-            <LeftCenterRow>
-              <h2>{user.first_name + " " + user.last_name}</h2>
-            </LeftCenterRow>
-
-            <ProfileField title="Email">{user.email}</ProfileField>
-            <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
-            <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
-            <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
+  return (
+    <LeftTopRow className="profile-display" xs={12}>
+      <Col xs={3}>
+        <img style={{ width: "100%", height: "auto" }} alt="Profilbilde" src={default_avatar} />
+      </Col>
+      <Col xs={9}>
+        <Container>
+          <LeftCenterRow>
+            <h2>{user.first_name + " " + user.last_name}</h2>
+          </LeftCenterRow>
+          <ProfileField title="Email">{user.email}</ProfileField>
+          <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
+          <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
+          <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
+          {session.user?.address ? (
             <ProfileField title="Addresse">
               {user.address.line1}
               {user.address.line2 ? (
@@ -90,30 +91,9 @@ export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
               <br />
               {user.address.postalcode} {user.address.city} {user.address.country}
             </ProfileField>
-          </Container>
-        </Col>
-      </LeftTopRow>
-    );
-  } else {
-    return (
-      <LeftTopRow className="profile-display" xs={12}>
-        <Col xs={3}>
-          <img style={{ width: "100%", height: "auto" }} alt="Profilbilde" src={default_avatar} />
-        </Col>
-
-        <Col xs={9}>
-          <Container>
-            <LeftCenterRow>
-              <h2>{user.first_name + " " + user.last_name}</h2>
-            </LeftCenterRow>
-
-            <ProfileField title="Email">{user.email}</ProfileField>
-            <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
-            <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
-            <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
-          </Container>
-        </Col>
-      </LeftTopRow>
-    );
-  }
+          ) : null}
+        </Container>
+      </Col>
+    </LeftTopRow>
+  );
 };
