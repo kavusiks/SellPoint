@@ -1,0 +1,22 @@
+input[type="file"] {
+  display: none;
+}
+
+#create-ad-image-amount-inc {
+    height: 2em;
+    width: 2em;
+}
+
+.create-ad-image-delete-button {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 0.5rem !important;
+}
+
+.create-ad-image-upload-button {
+  margin: 0px;
+}
+
+.create-ad-image-file {
+  margin-bottom: 0.5rem !important;
+}

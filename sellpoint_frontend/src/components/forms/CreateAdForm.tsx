@@ -4,7 +4,8 @@ import { useHistory } from "react-router";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
 import { Ad } from "../../models/ad";
-import { FormProps } from "./FormParts";
+import { CenteredRow } from "../styled";
+import { FormProps, SubmitImageMultipleFormPart, ImageSingleFormData } from "./FormParts";
 
 export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormProps) => {
   const history = useHistory();
@@ -12,21 +13,8 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
   const [title, setTitle] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
-  const [imagePath, setImagePath] = useState<File | undefined>(undefined);
+  const [images, setImages] = useState<ImageSingleFormData[]>([]);
   const [validated, setValidated] = useState<boolean>(false);
-
-  const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setImagePath(e.target.files ? e.target.files[0] : undefined);
-  };
-
-  const renderImage = () => {
-    if (!imagePath) {
-      return null;
-    }
-
-    const preview = URL.createObjectURL(imagePath);
-    return <Image style={{ maxWidth: "100%" }} src={preview} alt="Bilde" />;
-  };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     setValidated(true);
@@ -47,26 +35,31 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
     AdAPI.createAd(tempAd)
       .then((ad) => {
         if (!ad.id) {
-          setError("where my id >:(!");
+          setError("En uforventet error oppstod (Manglende ID)!");
           return;
         }
 
-        if (!imagePath) {
-          history.push(`/ad/${ad.id}`);
-          return;
-        }
-
-        AdAPI.addImage(ad.id, imagePath).then((img) => {
-          history.push(`/ad/${ad.id}`);
-        });
+        const id: number = ad.id;
+        Promise.all(images.map((image) => image.submit(id))).then(() =>
+          history.push(`/ad/${ad.id}`),
+        );
       })
       .catch((error) => {
+        console.log(error);
         setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
       });
   };
 
   return (
-    <Form noValidate validated={validated} onSubmit={onSubmit}>
+    <Form noValidate validated={validated} onSubmit={onSubmit} style={{ width: "100%" }}>
+      <br />
+      <Col>
+        <p>
+          <strong>Grunnleggende Informasjon</strong>
+        </p>
+        <hr style={{ margin: "5px 0px 5px 0px" }} />
+      </Col>
+
       <Form.Group as={Col} controlId="create-ad-title">
         <Form.Label>Tittel</Form.Label>
         <Form.Control
@@ -86,7 +79,6 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
           required
         />
       </Form.Group>
-      ´{" "}
       <Form.Group as={Col} controlId="create-ad-description">
         <Form.Label>Beskrivelse</Form.Label>
         <Form.Control
@@ -97,10 +89,9 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
           required
         />
       </Form.Group>
-      <Form.Group as={Col} controlId="create-ad-image">
-        <Form.File label="Last opp bilde" onChange={updateImage} />
-        {renderImage()}
-      </Form.Group>
+
+      <SubmitImageMultipleFormPart onUpdate={setImages} />
+
       <Button variant="primary" type="submit">
         Publiser annonsen
       </Button>

@@ -57,20 +57,14 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
     // until after the first submission attempt
     setValidated(true);
 
-    console.log("DEBUG #1");
-
     e.preventDefault();
 
     const form = e.target as HTMLFormElement;
     if (!form.checkValidity() || !address || password !== confirmPassword) {
-      console.log(form.checkValidity());
-      console.log(address);
-      console.log(password !== confirmPassword);
       e.stopPropagation();
       return;
     }
 
-    console.log("DEBUG #2");
     const user: User = {
       email: email,
       first_name: firstName,
