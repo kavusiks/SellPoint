@@ -47,3 +47,12 @@ frontend-lint:
   before_script:
     - cd sellpoint_frontend
   script: yarn lint:ci
+
+backend-lint:
+  stage: lint
+  image: python:latest
+  before_script:
+    - cd sellpoint_backend
+  script:
+    - pip install -r requirements.txt
+    - black ./ --check
