@@ -51,4 +51,4 @@ frontend-lint:
   stage: lint
   before_script:
     - cd sellpoint_frontend
-  script: yarn lint
+  script: yarn lint:ci
