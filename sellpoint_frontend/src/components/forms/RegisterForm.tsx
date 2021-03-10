@@ -50,7 +50,6 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
   const [address, setAddress] = useState<Address | undefined>(undefined);
   const [validated, setValidated] = useState<boolean>(false);
 
-  const [is_staff, setIs_staff] = useState<boolean>(false);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // We use a state for this so that validation doesn't display
@@ -71,7 +70,6 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
       last_name: lastName,
       phone_number: phoneNumber,
       address: address,
-      is_staff: is_staff,
     };
 
     AuthenticationService.signUp(user, password, logIn, rememberLogIn)
