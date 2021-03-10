@@ -7,7 +7,7 @@ stages:
   - lint
 
 cache:
-  key: $CI_PROJECT_ID
+  key: ${CI_COMMIT_REF_SLUG}
   policy: pull
   untracked: true
 
@@ -19,7 +19,7 @@ frontend-install:
     - echo 'Installing dependencies...'
     - yarn install
   cache:
-    key: $CI_PROJECT_ID
+    key: ${CI_COMMIT_REF_SLUG}
     policy: pull-push
     paths:
       - "sellpoint_frontend/.yarn"
