@@ -57,7 +57,7 @@ export interface ProfileDisplayProps {
 
 /**
  * A component for displaying a {@link User}s profile
- * 
+ *
  * @param props - The props
  */
 export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
