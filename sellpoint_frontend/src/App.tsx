@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import MainPage from "./components/MainPage";
+import MainPage from "./pages/MainPage";
 import Navigationbar from "./components/NavigationBar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ProtectedRoute, { ProtectedRouteProps } from "./components/Route";

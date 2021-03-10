@@ -7,6 +7,11 @@ class AdAPI {
     return response.data;
   }
 
+  async getOwnAds(): Promise<Ad[]> {
+    const response = await client.get(`ad/list/self/`);
+    return response.data;
+  }
+
   async getById(id: number): Promise<Ad> {
     const response = await client.get(`ad/${id}/`);
     return response.data;
