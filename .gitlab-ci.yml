@@ -8,8 +8,10 @@ stages:
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
-  policy: pull
-  untracked: true
+  paths:
+    - "sellpoint_frontend/.yarn"
+    - "sellpoint_frontend/node_modules"
+    - "sellpoint_frontend/packages/*/node_modules"
 
 frontend-install:
   stage: install
@@ -17,14 +19,7 @@ frontend-install:
     - cd sellpoint_frontend
   script:
     - echo 'Installing dependencies...'
-    - yarn install
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    policy: pull-push
-    paths:
-      - "sellpoint_frontend/.yarn"
-      - "sellpoint_frontend/node_modules"
-      - "sellpoint_frontend/packages/*/node_modules"
+    - yarn install --cache-folder .yarn
 
 frontend-build:
   stage: build
