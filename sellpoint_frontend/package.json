@@ -31,10 +31,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint:fix": "eslint . --fix --ext .js,.ts,.tsx --ignore-path .prettierignore",
+    "lint:fix": "eslint . --fix --ext .js,.ts,.tsx --ignore-path .prettierignore  && prettier --write \"src/**/*.css\"",
     "lint:prettier": "prettier --check \"src/**/*.{js,ts,tsx,css}\"",
     "lint:eslint": "eslint . --ext .js,.ts,.tsx --ignore-path .prettierignore",
-    "lint:ci": "eslint . --ext .js,.ts,.tsx --ignore-path .prettierignore --max-warnings=0",
+    "lint:ci": "eslint . --ext .js,.ts,.tsx --ignore-path .prettierignore --max-warnings=0 && prettier --check \"src/**/*.css\"",
     "lint": "yarn lint:prettier && yarn lint:eslint"
   },
   "browserslist": {
