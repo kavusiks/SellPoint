@@ -7,7 +7,6 @@ import "./index.css";
 import { useSessionContext } from "../../context/Session";
 import AuthenticationService from "../../core/auth";
 import { useHistory, useLocation } from "react-router";
-import user from "../../core/api/user";
 
 interface PathAwareButtonProps {
   href: string;
