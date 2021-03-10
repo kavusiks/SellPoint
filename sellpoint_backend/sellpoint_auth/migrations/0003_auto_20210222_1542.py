@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sellpoint_auth', '0002_address'),
+        ("sellpoint_auth", "0002_address"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='address',
-            options={'verbose_name': 'Address'},
+            name="address",
+            options={"verbose_name": "Address"},
         ),
         migrations.AlterModelOptions(
-            name='user',
-            options={'verbose_name': 'User'},
+            name="user",
+            options={"verbose_name": "User"},
         ),
     ]
