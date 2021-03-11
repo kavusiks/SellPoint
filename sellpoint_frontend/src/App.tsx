@@ -26,7 +26,7 @@ const App: FunctionComponent = () => {
       <Switch>
         <Route path="/" exact component={MainPage} />
 
-        <Route path="/ad/create" exact component={CreateAdPage} />
+        <ProtectedRoute {...protectedRouteProps} path="/ad/create" exact component={CreateAdPage} />
         <Route path="/ad/:id" component={AdViewPage} />
 
         <Route path="/login" component={LoginPage} exact />
