@@ -29,6 +29,11 @@ $ yarn lint
 
 Alternatively you can also run `yarn lint:prettier` to run just Prettier, and `yarn lint:eslint` to run just ESLint.
 
+To fix formatting run
+```bash
+$ yarn lint:fix
+```
+
 ## Testing
 
 To run tests run

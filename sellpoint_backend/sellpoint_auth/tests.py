@@ -12,18 +12,21 @@ class UserModelTestCase(TestCase):
     """
 
     def setUp(self):
-        user = User.objects.create_user("test@test.org",
-                                        password="123",
-                                        first_name="Ola",
-                                        last_name="Nordmann",
-                                        phone_number="+4798989898")
-        Address.objects.create(user=user,
-                               line1="Line1",
-                               line2="Line2",
-                               postalcode="1234",
-                               city="SomeCity",
-                               country="Norway"
-                               )
+        user = User.objects.create_user(
+            "test@test.org",
+            password="123",
+            first_name="Ola",
+            last_name="Nordmann",
+            phone_number="+4798989898",
+        )
+        Address.objects.create(
+            user=user,
+            line1="Line1",
+            line2="Line2",
+            postalcode="1234",
+            city="SomeCity",
+            country="Norway",
+        )
 
     def test_password_obscurity(self):
         """
@@ -56,18 +59,21 @@ class UserAuthenticateTestCase(APITestCase):
     """
 
     def setUp(self):
-        user = User.objects.create_user("test@test.org",
-                                        password="123",
-                                        first_name="Ola",
-                                        last_name="Nordmann",
-                                        phone_number="+4798989898")
-        Address.objects.create(user=user,
-                               line1="Line1",
-                               line2="Line2",
-                               postalcode="1234",
-                               city="SomeCity",
-                               country="Norway"
-                               )
+        user = User.objects.create_user(
+            "test@test.org",
+            password="123",
+            first_name="Ola",
+            last_name="Nordmann",
+            phone_number="+4798989898",
+        )
+        Address.objects.create(
+            user=user,
+            line1="Line1",
+            line2="Line2",
+            postalcode="1234",
+            city="SomeCity",
+            country="Norway",
+        )
 
     def test_log_in_valid(self):
         """
@@ -75,10 +81,7 @@ class UserAuthenticateTestCase(APITestCase):
         """
 
         url = reverse("token-obtain")
-        data = {
-            "email": "test@test.org",
-            "password": "123"
-        }
+        data = {"email": "test@test.org", "password": "123"}
 
         response = self.client.post(url, data, format="json")
 
@@ -100,10 +103,7 @@ class UserAuthenticateTestCase(APITestCase):
         """
         url = reverse("token-obtain")
 
-        data = {
-            "email": "test@test.org",
-            "password": "321"
-        }
+        data = {"email": "test@test.org", "password": "321"}
 
         response = self.client.post(url, data, format="json")
 
@@ -124,9 +124,7 @@ class UserAuthenticateTestCase(APITestCase):
         user = User.objects.get(email="test@test.org")
         token = RefreshToken.for_user(user)
 
-        data = {
-            "refresh": str(token)
-        }
+        data = {"refresh": str(token)}
 
         response = self.client.post(url, data, format="json")
 
@@ -187,8 +185,8 @@ class UserRegisterTestCase(APITestCase):
                 "line2": "Address line 2 (Optional)",
                 "postalcode": "1234",
                 "city": "City",
-                "country": "Country"
-            }
+                "country": "Country",
+            },
         }
 
         response = self.client.post(url, data, format="json")
@@ -223,8 +221,8 @@ class UserRegisterTestCase(APITestCase):
                 "line2": "Address line 2 (Optional)",
                 "postalcode": "1234",
                 "city": "City",
-                "country": "Country"
-            }
+                "country": "Country",
+            },
         }
 
         response = self.client.post(url, data, format="json")
@@ -253,8 +251,8 @@ class UserRegisterTestCase(APITestCase):
                 "line2": "Address line 2 (Optional)",
                 "postalcode": "1234",
                 "city": "City",
-                "country": "Country"
-            }
+                "country": "Country",
+            },
         }
 
         response = self.client.post(url, data, format="json")

@@ -50,7 +50,6 @@ export const RegisterForm: FunctionComponent<RegisterFormProps> = ({
   const [address, setAddress] = useState<Address | undefined>(undefined);
   const [validated, setValidated] = useState<boolean>(false);
 
-
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // We use a state for this so that validation doesn't display
     // until after the first submission attempt

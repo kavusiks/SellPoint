@@ -8,6 +8,7 @@ class AddressInline(admin.StackedInline):
     """
     Simple admin interface "inline" for a user's address
     """
+
     model = Address
 
 
@@ -18,27 +19,38 @@ class UserAdmin(BaseUserAdmin):
     """
 
     # Inline so we can edit a user's address
-    inlines = (AddressInline, )
+    inlines = (AddressInline,)
 
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        (_('Personal info'), {
-            'fields': ('first_name', 'last_name', 'phone_number')}),
-        (_('Permissions'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
-        }),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        (None, {"fields": ("email", "password")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "phone_number")}),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2'),
-        }),
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "password1", "password2"),
+            },
+        ),
     )
 
-    list_display = ('email', 'first_name', 'last_name', 'is_staff')
-    search_fields = ('first_name', 'last_name', 'email')
-    ordering = ('email',)
+    list_display = ("email", "first_name", "last_name", "is_staff")
+    search_fields = ("first_name", "last_name", "email")
+    ordering = ("email",)
 
 
 admin.site.register(User, UserAdmin)

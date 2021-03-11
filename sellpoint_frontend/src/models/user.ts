@@ -57,7 +57,7 @@ export default interface User {
    */
   address: Address;
   /**
-  * If the user has admin rights
-  */
+   * If the user has admin rights
+   */
   is_staff?: boolean;
 }

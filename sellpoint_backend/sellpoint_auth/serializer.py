@@ -12,9 +12,10 @@ class AddressSerializer(serializers.ModelSerializer):
     """
     Serializes an address, excluding the user field
     """
+
     class Meta:
         model = Address
-        fields = ('line1', 'line2', 'postalcode', 'city', 'country')
+        fields = ("line1", "line2", "postalcode", "city", "country")
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -27,32 +28,42 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'password',
-                  'first_name', 'last_name', 'phone_number', 'address')
+        fields = (
+            "email",
+            "password",
+            "first_name",
+            "last_name",
+            "phone_number",
+            "address",
+        )
         extra_kwargs = {
-            'password': {'write_only': True},
+            "password": {"write_only": True},
         }
 
     def create(self, validated_data):
-        user = User.objects.create_user(validated_data['email'],
-                                        password=validated_data['password'],
-                                        first_name=validated_data['first_name'],
-                                        last_name=validated_data['last_name'],
-                                        phone_number=validated_data['phone_number'])
-        Address.objects.create(user=user, **validated_data['address'])
+        user = User.objects.create_user(
+            validated_data["email"],
+            password=validated_data["password"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+            phone_number=validated_data["phone_number"],
+        )
+        Address.objects.create(user=user, **validated_data["address"])
         return user
 
     def validate(self, validated_data):
         # here data has all the fields which have validated values
         # so we can create a User instance out of it
-        user = User(validated_data['email'],
-                    password=validated_data['password'],
-                    first_name=validated_data['first_name'],
-                    last_name=validated_data['last_name'],
-                    phone_number=validated_data['phone_number'])
+        user = User(
+            validated_data["email"],
+            password=validated_data["password"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+            phone_number=validated_data["phone_number"],
+        )
 
         # get the password from the data
-        password = validated_data.get('password')
+        password = validated_data.get("password")
 
         errors = dict()
         try:
@@ -61,7 +72,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         # the exception raised here is different than serializers.ValidationError
         except exceptions.ValidationError as e:
-            errors['password'] = list(e.messages)
+            errors["password"] = list(e.messages)
 
         if errors:
             raise serializers.ValidationError(errors)
@@ -79,5 +90,13 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name',
-                  'phone_number', 'last_login', 'address', 'date_joined', 'is_staff')
+        fields = (
+            "email",
+            "first_name",
+            "last_name",
+            "phone_number",
+            "last_login",
+            "address",
+            "date_joined",
+            "is_staff",
+        )

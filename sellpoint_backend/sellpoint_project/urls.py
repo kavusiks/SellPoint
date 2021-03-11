@@ -23,11 +23,7 @@ admin.site.site_title = "SellPoint"
 admin.site.index_title = "Administration"
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('ad/', include('sellpoint_ads.urls')),
-    path('auth/', include('sellpoint_auth.urls'))
-
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-
+    path("admin/", admin.site.urls),
+    path("ad/", include("sellpoint_ads.urls")),
+    path("auth/", include("sellpoint_auth.urls")),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

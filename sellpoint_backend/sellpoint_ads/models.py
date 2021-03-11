@@ -9,7 +9,7 @@ from sellpoint_project.settings import BASE_URL
 
 
 def get_image_path(instance, filename):
-    return os.path.join('photos', str(instance.ad.id), filename)
+    return os.path.join("photos", str(instance.ad.id), filename)
 
 
 class Category(models.Model):
@@ -27,10 +27,16 @@ class Ad(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=True)
+        Category, on_delete=models.SET_NULL, null=True, blank=True
+    )
     is_sold = models.BooleanField(default=False)
     thumbnail = models.ForeignKey(
-        'Image', on_delete=models.RESTRICT, related_name="thumbnail_for", null=True, blank=True)
+        "Image",
+        on_delete=models.RESTRICT,
+        related_name="thumbnail_for",
+        null=True,
+        blank=True,
+    )
 
     def get_images(self):
         return self.image_set.all()
@@ -47,8 +53,9 @@ class Ad(models.Model):
 
 
 class Image(models.Model):
-    image = models.ImageField(upload_to=get_image_path,
-                              height_field=None, width_field=None, max_length=None)
+    image = models.ImageField(
+        upload_to=get_image_path, height_field=None, width_field=None, max_length=None
+    )
     ad = models.ForeignKey(Ad, on_delete=CASCADE)
     description = models.CharField(max_length=256, blank=True, null=True)
 
