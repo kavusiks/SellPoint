@@ -62,13 +62,14 @@ const Navigationbar: FunctionComponent = () => {
       );
     }
 
-    const logOut = () => {
-      AuthenticationService.logOut();
-      session.updateSelfUser().then(() => history.push("/login"));
-    };
-
     return (
       <>
+        {session.user?.is_staff ? (
+          <Button className="button" href="http://127.0.0.1:8000/admin/" variant="outline-primary">
+            Adminpanel
+          </Button>
+        ) : null}
+
         <PathAwareButton href="/profile" variant="outline-secondary">
           Din Profil
         </PathAwareButton>
@@ -77,6 +78,11 @@ const Navigationbar: FunctionComponent = () => {
         </Button>
       </>
     );
+  };
+
+  const logOut = () => {
+    AuthenticationService.logOut();
+    session.updateSelfUser().then(() => history.push("/login"));
   };
 
   return (

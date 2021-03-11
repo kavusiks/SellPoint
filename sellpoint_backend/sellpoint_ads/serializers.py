@@ -6,8 +6,7 @@ from sellpoint_auth.models import User
 class LimitedUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name',
-                  'phone_number']
+        fields = ["email", "first_name", "last_name", "phone_number"]
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -23,7 +22,7 @@ class AdCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ad
-        fields = ['title', 'description', 'price', 'category']
+        fields = ["title", "description", "price", "category"]
 
     def create(self, validated_data):
         owner = self.context["request"].user

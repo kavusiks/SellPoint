@@ -56,4 +56,8 @@ export default interface User {
    * The user's {@link Address}
    */
   address: Address;
+  /**
+   * If the user has admin rights
+   */
+  is_staff?: boolean;
 }

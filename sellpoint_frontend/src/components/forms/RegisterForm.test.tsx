@@ -19,7 +19,6 @@ const expectExists = (label: string) => {
   expect(formElement).toBeInTheDocument();
 };
 
-
 test("renders register form expected fields", () => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   render(<RegisterForm setError={(error: string | React.ReactNode) => {}} />);

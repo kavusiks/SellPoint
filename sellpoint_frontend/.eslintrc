@@ -1,34 +1,31 @@
 {
-    "parser": "@typescript-eslint/parser",
-    "extends": [
-        "react-app",
-        "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:react/recommended",
-        "prettier",
-        "prettier/@typescript-eslint",
-        "prettier/react"
-    ],
-    "plugins": [
-        "react",
-        "@typescript-eslint",
-        "eslint-plugin-tsdoc"
-    ],
-    "rules": {
-        "react/prop-types": 0,
-        "react/display-name": 2,
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/ban-ts-ignore": 0,
-        "tsdoc/syntax": "warn"
-    },
-    "env": {
-        "jest": true,
-        "browser": true
-    },
-    "parserOptions": {
-        "project": "./tsconfig.json",
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    }
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "react-app",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/@typescript-eslint",
+    "prettier/react"
+  ],
+  "plugins": ["react", "@typescript-eslint", "eslint-plugin-tsdoc", "prettier"],
+  "rules": {
+    "react/prop-types": 0,
+    "react/display-name": 2,
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-ignore": 0,
+    "tsdoc/syntax": "warn",
+    "prettier/prettier": "error"
+  },
+  "env": {
+    "jest": true,
+    "browser": true
+  },
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  }
 }

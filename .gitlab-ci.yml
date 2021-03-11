@@ -1,54 +1,62 @@
 image: node:14.16.0-alpine3.10
 
+variables:
+  YARN_CACHE_FOLDER: "$CI_PROJECT_DIR/.cache/yarn"
+
 stages:
-  - install
   - build
   - test
   - lint
 
 cache:
-  key: $CI_PROJECT_ID
-  policy: pull
-  untracked: true
-
-frontend-install:
-  stage: install
-  before_script:
-    - cd sellpoint_frontend
-  script:
-    - echo 'Installing dependencies...'
-    - yarn install
-  cache:
-    key: $CI_PROJECT_ID
-    policy: pull-push
-    paths:
-      - "sellpoint_frontend/.yarn"
-      - "sellpoint_frontend/node_modules"
-      - "sellpoint_frontend/packages/*/node_modules"
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - ".cache/*"
+    - "sellpoint_frontend/node_modules/*"
 
 frontend-build:
   stage: build
   before_script:
     - cd sellpoint_frontend
+    - yarn install --non-interactive --production=false
   script: yarn build
 
 frontend-test:
   stage: test
+  needs: ["frontend-build"]
   before_script:
     - cd sellpoint_frontend
+    - yarn install --non-interactive --production=false
+  cache:
+    policy: pull
   script: yarn test
 
 backend-test:
   stage: test
-  image: python:latest
+  image: python:3.9.2
   before_script:
     - cd sellpoint_backend
-  script:
     - pip install -r requirements.txt
+  script:
     - python manage.py test
 
 frontend-lint:
   stage: lint
+  needs: ["frontend-test"]
   before_script:
     - cd sellpoint_frontend
-  script: yarn lint
+    - yarn install --non-interactive --production=false
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    policy: pull
+  script: yarn lint:ci
+
+backend-lint:
+  stage: lint
+  needs: ["backend-test"]
+  image: python:3.9.2
+  before_script:
+    - cd sellpoint_backend
+    - pip install -r requirements.txt
+  script:
+    - python -m black ./ --check

@@ -168,17 +168,19 @@ const SubmitImageSingleFormPart: FunctionComponent<SubmitImageSingleFormPartProp
   const [path, setPath] = useState<File | undefined>(initialPath);
   const [description, setDescription] = useState<string | undefined>(initialDescription);
 
-  useEffect(() => {
-    if (!path) {
-      return;
-    }
-
+  const sendImageUpdate = () => {
     const image = new ImageSingleFormData(id, path, description);
     onUpdate(image);
-  }, [id, path, description]);
+  };
 
   const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPath(e.target.files ? e.target.files[0] : undefined);
+    sendImageUpdate();
+  };
+
+  const updateDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDescription(e.target.value);
+    sendImageUpdate();
   };
 
   const renderImage = () => {
@@ -221,7 +223,7 @@ const SubmitImageSingleFormPart: FunctionComponent<SubmitImageSingleFormPartProp
             as="textarea"
             placeholder="Beskrivelse"
             rows={2}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={updateDescription}
           />
         </Form.Group>
       ) : null}
@@ -241,37 +243,23 @@ export const SubmitImageMultipleFormPart: FunctionComponent<SubmitImageMultipleF
   onUpdate,
 }) => {
   const [amount, setAmount] = useState<number>(initialAmount);
-  const [images, setImages] = useState<ImageSingleFormData[]>([]);
-  const [id, setId] = useState<number>(0);
+  const [id, setId] = useState<number>(1);
+  const [images, setImages] = useState<ImageSingleFormData[]>([new ImageSingleFormData(id)]);
 
   const getNextId = () => {
-    const next = id;
-    setId(id + 1);
-    return next;
+    setId((i) => i + 1);
+    return id + 1;
   };
 
-  useEffect(() => {
-    let img = images;
-    for (let i = 0; i < amount; i++) {
-      if (i >= img.length) {
-        img = [...img, new ImageSingleFormData(getNextId())];
-        continue;
-      }
-
-      if (img[i]) {
-        continue;
-      }
-
-      img[i] = new ImageSingleFormData(getNextId());
-    }
-
-    setImages(img);
-  }, [amount]);
+  const addOne = () => {
+    setAmount((a) => a + 1);
+    setImages([...images, new ImageSingleFormData(getNextId())]);
+  };
 
   const receiveUpdate = (image: ImageSingleFormData) => {
     const img = [...images];
     img[img.findIndex((other) => other.id === image.id)] = image;
-    
+
     setImages(img);
     onUpdate(img);
   };
@@ -305,11 +293,7 @@ export const SubmitImageMultipleFormPart: FunctionComponent<SubmitImageMultipleF
           <strong>Bilder</strong>
         </p>
 
-        <Button
-          id="create-ad-image-amount-inc"
-          variant="outline-secondary"
-          onClick={() => setAmount(amount + 1)}
-        >
+        <Button id="create-ad-image-amount-inc" variant="outline-secondary" onClick={addOne}>
           <CenteredRow>
             <Plus size={20} />
           </CenteredRow>

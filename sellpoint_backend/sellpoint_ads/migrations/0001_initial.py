@@ -16,46 +16,95 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Ad',
+            name="Ad",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('description', models.TextField(max_length=512)),
-                ('price', models.PositiveSmallIntegerField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('last_modified', models.DateTimeField(auto_now=True)),
-                ('is_sold', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                ("description", models.TextField(max_length=512)),
+                ("price", models.PositiveSmallIntegerField()),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("last_modified", models.DateTimeField(auto_now=True)),
+                ("is_sold", models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=64, unique=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=64, unique=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Image',
+            name="Image",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to=sellpoint_ads.models.get_image_path)),
-                ('description', models.CharField(blank=True, max_length=256, null=True)),
-                ('ad', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='sellpoint_ads.ad')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "image",
+                    models.ImageField(upload_to=sellpoint_ads.models.get_image_path),
+                ),
+                (
+                    "description",
+                    models.CharField(blank=True, max_length=256, null=True),
+                ),
+                (
+                    "ad",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="sellpoint_ads.ad",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='ad',
-            name='category',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='sellpoint_ads.category'),
+            model_name="ad",
+            name="category",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="sellpoint_ads.category",
+            ),
         ),
         migrations.AddField(
-            model_name='ad',
-            name='owner',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="ad",
+            name="owner",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='ad',
-            name='thumbnail',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.RESTRICT, related_name='thumbnail_for', to='sellpoint_ads.image'),
+            model_name="ad",
+            name="thumbnail",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.RESTRICT,
+                related_name="thumbnail_for",
+                to="sellpoint_ads.image",
+            ),
         ),
     ]
