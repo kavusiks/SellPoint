@@ -40,13 +40,13 @@ class AdUpdateAPIView(generics.CreateAPIView):
 
     def put(self, request, pk):
         ad = Ad.objects.get(id=pk)
-        serializer = AdCreateSerializer(ad, data=request.data, partial = True)
+        serializer = AdCreateSerializer(ad, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         if ad.owner == self.request.user:
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status = status.HTTP_401_UNAUTHORIZED)
-            
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
 
 class AdUserList(generics.ListCreateAPIView):
 
@@ -56,7 +56,7 @@ class AdUserList(generics.ListCreateAPIView):
 
     def list(self, request):
         logged_in_user = self.request.user
-        ads = self.get_queryset().filter(owner = logged_in_user)
+        ads = self.get_queryset().filter(owner=logged_in_user)
         serializer = AdSerializer(ads, many=True)
         return Response(serializer.data)
 
