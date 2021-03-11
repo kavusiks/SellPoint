@@ -1,5 +1,6 @@
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from rest_framework import generics
+from rest_framework import status
 from .serializers import AdCreateSerializer, AdSerializer, ImageSerializer
 from .models import Ad, Image
 from .renderers import JPEGRenderer, PNGRenderer
@@ -33,11 +34,19 @@ class AdImageCreateAPIView(generics.CreateAPIView):
         image = Image.objects.create(image=image_file, ad=ad, description=description)
         return Response(ImageSerializer(image).data)
 
+
 class AdUpdateAPIView(generics.CreateAPIView):
-    serializer_class = AdCreateSerializer
     permission_classes = [IsAuthenticated]
 
-    #def put(self, request, *args,  **kwargs):
+    def put(self, request, pk):
+        ad = Ad.objects.get(id=pk)
+        serializer = AdCreateSerializer(ad, data=request.data, partial = True)
+        serializer.is_valid(raise_exception=True)
+        if ad.owner == self.request.user:
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status = status.HTTP_401_UNAUTHORIZED)
+            
 
 class AdUserList(generics.ListCreateAPIView):
 
@@ -46,8 +55,8 @@ class AdUserList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        loggedInUser = self.context["request"].user
-        ads = self.get_queryset().filter(owner = loggedInUser)
+        logged_in_user = self.request.user
+        ads = self.get_queryset().filter(owner = logged_in_user)
         serializer = AdSerializer(ads, many=True)
         return Response(serializer.data)
 
