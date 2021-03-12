@@ -1,10 +1,12 @@
 import React, { FunctionComponent, useState } from "react";
-import { Button, Col, Form } from "react-bootstrap";
+import { Button, Col, Form, Dropdown } from "react-bootstrap";
 import { useHistory } from "react-router";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
-import { Ad } from "../../models/ad";
+import { Ad, Category } from "../../models/ad";
 import { FormProps, SubmitImageMultipleFormPart, ImageSingleFormData } from "./FormParts";
+
+
 
 export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormProps) => {
   const history = useHistory();
@@ -49,6 +51,7 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
       });
   };
 
+
   return (
     <Form noValidate validated={validated} onSubmit={onSubmit} style={{ width: "100%" }}>
       <br />
@@ -87,6 +90,21 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
           onChange={(e) => setDescription(e.target.value)}
           required
         />
+      </Form.Group>
+
+      <Form.Group as={Col} controlId="create-ad-category">
+        <Form.Label>Velg en kategori</Form.Label>
+        <Dropdown>
+          <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
+            Velg en kategori
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </Form.Group>
 
       <SubmitImageMultipleFormPart onUpdate={setImages} />

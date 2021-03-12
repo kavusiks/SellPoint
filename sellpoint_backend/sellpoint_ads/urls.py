@@ -12,6 +12,7 @@ urlpatterns = [
     ),
     path("list/", views.ad_all_list, name="ad-list"),
     path("list/not-sold/", views.ad_not_sold_list, name="ad-not-sold-list"),
+    path("categorylist/", views.category_all_list, name="category-list"),
     path("<str:pk>/", views.ad_detail, name="ad-detail"),
     path("image/<str:pk>/", views.ad_image_detail, name="ad-detail-image"),
 ]

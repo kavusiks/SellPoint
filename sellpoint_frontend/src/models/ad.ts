@@ -18,3 +18,7 @@ export interface Ad {
   thumbnail?: AdImage;
   images?: AdImage[];
 }
+
+export interface Category {
+  name: string;
+}
