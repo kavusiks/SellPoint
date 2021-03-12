@@ -1,4 +1,4 @@
-import { Ad, AdImage } from "../../models/ad";
+import { Ad, AdImage, Category } from "../../models/ad";
 import client from "../client";
 
 class AdAPI {
@@ -30,6 +30,11 @@ class AdAPI {
     }
 
     const response = await client.post(`ad/create/image/${id}/`, formData);
+    return response.data;
+  }
+
+  async getAllCategories(): Promise<Category[]> {
+    const response = await client.get(`ad/categorylist/`);
     return response.data;
   }
 }

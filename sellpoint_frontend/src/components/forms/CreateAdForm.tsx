@@ -6,8 +6,6 @@ import { readDjangoError } from "../../core/client";
 import { Ad, Category } from "../../models/ad";
 import { FormProps, SubmitImageMultipleFormPart, ImageSingleFormData } from "./FormParts";
 
-
-
 export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormProps) => {
   const history = useHistory();
 
@@ -50,7 +48,6 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
         setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
       });
   };
-
 
   return (
     <Form noValidate validated={validated} onSubmit={onSubmit} style={{ width: "100%" }}>
