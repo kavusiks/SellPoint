@@ -18,8 +18,6 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class AdCreateSerializer(serializers.ModelSerializer):
-    category = serializers.IntegerField(required=False)
-
     class Meta:
         model = Ad
         fields = ["title", "description", "price", "category"]

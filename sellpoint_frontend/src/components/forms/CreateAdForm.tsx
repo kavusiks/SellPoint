@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { Button, Col, Form, Dropdown } from "react-bootstrap";
+import { Button, Col, Form, Dropdown, DropdownButton } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { NullLiteral } from "typescript";
 import AdAPI from "../../core/api/ad";
@@ -24,6 +24,7 @@ export const CreateAdForm: FunctionComponent<CategoryProps> = ({
   const [images, setImages] = useState<ImageSingleFormData[]>([]);
   const [validated, setValidated] = useState<boolean>(false);
   const [category, setCategory] = useState<string>("");
+  const [categoryTitle, setCategoryTitle] = useState<string>("Velg en kategori");
 
   const makeCategoriesComponents = () => {
     const categorylist: JSX.Element[] = [];
@@ -37,6 +38,13 @@ export const CreateAdForm: FunctionComponent<CategoryProps> = ({
     });
 
     return categorylist;
+  };
+
+  const handleSelect = (e: any) => {
+    if (typeof e === "string") {
+      setCategory(e);
+      setCategoryTitle(e);
+    }
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -116,13 +124,14 @@ export const CreateAdForm: FunctionComponent<CategoryProps> = ({
       <Form.Group as={Col} controlId="create-ad-category">
         <Form.Label>Velg en kategori</Form.Label>
 
-        <Dropdown>
-          <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
-            Velg en kategori
-          </Dropdown.Toggle>
-
-          <Dropdown.Menu>{makeCategoriesComponents()}</Dropdown.Menu>
-        </Dropdown>
+        <DropdownButton
+          title={categoryTitle}
+          variant="outline-secondary"
+          id="dropdown-basic"
+          onSelect={handleSelect}
+        >
+          {makeCategoriesComponents()}
+        </DropdownButton>
       </Form.Group>
       <SubmitImageMultipleFormPart onUpdate={setImages} />
       <Button variant="primary" type="submit">

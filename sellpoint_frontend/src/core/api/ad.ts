@@ -17,6 +17,7 @@ class AdAPI {
       title: ad.title,
       price: ad.price,
       description: ad.description,
+      category: ad.category,
     });
     return response.data;
   }
