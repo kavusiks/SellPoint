@@ -1,12 +1,21 @@
 import React, { FunctionComponent, useState } from "react";
 import { Button, Col, Form, Dropdown } from "react-bootstrap";
 import { useHistory } from "react-router";
+import { NullLiteral } from "typescript";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
 import { Ad, Category } from "../../models/ad";
-import { FormProps, SubmitImageMultipleFormPart, ImageSingleFormData } from "./FormParts";
+import {
+  CategoryProps,
+  FormProps,
+  SubmitImageMultipleFormPart,
+  ImageSingleFormData,
+} from "./FormParts";
 
-export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormProps) => {
+export const CreateAdForm: FunctionComponent<CategoryProps> = ({
+  categories,
+  setError,
+}: CategoryProps) => {
   const history = useHistory();
 
   const [title, setTitle] = useState<string>("");
@@ -14,6 +23,21 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
   const [description, setDescription] = useState<string>("");
   const [images, setImages] = useState<ImageSingleFormData[]>([]);
   const [validated, setValidated] = useState<boolean>(false);
+  const [category, setCategory] = useState<string>("");
+
+  const makeCategoriesComponents = () => {
+    const categorylist: JSX.Element[] = [];
+
+    categories.forEach((category) => {
+      categorylist.push(
+        <Dropdown.Item key={category.name} eventKey={category.name}>
+          {category.name}
+        </Dropdown.Item>,
+      );
+    });
+
+    return categorylist;
+  };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     setValidated(true);
@@ -29,6 +53,7 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
       title: title,
       price: price,
       description: description,
+      category: category,
     };
 
     AdAPI.createAd(tempAd)
@@ -88,24 +113,18 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
           required
         />
       </Form.Group>
-
       <Form.Group as={Col} controlId="create-ad-category">
         <Form.Label>Velg en kategori</Form.Label>
+
         <Dropdown>
           <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
             Velg en kategori
           </Dropdown.Toggle>
 
-          <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-          </Dropdown.Menu>
+          <Dropdown.Menu>{makeCategoriesComponents()}</Dropdown.Menu>
         </Dropdown>
       </Form.Group>
-
       <SubmitImageMultipleFormPart onUpdate={setImages} />
-
       <Button variant="primary" type="submit">
         Publiser annonsen
       </Button>

@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Button, Col, Form, FormFile, Image } from "react-bootstrap";
 import { Trash, Upload, Plus } from "react-bootstrap-icons";
 import { Address } from "../../models/user";
-import { AdImage } from "../../models/ad";
+import { AdImage, Category } from "../../models/ad";
 import AdAPI from "../../core/api/ad";
 import { CenteredRow, SpaceBetweenCenterRow } from "../styled";
 import "./forms.css";
@@ -17,6 +17,17 @@ export interface FormProps {
    * @param error - The error message
    */
   setError: (error: string | React.ReactNode) => void;
+}
+
+export interface CategoryProps {
+  /**
+   * Called whenever an error occurs
+   *
+   * @param error - The error message
+   */
+  setError: (error: string | React.ReactNode) => void;
+
+  categories: Category[];
 }
 
 /**

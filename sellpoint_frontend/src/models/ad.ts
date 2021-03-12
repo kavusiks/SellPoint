@@ -17,6 +17,7 @@ export interface Ad {
   is_sold?: boolean;
   thumbnail?: AdImage;
   images?: AdImage[];
+  category: string;
 }
 
 export interface Category {
