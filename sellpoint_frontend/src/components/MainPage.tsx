@@ -93,7 +93,13 @@ export const MainPage: FunctionComponent = () => {
         <Col md={8}>
           <AdContainer noGutters>
             {items
-              .filter((item) => !item.is_sold)
+              .filter((item) =>
+                chosenCategories.length
+                  ? !item.is_sold &&
+                    (item.category ? chosenCategories.includes(item.category) : false)
+                  : !item.is_sold,
+              )
+              .reverse()
               .map((item) => (
                 <AdLink key={item.id} to={`/ad/${item.id}`}>
                   <SmallAd ad={item} />
