@@ -123,3 +123,233 @@ Fetch information about the currently logged in user.
   }
 }
 ```
+
+## POST ad/create/
+
+Create an ad
+
+### Request
+
+```json
+{
+  "title": "test",
+  "description": "test",
+  "price": 100
+  }
+```
+
+### Response
+
+```json
+{
+    "id": 1,
+    "owner": {
+        "email": "test@test.org",
+        "first_name": "test",
+        "last_name": "test",
+        "phone_number": "98989898"
+    },
+    "thumbnail": null,
+    "images": [],
+    "title": "test",
+    "description": "test",
+    "price": 100,
+    "created_at": "2021-03-11T22:40:10.507173Z",
+    "last_modified": "2021-03-11T22:40:10.507208Z",
+    "is_sold": false,
+    "category": null
+}
+```
+
+## GET ad/$id/
+
+Return the ad with given id
+
+### Response
+
+```json
+{
+    "id": 1,
+    "owner": {
+        "email": "test@test.no",
+        "first_name": "test",
+        "last_name": "test",
+        "phone_number": "98989898"
+    },
+    "thumbnail": null,
+    "images": [],
+    "title": "test",
+    "description": "test",
+    "price": 100,
+    "created_at": "2021-03-11T22:40:10.507173Z",
+    "last_modified": "2021-03-11T22:40:10.507208Z",
+    "is_sold": false,
+    "category": null
+}
+```
+
+## PUT ad/$id/update/
+
+Update the ad with given id
+
+### Request
+
+```json
+{
+  "title": "test",
+  "description": "test",
+  "price": "100"
+  }
+```
+
+### Response
+
+```json
+{
+  "title": "test",
+  "description": "test",
+  "price": "100",
+  "category": null
+  }
+```
+
+## GET ad/list/
+
+Return a list of all ads
+
+### Response
+
+```json
+[{
+    "id": 1,
+    "owner": {
+        "email": "test@test.no",
+        "first_name": "test",
+        "last_name": "test",
+        "phone_number": "98989898"
+    },
+    "thumbnail": null,
+    "images": [],
+    "title": "test",
+    "description": "test",
+    "price": 100,
+    "created_at": "2021-03-11T22:40:10.507173Z",
+    "last_modified": "2021-03-11T22:40:10.507208Z",
+    "is_sold": false,
+    "category": null
+},
+  {
+    "id": 2,
+    "owner": {
+        "email": "admin@admin.no",
+        "first_name": "test",
+        "last_name": "test",
+        "phone_number": "98989898"
+    },
+    "thumbnail": null,
+    "images": [],
+    "title": "test",
+    "description": "test",
+    "price": 100,
+    "created_at": "2021-03-11T22:40:10.507173Z",
+    "last_modified": "2021-03-11T22:40:10.507208Z",
+    "is_sold": true,
+    "category": null
+}
+  ]
+
+```
+
+## GET ad/list/not-sold/
+
+Return a list of not sold ads
+
+### Response
+
+The same as `ad/list/`, but filtered on `is_sold = False`.
+
+## GET ad/list/self
+
+Return a list with all the ads created by user logged in
+
+### Response
+
+```json
+[
+  {
+    "id": 1,
+    "owner": {
+        "email": "test@test.no",
+        "first_name": "test",
+        "last_name": "test",
+        "phone_number": "98989898"
+    },
+    "thumbnail": null,
+    "images": [],
+    "title": "test",
+    "description": "test",
+    "price": 100,
+    "created_at": "2021-03-11T22:40:10.507173Z",
+    "last_modified": "2021-03-11T22:40:10.507208Z",
+    "is_sold": false,
+    "category": null
+},
+{
+    "id": 2,
+    "owner": {
+        "email": "test@test.no",
+        "first_name": "test",
+        "last_name": "test",
+        "phone_number": "98989898"
+    },
+    "thumbnail": null,
+    "images": [],
+    "title": "test 1",
+    "description": "test 1",
+    "price": 100,
+    "created_at": "2021-03-11T22:40:10.507173Z",
+    "last_modified": "2021-03-11T22:40:10.507208Z",
+    "is_sold": false,
+    "category": null
+}
+]
+```
+
+## POST ad/create/image/$id/
+
+Create an image
+
+### Request
+
+```json
+{
+  "image": "FILE.IMAGE",
+  "ad": 1, 
+  "description": "test"
+}
+```
+
+### Response
+
+```json
+{
+    "id": 1,
+    "url": "http://localhost:8000/ad/image/1/",
+    "description": "Test"
+}
+```
+
+## GET ad/image/$id/
+
+Return the image with given id
+
+### Response
+
+Returns `image/jpeg`
+
+```json
+{
+  "image": "FILE.IMAGE"
+  
+  }
+```
