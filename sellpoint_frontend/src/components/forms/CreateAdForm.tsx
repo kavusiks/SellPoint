@@ -4,13 +4,8 @@ import { useHistory } from "react-router";
 import { NullLiteral } from "typescript";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
-import { Ad, Category } from "../../models/ad";
-import {
-  CategoryProps,
-  FormProps,
-  SubmitImageMultipleFormPart,
-  ImageSingleFormData,
-} from "./FormParts";
+import { Ad } from "../../models/ad";
+import { CategoryProps, SubmitImageMultipleFormPart, ImageSingleFormData } from "./FormParts";
 
 export const CreateAdForm: FunctionComponent<CategoryProps> = ({
   categories,
@@ -29,13 +24,15 @@ export const CreateAdForm: FunctionComponent<CategoryProps> = ({
   const makeCategoriesComponents = () => {
     const categorylist: JSX.Element[] = [];
 
-    categories.forEach((category) => {
-      categorylist.push(
-        <Dropdown.Item key={category.name} eventKey={category.name}>
-          {category.name}
-        </Dropdown.Item>,
-      );
-    });
+    categories
+      .sort((a, b) => (a.name > b.name ? 1 : -1))
+      .forEach((category) => {
+        categorylist.push(
+          <Dropdown.Item key={category.name} eventKey={category.name}>
+            {category.name}
+          </Dropdown.Item>,
+        );
+      });
 
     return categorylist;
   };
