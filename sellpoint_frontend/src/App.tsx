@@ -9,6 +9,7 @@ import RegisterPage from "./pages/Register";
 import ProfilePage from "./pages/Profile";
 import AdViewPage from "./pages/AdView";
 import CreateAdPage from "./pages/CreateAd";
+import { NotFoundPage } from "./pages/NotFound";
 
 const App: FunctionComponent = () => {
   const session = useSessionContext();
@@ -16,7 +17,6 @@ const App: FunctionComponent = () => {
   const protectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: session.isAuthenticated,
     authenticationPath: "/login",
-    redirectPathOnAuthentication: session.redirectPath ?? "/",
     setRedirectPathOnAuthentication: session.setRedirectPath,
   };
 
@@ -24,14 +24,16 @@ const App: FunctionComponent = () => {
     <Router>
       <Navigationbar />
       <Switch>
-        <Route path="/" exact component={MainPage} />
+        <Route path="/" component={MainPage} exact />
 
-        <ProtectedRoute {...protectedRouteProps} path="/ad/create" exact component={CreateAdPage} />
-        <Route path="/ad/:id" component={AdViewPage} />
+        <ProtectedRoute {...protectedRouteProps} path="/ad/create" component={CreateAdPage} exact />
+        <ProtectedRoute {...protectedRouteProps} path="/profile" component={ProfilePage} exact />
 
+        <Route path="/ad/:id" component={AdViewPage} exact />
         <Route path="/login" component={LoginPage} exact />
         <Route path="/register" component={RegisterPage} exact />
-        <ProtectedRoute {...protectedRouteProps} path="/profile" component={ProfilePage} exact />
+
+        <Route path="/" component={NotFoundPage} />
       </Switch>
     </Router>
   );

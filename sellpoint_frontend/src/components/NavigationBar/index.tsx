@@ -68,6 +68,10 @@ const Navigationbar: FunctionComponent = () => {
 
     return (
       <>
+        <Nav className="mr-auto">
+          <Nav.Link href="/ad/create">Ny annonse</Nav.Link>
+        </Nav>
+
         {session.user?.is_staff ? (
           <Button className="button" href="http://127.0.0.1:8000/admin/" variant="outline-primary">
             Adminpanel
