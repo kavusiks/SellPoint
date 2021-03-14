@@ -55,7 +55,7 @@ const Navigationbar: FunctionComponent = () => {
           <Nav className="mr-auto">
             <Nav.Link href="/ad/create">Ny annonse</Nav.Link>
           </Nav>
-          <PathAwareButton href="/register" variant="outline-secondary" >
+          <PathAwareButton href="/register" variant="outline-secondary">
             Opprett bruker
           </PathAwareButton>
 
@@ -63,17 +63,16 @@ const Navigationbar: FunctionComponent = () => {
             Logg Inn
           </PathAwareButton>
         </>
-
       );
     }
 
-    const logOut = () => {
-      AuthenticationService.logOut();
-      session.updateSelfUser().then(() => history.push("/login"));
-    };
-
     return (
       <>
+        {session.user?.is_staff ? (
+          <Button className="button" href="http://127.0.0.1:8000/admin/" variant="outline-primary">
+            Adminpanel
+          </Button>
+        ) : null}
 
         <PathAwareButton href="/profile" variant="outline-secondary">
           Din Profil
@@ -83,6 +82,11 @@ const Navigationbar: FunctionComponent = () => {
         </Button>
       </>
     );
+  };
+
+  const logOut = () => {
+    AuthenticationService.logOut();
+    session.updateSelfUser().then(() => history.push("/login"));
   };
 
   return (

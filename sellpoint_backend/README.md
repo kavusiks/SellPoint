@@ -50,6 +50,18 @@ To run tests run
 $ python manage.py test
 ```
 
+## Fix Formatting
+
+Check if formatting is correct using
+```bash
+$ black ./ --check
+```
+
+To fix any formatting errors run
+```bash
+$ black ./
+```
+
 ## Further Reading
 
  - [Django](https://www.djangoproject.com/start/)
