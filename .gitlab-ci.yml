@@ -1,10 +1,9 @@
 image: node:14.16.0-alpine3.10
 
 variables:
-  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  YARN_CACHE_FOLDER: "$CI_PROJECT_DIR/.cache/yarn"
 
 stages:
-  - install
   - build
   - test
   - lint
@@ -12,54 +11,52 @@ stages:
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
-    - "sellpoint_frontend/.yarn"
-    - "sellpoint_frontend/node_modules"
-    - "sellpoint_frontend/packages/*/node_modules"
-    - ".cache/pip"
-    - "sellpoint_backend/venv/"
-
-frontend-install:
-  stage: install
-  before_script:
-    - cd sellpoint_frontend
-  script:
-    - echo 'Installing dependencies...'
-    - yarn install --cache-folder .yarn
+    - ".cache/*"
+    - "sellpoint_frontend/node_modules/*"
 
 frontend-build:
   stage: build
   before_script:
     - cd sellpoint_frontend
+    - yarn install --non-interactive --production=false
   script: yarn build
 
 frontend-test:
   stage: test
+  needs: ["frontend-build"]
   before_script:
     - cd sellpoint_frontend
+    - yarn install --non-interactive --production=false
+  cache:
+    policy: pull
   script: yarn test
 
 backend-test:
   stage: test
-  image: python:latest
+  image: python:3.9.2
   before_script:
     - cd sellpoint_backend
-    - python -m venv venv
-    - source venv/bin/activate
     - pip install -r requirements.txt
   script:
     - python manage.py test
 
 frontend-lint:
   stage: lint
+  needs: ["frontend-test"]
   before_script:
     - cd sellpoint_frontend
+    - yarn install --non-interactive --production=false
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    policy: pull
   script: yarn lint:ci
 
 backend-lint:
   stage: lint
-  image: python:latest
+  needs: ["backend-test"]
+  image: python:3.9.2
   before_script:
     - cd sellpoint_backend
-    - source venv/bin/activate
+    - pip install -r requirements.txt
   script:
     - python -m black ./ --check
