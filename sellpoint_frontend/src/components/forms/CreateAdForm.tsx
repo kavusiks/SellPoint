@@ -19,7 +19,7 @@ export const CreateAdForm: FunctionComponent<CategoryProps> = ({
   const [images, setImages] = useState<ImageSingleFormData[]>([]);
   const [validated, setValidated] = useState<boolean>(false);
   const [category, setCategory] = useState<string>("");
-  const [categoryTitle, setCategoryTitle] = useState<string>("Velg en kategori");
+  const [categoryTitle, setCategoryTitle] = useState<string>("Ikke valgt");
 
   const makeCategoriesComponents = () => {
     const categorylist: JSX.Element[] = [];
@@ -38,7 +38,10 @@ export const CreateAdForm: FunctionComponent<CategoryProps> = ({
   };
 
   const handleSelect = (e: any) => {
-    if (typeof e === "string") {
+    if (e === "None") {
+      setCategory("");
+      setCategoryTitle("Ikke valgt");
+    } else {
       setCategory(e);
       setCategoryTitle(e);
     }
@@ -128,6 +131,10 @@ export const CreateAdForm: FunctionComponent<CategoryProps> = ({
           onSelect={handleSelect}
         >
           {makeCategoriesComponents()}
+          <Dropdown.Divider />
+          <Dropdown.Item key="None" eventKey="None">
+            Ingen
+          </Dropdown.Item>
         </DropdownButton>
       </Form.Group>
       <SubmitImageMultipleFormPart onUpdate={setImages} />
