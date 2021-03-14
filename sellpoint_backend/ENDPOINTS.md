@@ -347,9 +347,3 @@ Return the image with given id
 
 Returns `image/jpeg`
 
-```json
-{
-  "image": "FILE.IMAGE"
-  
-  }
-```
