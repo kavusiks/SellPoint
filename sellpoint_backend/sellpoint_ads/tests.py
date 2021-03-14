@@ -1,8 +1,9 @@
-from sellpoint_auth.models import User
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from rest_framework_simplejwt.tokens import AccessToken, RefreshToken, Token
+from rest_framework_simplejwt.tokens import AccessToken
+from sellpoint_auth.models import User
+from sellpoint_ads.models import Ad
 
 
 class AdCreateTestCase(APITestCase):
@@ -37,6 +38,7 @@ class AdCreateTestCase(APITestCase):
         response = self.client.post(url, data, format="json")
 
         # Checks if the ad is created
+        self.assertTrue(Ad.objects.filter(id=1).exists())
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Checks if the owner is the one that created the ad
         self.assertEqual(response.data.get("owner").get("email"), "test@test.org")
@@ -53,6 +55,7 @@ class AdCreateTestCase(APITestCase):
 
         # Checks that the ad isnt created
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertFalse(Ad.objects.filter(id=1).exists())
 
 
 class AdUpdateTestCase(APITestCase):
@@ -96,6 +99,7 @@ class AdUpdateTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Checks if the title is changed
         self.assertEqual(response.data.get("title"), self.ad_update_data.get("title"))
+        self.assertEqual(Ad.objects.get(id=1).title, self.ad_update_data.get("title"))
 
     def test_ad_invalid_update(self):
         """
