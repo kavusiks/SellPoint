@@ -52,10 +52,13 @@ const Navigationbar: FunctionComponent = () => {
     if (!session.isAuthenticated) {
       return (
         <>
+          <Nav className="mr-auto">
+            <Nav.Link href="/ad/create">Ny annonse</Nav.Link>
+          </Nav>
           <PathAwareButton href="/register" variant="outline-secondary" >
             Opprett bruker
           </PathAwareButton>
-          
+
           <PathAwareButton href="/login" variant="outline-success">
             Logg Inn
           </PathAwareButton>
@@ -63,7 +66,7 @@ const Navigationbar: FunctionComponent = () => {
 
       );
     }
-    
+
     const logOut = () => {
       AuthenticationService.logOut();
       session.updateSelfUser().then(() => history.push("/login"));
@@ -71,9 +74,7 @@ const Navigationbar: FunctionComponent = () => {
 
     return (
       <>
-      <Nav className="mr-auto">
-        <Nav.Link href="/ad/create">Ny annonse</Nav.Link>
-        </Nav>
+
         <PathAwareButton href="/profile" variant="outline-secondary">
           Din Profil
         </PathAwareButton>
