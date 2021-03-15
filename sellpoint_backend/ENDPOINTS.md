@@ -188,7 +188,7 @@ Return the ad with given id
 }
 ```
 
-## PUT ad/$id/update/
+## PUT ad/$id/
 
 Update the ad with given id
 
@@ -212,6 +212,10 @@ Update the ad with given id
   "category": null
   }
 ```
+
+## DELETE ad/$id/
+
+Delete the ad with given id
 
 ## GET ad/list/
 
