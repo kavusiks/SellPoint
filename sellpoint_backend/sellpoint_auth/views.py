@@ -2,9 +2,14 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
-from .serializer import RegisterSerializer, UserSerializer
+from .serializer import (
+    RegisterSerializer,
+    UserSerializer,
+    AddressSerializer,
+    ChangePasswordSerializer,
+)
 from django.contrib.auth.models import User
 
 
@@ -32,6 +37,39 @@ class RegisterAPIView(generics.GenericAPIView):
         )
 
 
+class UserUpdateAPIView(generics.GenericAPIView):
+    """
+    REST API View for updating user
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        user_self = self.request.user
+        serializer = RegisterSerializer(user_self, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.save()
+            user_self.save()
+            return Response({"user": UserSerializer(user).data})
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+class AddressUpdateAPIView(generics.GenericAPIView):
+    """
+    REST API view for editing the address field
+    """
+
+    permission_classes = [IsAuthenticated]
+    """
+    def put(self, request, *args, **kwargs):
+        user_self = self.request.user
+        serializer = AddressSerializer(user_self, data = request.data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+    """
+
+
 class SelfAPIView(generics.GenericAPIView):
     """
     REST API view for getting the user that is currently logged in.
@@ -43,3 +81,34 @@ class SelfAPIView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         user_self = UserSerializer(request.user, read_only=True)
         return Response(user_self.data)
+
+
+class ChangePasswordView(APIView):
+    """
+    An endpoint for changing password.
+    """
+
+    serializer_class = ChangePasswordSerializer
+    model = User
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+
+    def put(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = ChangePasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            if not self.object.check_password(serializer.data.get("old_password")):
+                return Response(
+                    {"old_password": ["Wrong password."]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            # set_password also hashes the password that the user will get
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            return Response(status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

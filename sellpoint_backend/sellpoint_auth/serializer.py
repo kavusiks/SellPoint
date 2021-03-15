@@ -100,3 +100,25 @@ class UserSerializer(serializers.ModelSerializer):
             "date_joined",
             "is_staff",
         )
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+
+    """
+    Serializer for password change endpoint.
+    """
+
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate(self, validated_data):
+        password = validated_data.get("new_password")
+        errors = dict()
+        try:
+            validators.validate_password(password=password)
+        except exceptions.ValidationError as e:
+            errors["password"] = list(e.messages)
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return super(ChangePasswordSerializer, self).validate(validated_data)
