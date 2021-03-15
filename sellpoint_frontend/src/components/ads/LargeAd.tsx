@@ -1,9 +1,10 @@
 import React, { FunctionComponent } from "react";
 import { CenteredRow, LeftCenterRow, ShadowedContainer } from "../styled";
 import { AdComponentProps } from "./Ads";
-import { Carousel, Image } from "react-bootstrap";
+import { Button, Carousel, Image } from "react-bootstrap";
 import { AdImage } from "../../models/ad";
 import "./ads.css";
+import { useSessionContext } from "../../context/Session";
 
 interface AdImageProps {
   image: AdImage;
@@ -35,6 +36,8 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   ad,
   children,
 }: AdComponentProps) => {
+  const session = useSessionContext();
+
   const isThumbnail = (img: AdImage): boolean => {
     return !!ad.thumbnail && ad.thumbnail.url === img.url;
   };
@@ -64,6 +67,19 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
     return images;
   };
 
+  // Shows the favoritebutton if a user is logged in and the owner of the ad
+  // is not the user
+  const makeFavoriteButton = () => {
+    return session.user && ad.owner ? (
+      session.isAuthenticated && ad.owner.email !== session.user.email ? (
+        <>
+          <Button>Lagre annonsen</Button>
+          <br />
+        </>
+      ) : null
+    ) : null;
+  };
+
   return (
     <ShadowedContainer className="ad large">
       <CenteredRow noGutters>
@@ -81,6 +97,7 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
       <LeftCenterRow noGutters>
         <div className="ad info">
           <p>
+            {makeFavoriteButton()}
             <strong>Pris:</strong> {ad.price},-
             <br />
             <strong>Selger: </strong> {ad.owner?.first_name} {ad.owner?.last_name}
