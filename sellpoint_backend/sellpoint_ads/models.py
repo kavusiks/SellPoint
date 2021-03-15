@@ -51,6 +51,9 @@ class Ad(models.Model):
 
         return None
 
+    def __str__(self):
+        return self.title
+
 
 class Image(models.Model):
     image = models.ImageField(
