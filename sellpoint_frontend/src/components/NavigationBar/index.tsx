@@ -52,9 +52,6 @@ const Navigationbar: FunctionComponent = () => {
     if (!session.isAuthenticated) {
       return (
         <>
-          <Nav className="mr-auto">
-            <Nav.Link href="/ad/create">Ny annonse</Nav.Link>
-          </Nav>
           <PathAwareButton href="/register" variant="outline-secondary">
             Opprett bruker
           </PathAwareButton>
