@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "sellpoint_ads.apps.SellpointAdsConfig",
     "sellpoint_auth.apps.SellpointAuthConfig",
+    "sellpoint_favorite.apps.SellpointFavoriteConfig",
 ]
 
 REST_FRAMEWORK = {

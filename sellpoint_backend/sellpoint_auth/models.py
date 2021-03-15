@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from .user_manager import UserManager
+from django.db.models.deletion import CASCADE
 
 # Simple regex validator for validating a phone number
 PHONE_REGEX = RegexValidator(
@@ -30,12 +31,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         _("last name"), null=False, blank=False, max_length=150
     )
 
-    phone_number = models.CharField(validators=[PHONE_REGEX], max_length=17, blank=True)
+    phone_number = models.CharField(
+        validators=[PHONE_REGEX], max_length=17, blank=True)
 
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
-        help_text=_("Designates whether the user can log into this admin site."),
+        help_text=_(
+            "Designates whether the user can log into this admin site."),
     )
 
     is_active = models.BooleanField(
@@ -65,7 +68,8 @@ class Address(models.Model):
     class Meta:
         verbose_name = _("Address")
 
-    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, primary_key=True, on_delete=models.CASCADE)
 
     line1 = models.CharField(max_length=150)
     line2 = models.CharField(max_length=150, null=True, blank=True)
