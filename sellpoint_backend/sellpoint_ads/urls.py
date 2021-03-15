@@ -15,4 +15,6 @@ urlpatterns = [
     path("categorylist/", views.category_all_list, name="category-list"),
     path("<str:pk>/", views.ad_detail, name="ad-detail"),
     path("image/<str:pk>/", views.ad_image_detail, name="ad-detail-image"),
+    path("list/self/", views.AdUserList.as_view(), name="ad-user-list"),
+    path("<str:pk>/update/", views.AdUpdateAPIView.as_view(), name="ad-update"),
 ]
