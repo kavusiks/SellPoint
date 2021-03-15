@@ -38,7 +38,7 @@ class AdCreateTestCase(APITestCase):
         response = self.client.post(url, data, format="json")
 
         # Checks if the ad is created
-        self.assertTrue(Ad.objects.filter(id=1).exists())
+        self.assertTrue(Ad.objects.filter(id=response.data.get("id")).exists())
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Checks if the owner is the one that created the ad
         self.assertEqual(response.data.get("owner").get("email"), "test@test.org")
@@ -55,7 +55,7 @@ class AdCreateTestCase(APITestCase):
 
         # Checks that the ad isnt created
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        self.assertFalse(Ad.objects.filter(id=1).exists())
+        self.assertFalse(Ad.objects.filter(id=response.data.get("id")).exists())
 
 
 class AdUpdateTestCase(APITestCase):
@@ -99,7 +99,10 @@ class AdUpdateTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Checks if the title is changed
         self.assertEqual(response.data.get("title"), self.ad_update_data.get("title"))
-        self.assertEqual(Ad.objects.get(id=1).title, self.ad_update_data.get("title"))
+        self.assertEqual(
+            Ad.objects.get(id=response.data.get("id")).title,
+            self.ad_update_data.get("title"),
+        )
 
     def test_ad_invalid_update(self):
         """

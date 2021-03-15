@@ -44,7 +44,9 @@ class AdUpdateAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         if ad.owner == self.request.user:
             serializer.save()
-            return Response(serializer.data)
+            return Response(
+                AdSerializer(ad).data,
+            )
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 
