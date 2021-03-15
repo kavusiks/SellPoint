@@ -68,9 +68,6 @@ const Navigationbar: FunctionComponent = () => {
 
     return (
       <>
-        <Nav className="mr-auto">
-          <Nav.Link href="/ad/create">Ny annonse</Nav.Link>
-        </Nav>
 
         {session.user?.is_staff ? (
           <Button className="button" href="http://127.0.0.1:8000/admin/" variant="outline-primary">
@@ -98,6 +95,9 @@ const Navigationbar: FunctionComponent = () => {
       <Navbar.Brand href="/" className="logo">
         Sell<strong>Point</strong>
       </Navbar.Brand>
+      <Nav className="mr-auto">
+        <Nav.Link href="/ad/create">Ny annonse</Nav.Link>
+      </Nav>
 
       {makeButtons()}
     </Navbar>

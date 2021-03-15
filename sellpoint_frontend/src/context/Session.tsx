@@ -39,7 +39,6 @@ export const useProviderValue = (): Session => {
       return;
     }
 
-    console.log("Setting redirect to " + redirectPath);
     setRedirectPathState(redirectPath);
   };
 
