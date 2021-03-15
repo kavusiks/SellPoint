@@ -130,11 +130,15 @@ export const CreateAdForm: FunctionComponent<CategoryProps> = ({
           id="dropdown-basic"
           onSelect={handleSelect}
         >
+          {category ? (
+            <>
+              <Dropdown.Item key="None" eventKey="None">
+                Ingen
+              </Dropdown.Item>
+              <Dropdown.Divider />
+            </>
+          ) : null}
           {makeCategoriesComponents()}
-          <Dropdown.Divider />
-          <Dropdown.Item key="None" eventKey="None">
-            Ingen
-          </Dropdown.Item>
         </DropdownButton>
       </Form.Group>
       <SubmitImageMultipleFormPart onUpdate={setImages} />
