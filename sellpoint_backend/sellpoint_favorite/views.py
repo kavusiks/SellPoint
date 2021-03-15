@@ -14,7 +14,7 @@ def favorite_ads_list(request):
     serializer = FavoriteAdSerializer(favorite_ads, many=True)
     return Response(serializer.data)
 
-class AdCreateAPIView(generics.CreateAPIView):
+class FavoriteCreateAPIView(generics.CreateAPIView):
     serializer_class = FavoriteCreateSerializer
     permission_classes = [IsAuthenticated]
 
