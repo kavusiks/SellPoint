@@ -67,7 +67,7 @@ const Navigationbar: FunctionComponent = () => {
     the button "Rediger Annonse" will take the super user directly to the admin site for this ad,
     where the editing can be done*/
     if (currentLocation.indexOf("http://localhost:3000/ad/") > -1) {
-      const adminPath = "http://127.0.0.1:8000/admin/sellpoint_ads/ad/" + adID + "/change/"
+      const adminPath = "http://127.0.0.1:8000/admin/sellpoint_ads/ad/" + adID + "/change/";
       return (
         <>
           {session.user?.is_staff ? (
@@ -78,23 +78,25 @@ const Navigationbar: FunctionComponent = () => {
 
           <PathAwareButton href="/profile" variant="outline-secondary">
             Din Profil
-        </PathAwareButton>
+          </PathAwareButton>
           <Button className="button" onClick={logOut} variant="outline-primary">
             Logg Ut
-        </Button>
+          </Button>
         </>
       );
-    }
-
-    /* If the user hasn't clicked any ads but is a super user,
+    } else {
+      /* If the user hasn't clicked any ads but is a super user,
     the button "Adminpanel" will take the super user to the general admin site.
     
     Neither "Rediger Annonse" og "Admin Panel" will show if the user is not a super user*/
-    else {
       return (
         <>
           {session.user?.is_staff ? (
-            <Button className="button" href="http://127.0.0.1:8000/admin/" variant="outline-primary">
+            <Button
+              className="button"
+              href="http://127.0.0.1:8000/admin/"
+              variant="outline-primary"
+            >
               Adminpanel
             </Button>
           ) : null}
