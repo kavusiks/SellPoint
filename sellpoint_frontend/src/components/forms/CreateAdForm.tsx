@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { Button, Col, Form, Dropdown, DropdownButton } from "react-bootstrap";
 import { useHistory } from "react-router";
-import { NullLiteral } from "typescript";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
 import { Ad } from "../../models/ad";
