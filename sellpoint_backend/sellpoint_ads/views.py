@@ -1,6 +1,11 @@
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from rest_framework import generics
-from .serializers import AdCreateSerializer, AdSerializer, ImageSerializer, CategorySerializer
+from .serializers import (
+    AdCreateSerializer,
+    AdSerializer,
+    ImageSerializer,
+    CategorySerializer,
+)
 from .models import Ad, Image, Category
 from .renderers import JPEGRenderer, PNGRenderer
 from rest_framework.decorators import api_view, renderer_classes
