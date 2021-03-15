@@ -26,6 +26,19 @@ class AdAPI {
     return response.data;
   }
 
+  async updateAd(ad: Ad): Promise<Ad> {
+    const response = await client.put(`ad/${ad.id}/`, {
+      title: ad.title,
+      price: ad.price,
+      description: ad.description,
+    });
+    return response.data;
+  }
+
+  async deleteAd(ad: Ad): Promise<void> {
+    await client.delete(`ad/${ad.id}/`);
+  }
+
   async addImage(id: number, image: File, description?: string): Promise<AdImage> {
     const formData = new FormData();
     formData.append("image", image);

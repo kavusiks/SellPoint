@@ -36,7 +36,7 @@ export const AdListView: FunctionComponent<AdListViewProps> = ({
   const width = Math.min(100, Math.floor(100 / perRow) - 1);
 
   return (
-    <AdContainer noGutters fluid>
+    <AdContainer noGutters>
       {children}
       {ads
         .filter((item) => !item.is_sold)

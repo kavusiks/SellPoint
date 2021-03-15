@@ -9,6 +9,7 @@ import RegisterPage from "./pages/Register";
 import ProfilePage from "./pages/Profile";
 import AdViewPage from "./pages/AdView";
 import CreateAdPage from "./pages/CreateAd";
+import EditAdPage from "./pages/EditAd";
 
 const App: FunctionComponent = () => {
   const session = useSessionContext();
@@ -26,12 +27,13 @@ const App: FunctionComponent = () => {
       <Switch>
         <Route path="/" exact component={MainPage} />
 
-        <Route path="/ad/create" exact component={CreateAdPage} />
-        <Route path="/ad/:id" component={AdViewPage} />
+        <Route path="/ad/create" component={CreateAdPage} exact />
+        <Route path="/ad/:id" component={AdViewPage} exact />
 
         <Route path="/login" component={LoginPage} exact />
         <Route path="/register" component={RegisterPage} exact />
         <ProtectedRoute {...protectedRouteProps} path="/profile" component={ProfilePage} exact />
+        <ProtectedRoute {...protectedRouteProps} path="/ad/:id/edit" component={EditAdPage} exact />
       </Switch>
     </Router>
   );

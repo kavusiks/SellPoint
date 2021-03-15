@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { Button, Col, Form, FormFile, Image } from "react-bootstrap";
 import { Trash, Upload, Plus } from "react-bootstrap-icons";
 import { Address } from "../../models/user";
@@ -130,85 +130,67 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
   );
 };
 
-export class ImageSingleFormData {
+export class ImageFormData {
   id: number;
-  readonly path?: File;
-  readonly description?: string;
+  path?: File;
+  description?: string;
+  readonly existing?: AdImage;
 
-  constructor(id: number, path?: File, description?: string) {
+  constructor({
+    id,
+    path,
+    description,
+    existing,
+  }: {
+    id: number;
+    path?: File;
+    description?: string;
+    existing?: AdImage;
+  }) {
     this.id = id;
     this.description = description;
     this.path = path;
+    this.existing = existing;
   }
 
-  submit = (adId: number): Promise<AdImage> => {
+  existsRemotely = (): boolean => {
+    return !!this.existing;
+  };
+
+  submit = (adId: number): Promise<AdImage | undefined> => {
+    if (this.existsRemotely()) {
+      return new Promise((resolve, reject) => resolve(undefined));
+    }
+
     if (!this.path) {
-      throw new Error("Missing path!");
+      return new Promise((resolve, reject) => resolve(undefined));
     }
 
     return AdAPI.addImage(adId, this.path, this.description);
   };
 }
 
-interface SubmitImageSingleFormPartProps {
-  id: number;
+interface ImageFormPartProps {
+  data: ImageFormData;
   onRemove: (id: number) => void;
-  onUpdate: (image: ImageSingleFormData) => void;
-  initialDescription?: string;
-  initialPath?: File;
 }
 
-const SubmitImageSingleFormPart: FunctionComponent<SubmitImageSingleFormPartProps> = ({
-  id,
-  onRemove,
-  onUpdate,
-  initialPath,
-  initialDescription,
-}) => {
-  const [path, setPath] = useState<File | undefined>(initialPath);
-  const [description, setDescription] = useState<string | undefined>(initialDescription);
+const EditImageFormPart: FunctionComponent<ImageFormPartProps> = ({ data, onRemove }) => {
+  const openRemoveDialog = () => {
+    // TODO: Add confirm modal and delete image remotely.
 
-  const sendImageUpdate = () => {
-    const image = new ImageSingleFormData(id, path, description);
-    onUpdate(image);
-  };
-
-  const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPath(e.target.files ? e.target.files[0] : undefined);
-    sendImageUpdate();
-  };
-
-  const updateDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDescription(e.target.value);
-    sendImageUpdate();
-  };
-
-  const renderImage = () => {
-    if (!path) {
-      return null;
-    }
-
-    const preview = URL.createObjectURL(path);
-    return <Image style={{ maxWidth: "100%" }} src={preview} alt="Bilde" />;
+    onRemove(data.id);
   };
 
   return (
     <div style={{ marginBottom: "10px" }}>
       <Form.Row as={SpaceBetweenCenterRow} noGutters>
-        <Form.Group className="create-ad-image-file" controlId={`create-ad-image-file-${id}`}>
-          <FormFile>
-            <FormFile.Label className="btn btn-secondary create-ad-image-upload-button">
-              <FormFile.Input onChange={updateImage} />
-              <Upload style={{ margin: "0px 10px 3px 0px" }} />
-              {path ? path.name : "Last Opp"}
-            </FormFile.Label>
-          </FormFile>
-        </Form.Group>
+        <p>Image {data.existing?.id}</p>
 
         <Button
           className="create-ad-image-delete-button"
           variant="danger"
-          onClick={() => onRemove(id)}
+          onClick={openRemoveDialog}
         >
           <CenteredRow>
             <Trash />
@@ -216,10 +198,85 @@ const SubmitImageSingleFormPart: FunctionComponent<SubmitImageSingleFormPartProp
         </Button>
       </Form.Row>
 
-      {path ? (
-        <Form.Group controlId={`create-ad-image-desc-${id}`}>
+      <Form.Group controlId={`create-ad-image-desc-${data.id}`}>
+        <Form.Control
+          value={data.existing?.description}
+          as="textarea"
+          placeholder="Beskrivelse"
+          rows={2}
+          disabled
+        />
+      </Form.Group>
+
+      <Image style={{ maxWidth: "100%" }} src={data.existing?.url} alt="Bilde" />
+    </div>
+  );
+};
+
+interface UploadImageFormPartProps extends ImageFormPartProps {
+  onUpdate: (image: ImageFormData) => void;
+}
+
+const UploadImageFormPart: FunctionComponent<UploadImageFormPartProps> = ({
+  data,
+  onRemove,
+  onUpdate,
+}) => {
+  const sendImageUpdate = () => {
+    onUpdate(data);
+  };
+
+  const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+
+    data.path = e.target.files[0];
+    sendImageUpdate();
+  };
+
+  const updateDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
+    data.description = e.target.value;
+    sendImageUpdate();
+  };
+
+  const renderImage = () => {
+    if (!data.path) {
+      return null;
+    }
+
+    const preview = URL.createObjectURL(data.path);
+    return <Image style={{ maxWidth: "100%" }} src={preview} alt="Bilde" />;
+  };
+
+  return (
+    <div style={{ marginBottom: "10px" }}>
+      <Form.Row as={SpaceBetweenCenterRow} noGutters>
+        <Form.Group className="create-ad-image-file" controlId={`create-ad-image-file-${data.id}`}>
+          <FormFile>
+            <FormFile.Label className="btn btn-secondary create-ad-image-upload-button">
+              <FormFile.Input onChange={updateImage} />
+              <Upload style={{ margin: "0px 10px 3px 0px" }} />
+              {data.path ? data.path.name : "Last Opp"}
+            </FormFile.Label>
+          </FormFile>
+        </Form.Group>
+
+        <Button
+          className="create-ad-image-delete-button"
+          variant="danger"
+          onClick={() => onRemove(data.id)}
+        >
+          <CenteredRow>
+            <Trash />
+          </CenteredRow>
+        </Button>
+      </Form.Row>
+
+      {data.path ? (
+        <Form.Group controlId={`create-ad-image-desc-${data.id}`}>
           <Form.Control
-            value={description}
+            value={data.description}
             as="textarea"
             placeholder="Beskrivelse"
             rows={2}
@@ -234,34 +291,32 @@ const SubmitImageSingleFormPart: FunctionComponent<SubmitImageSingleFormPartProp
 };
 
 export interface SubmitImageMultipleFormPartProps {
-  onUpdate: (images: ImageSingleFormData[]) => void;
-  initialAmount?: number;
+  images: ImageFormData[];
+  setImages: (images: ImageFormData[]) => void;
 }
 
 export const SubmitImageMultipleFormPart: FunctionComponent<SubmitImageMultipleFormPartProps> = ({
-  initialAmount = 1,
-  onUpdate,
+  images,
+  setImages,
 }) => {
-  const [amount, setAmount] = useState<number>(initialAmount);
-  const [id, setId] = useState<number>(1);
-  const [images, setImages] = useState<ImageSingleFormData[]>([new ImageSingleFormData(id)]);
+  const [id, setId] = useState<number>(images.length + 1);
 
-  const getNextId = () => {
-    setId((i) => i + 1);
-    return id + 1;
-  };
+  const addOne = useCallback(() => {
+    setImages([...images, new ImageFormData({ id: id })]);
+    setId(id + 1);
+  }, [id, images, setImages]);
 
-  const addOne = () => {
-    setAmount((a) => a + 1);
-    setImages([...images, new ImageSingleFormData(getNextId())]);
-  };
+  useEffect(() => {
+    if (images.length === 0) {
+      addOne();
+    }
+  }, [addOne, images.length]);
 
-  const receiveUpdate = (image: ImageSingleFormData) => {
+  const receiveUpdate = (image: ImageFormData) => {
     const img = [...images];
     img[img.findIndex((other) => other.id === image.id)] = image;
 
     setImages(img);
-    onUpdate(img);
   };
 
   const removeImage = (id: number) => {
@@ -270,18 +325,19 @@ export const SubmitImageMultipleFormPart: FunctionComponent<SubmitImageMultipleF
     img.splice(index, 1);
 
     setImages(img);
-    setAmount(amount - 1);
   };
 
   const makeImageData = () => {
+    const defaultProps = {
+      onUpdate: receiveUpdate,
+      onRemove: removeImage,
+    };
+
     return images.map((image) => {
-      return (
-        <SubmitImageSingleFormPart
-          key={image.id}
-          {...image}
-          onUpdate={receiveUpdate}
-          onRemove={removeImage}
-        />
+      return image.existsRemotely() ? (
+        <EditImageFormPart key={image.id} data={image} {...defaultProps} />
+      ) : (
+        <UploadImageFormPart key={image.id} data={image} {...defaultProps} />
       );
     });
   };

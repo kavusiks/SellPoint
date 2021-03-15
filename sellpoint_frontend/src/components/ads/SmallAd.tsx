@@ -10,7 +10,9 @@ import {
 import { AdComponentProps } from "./Ads";
 import { Button, Image } from "react-bootstrap";
 import "./ads.css";
-import { Pencil } from "react-bootstrap-icons";
+import { Pencil, Trash } from "react-bootstrap-icons";
+import { useHistory } from "react-router";
+import AdAPI from "../../core/api/ad";
 
 const SmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }: AdComponentProps) => {
   return (
@@ -39,13 +41,25 @@ const SmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }: AdCompon
 };
 
 export const SelfSmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }) => {
+  const history = useHistory();
+
+  const deleteAd = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    AdAPI.deleteAd(ad).then(() => window.location.reload());
+  };
+
   const editAd = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log("Edit ad!");
+    history.push(`/ad/${ad.id}/edit`);
   };
+
+  // TODO: Add modal asking to confirm deletion
 
   return (
     <SmallAd ad={ad}>
+      <Button variant="danger" onClick={deleteAd} style={{ marginRight: "10px" }}>
+        <Trash size={24} style={{ margin: "-1px -4px 1px -4px" }} />
+      </Button>
       <Button variant="primary" onClick={editAd}>
         <Pencil size={24} style={{ margin: "-1px -4px 1px -4px" }} />
       </Button>

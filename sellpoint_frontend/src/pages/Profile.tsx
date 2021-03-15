@@ -50,6 +50,8 @@ const SelfAdsView: FunctionComponent = () => {
 const ProfilePage: FunctionComponent = () => {
   const session = useSessionContext();
 
+  // TODO: Include active page in URL
+
   return (
     <Tab.Container id="profile-tabs" defaultActiveKey="personal">
       <Row noGutters>

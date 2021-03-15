@@ -4,16 +4,38 @@ import { useHistory } from "react-router";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
 import { Ad } from "../../models/ad";
-import { FormProps, SubmitImageMultipleFormPart, ImageSingleFormData } from "./FormParts";
+import { FormProps, SubmitImageMultipleFormPart, ImageFormData } from "./FormParts";
 
-export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormProps) => {
-  const history = useHistory();
+interface EditAdFormProps extends FormProps {
+  initial: Ad;
+}
 
-  const [title, setTitle] = useState<string>("");
-  const [price, setPrice] = useState<number>(0);
-  const [description, setDescription] = useState<string>("");
-  const [images, setImages] = useState<ImageSingleFormData[]>([]);
+interface BaseFormProps extends FormProps {
+  buttonText: string;
+  initial?: Ad;
+  submitAd: (ad: Ad, images: ImageFormData[]) => void;
+}
+
+const BaseAdForm: FunctionComponent<BaseFormProps> = ({
+  buttonText,
+  initial,
+  submitAd,
+  setError,
+}) => {
+  const [title, setTitle] = useState<string>(initial?.title ?? "");
+  const [price, setPrice] = useState<number>(initial?.price ?? 0);
+  const [description, setDescription] = useState<string>(initial?.description ?? "");
   const [validated, setValidated] = useState<boolean>(false);
+
+  // Not pretty but it will work. Either maps the existing images as their
+  // form part object representations or just makes a new empty list.
+  const [images, setImages] = useState<ImageFormData[]>(
+    initial?.images
+      ? initial.images.map((image, idx) => {
+          return new ImageFormData({ id: idx, existing: image });
+        })
+      : [],
+  );
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     setValidated(true);
@@ -26,27 +48,13 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
     }
 
     const tempAd: Ad = {
+      ...initial,
       title: title,
       price: price,
       description: description,
     };
 
-    AdAPI.createAd(tempAd)
-      .then((ad) => {
-        if (!ad.id) {
-          setError("En uforventet error oppstod (Manglende ID)!");
-          return;
-        }
-
-        const id: number = ad.id;
-        Promise.all(images.map((image) => image.submit(id))).then(() =>
-          history.push(`/ad/${ad.id}`),
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-        setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
-      });
+    submitAd(tempAd, images);
   };
 
   return (
@@ -65,6 +73,7 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
           autoFocus
           type="text"
           placeholder="Tittel"
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
         />
@@ -74,6 +83,7 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
         <Form.Control
           type="number"
           placeholder="Pris"
+          value={price}
           onChange={(e) => setPrice(Number(e.target.value))}
           required
         />
@@ -84,17 +94,74 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
           as="textarea"
           placeholder="Beskrivelse"
           rows={5}
+          value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
         />
       </Form.Group>
 
-      <SubmitImageMultipleFormPart onUpdate={setImages} />
+      <SubmitImageMultipleFormPart images={images} setImages={setImages} />
 
       <Button variant="primary" type="submit">
-        Publiser annonsen
+        {buttonText}
       </Button>
     </Form>
   );
 };
-export default CreateAdForm;
+
+export const EditAdForm: FunctionComponent<EditAdFormProps> = ({ initial, setError }) => {
+  const history = useHistory();
+
+  const onSubmit = (tempAd: Ad, images: ImageFormData[]) => {
+    AdAPI.updateAd(tempAd)
+      .then((ad) => {
+        if (!ad.id) {
+          setError("En uforventet error oppstod (Manglende ID)!");
+          return;
+        }
+
+        const id: number = ad.id;
+        Promise.all(images.map((image) => image.submit(id))).then(() =>
+          history.push(`/ad/${ad.id}`),
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
+      });
+  };
+
+  return (
+    <BaseAdForm
+      buttonText="Oppdater Annonsen"
+      initial={initial}
+      submitAd={onSubmit}
+      setError={setError}
+    />
+  );
+};
+
+export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormProps) => {
+  const history = useHistory();
+
+  const onSubmit = (tempAd: Ad, images: ImageFormData[]) => {
+    AdAPI.createAd(tempAd)
+      .then((ad) => {
+        if (!ad.id) {
+          setError("En uforventet error oppstod (Manglende ID)!");
+          return;
+        }
+
+        const id: number = ad.id;
+        Promise.all(images.map((image) => image.submit(id))).then(() =>
+          history.push(`/ad/${ad.id}`),
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
+      });
+  };
+
+  return <BaseAdForm buttonText="Publiser Annonsen" submitAd={onSubmit} setError={setError} />;
+};
