@@ -6,6 +6,7 @@ import { CenteredRow, DefaultSpinner } from "../components/styled";
 import { useSessionContext } from "../context/Session";
 import { Ad } from "../models/ad";
 import AdAPI from "../core/api/ad";
+import { useParams } from "react-router";
 
 interface ProfilePageTabProps {
   title: string;
@@ -47,13 +48,28 @@ const SelfAdsView: FunctionComponent = () => {
   return <AdListView perRow={1} ads={items} self />;
 };
 
+interface ProfilePageParams {
+  page: string;
+}
+
 const ProfilePage: FunctionComponent = () => {
   const session = useSessionContext();
+  let { page } = useParams<ProfilePageParams>();
 
-  // TODO: Include active page in URL
+  if (!page) {
+    page = "personal";
+  }
+
+  const updateUrl = (key: string | null) => {
+    if (!key) {
+      return;
+    }
+
+    window.history.replaceState(null, "SellPoint", `/profile/${key}`);
+  };
 
   return (
-    <Tab.Container id="profile-tabs" defaultActiveKey="personal">
+    <Tab.Container id="profile-tabs" defaultActiveKey={page} onSelect={updateUrl}>
       <Row noGutters>
         <Col sm={2}>
           <Nav variant="pills" className="flex-column" style={{ margin: "5px" }}>
@@ -61,7 +77,7 @@ const ProfilePage: FunctionComponent = () => {
               <Nav.Link eventKey="personal">Personlig Info</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="self-ads">Dine Annonser</Nav.Link>
+              <Nav.Link eventKey="ads">Dine Annonser</Nav.Link>
             </Nav.Item>
           </Nav>
         </Col>
@@ -72,7 +88,7 @@ const ProfilePage: FunctionComponent = () => {
                 {session.user ? <ProfileDisplay user={session.user} /> : <DefaultSpinner />}
               </ProfilePageTab>
             </Tab.Pane>
-            <Tab.Pane eventKey="self-ads">
+            <Tab.Pane eventKey="ads">
               <ProfilePageTab title="Dine Annonser">
                 <SelfAdsView />
               </ProfilePageTab>
