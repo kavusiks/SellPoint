@@ -50,6 +50,10 @@ class AdAPI {
     const response = await client.post(`ad/create/image/${id}/`, formData);
     return response.data;
   }
+
+  async deleteImage(image: AdImage): Promise<void> {
+    await client.delete(`ad/image/${image.id}`);
+  }
 }
 
 export default new AdAPI();

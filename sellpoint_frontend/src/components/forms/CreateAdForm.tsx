@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
 import { Ad } from "../../models/ad";
-import { FormProps, SubmitImageMultipleFormPart, ImageFormData } from "./FormParts";
+import { FormProps, AdImageMultipleFormPart, ImageFormData } from "./FormParts";
 
 interface EditAdFormProps extends FormProps {
   initial: Ad;
@@ -100,7 +100,7 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
         />
       </Form.Group>
 
-      <SubmitImageMultipleFormPart images={images} setImages={setImages} />
+      <AdImageMultipleFormPart images={images} setImages={setImages} />
 
       <Button variant="primary" type="submit">
         {buttonText}

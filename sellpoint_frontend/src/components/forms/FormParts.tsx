@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useCallback, useEffect, useState } from "react";
-import { Button, Col, Form, FormFile, Image } from "react-bootstrap";
+import { Button, Col, Form, FormFile, Image, Modal } from "react-bootstrap";
 import { Trash, Upload, Plus } from "react-bootstrap-icons";
 import { Address } from "../../models/user";
 import { AdImage } from "../../models/ad";
@@ -157,6 +157,14 @@ export class ImageFormData {
     return !!this.existing;
   };
 
+  delete = async (): Promise<void> => {
+    if (!this.existing) {
+      throw new Error("Image doesn't exist remotely!");
+    }
+
+    await AdAPI.deleteImage(this.existing);
+  };
+
   submit = (adId: number): Promise<AdImage | undefined> => {
     if (this.existsRemotely()) {
       return new Promise((resolve, reject) => resolve(undefined));
@@ -176,40 +184,60 @@ interface ImageFormPartProps {
 }
 
 const EditImageFormPart: FunctionComponent<ImageFormPartProps> = ({ data, onRemove }) => {
-  const openRemoveDialog = () => {
-    // TODO: Add confirm modal and delete image remotely.
+  const [showModal, setShowModal] = useState<boolean>(false);
 
-    onRemove(data.id);
+  const confirmRemoveDialog = () => {
+    setShowModal(false);
+    data.delete().then(() => onRemove(data.id));
   };
 
   return (
-    <div style={{ marginBottom: "10px" }}>
-      <Form.Row as={SpaceBetweenCenterRow} noGutters>
-        <p>Image {data.existing?.id}</p>
+    <>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Er du sikker?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Det går ikke ann å angre denne handlingen. Bildet vil bli slettet med en gang.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Avbryt
+          </Button>
+          <Button variant="danger" onClick={confirmRemoveDialog}>
+            Slett Bildet
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-        <Button
-          className="create-ad-image-delete-button"
-          variant="danger"
-          onClick={openRemoveDialog}
-        >
-          <CenteredRow>
-            <Trash />
-          </CenteredRow>
-        </Button>
-      </Form.Row>
+      <div style={{ marginBottom: "10px" }}>
+        <Form.Row as={SpaceBetweenCenterRow} noGutters>
+          <p>Image {data.existing?.id}</p>
 
-      <Form.Group controlId={`create-ad-image-desc-${data.id}`}>
-        <Form.Control
-          value={data.existing?.description}
-          as="textarea"
-          placeholder="Beskrivelse"
-          rows={2}
-          disabled
-        />
-      </Form.Group>
+          <Button
+            className="create-ad-image-delete-button"
+            variant="danger"
+            onClick={() => setShowModal(true)}
+          >
+            <CenteredRow>
+              <Trash />
+            </CenteredRow>
+          </Button>
+        </Form.Row>
 
-      <Image style={{ maxWidth: "100%" }} src={data.existing?.url} alt="Bilde" />
-    </div>
+        <Form.Group controlId={`create-ad-image-desc-${data.id}`}>
+          <Form.Control
+            value={data.existing?.description ?? ""}
+            as="textarea"
+            placeholder="Beskrivelse"
+            rows={2}
+            disabled
+          />
+        </Form.Group>
+
+        <Image style={{ maxWidth: "100%" }} src={data.existing?.url} alt="Bilde" />
+      </div>
+    </>
   );
 };
 
@@ -290,12 +318,12 @@ const UploadImageFormPart: FunctionComponent<UploadImageFormPartProps> = ({
   );
 };
 
-export interface SubmitImageMultipleFormPartProps {
+export interface AdImageMultipleFormPartProps {
   images: ImageFormData[];
   setImages: (images: ImageFormData[]) => void;
 }
 
-export const SubmitImageMultipleFormPart: FunctionComponent<SubmitImageMultipleFormPartProps> = ({
+export const AdImageMultipleFormPart: FunctionComponent<AdImageMultipleFormPartProps> = ({
   images,
   setImages,
 }) => {
