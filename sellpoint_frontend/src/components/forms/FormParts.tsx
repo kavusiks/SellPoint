@@ -19,14 +19,7 @@ export interface FormProps {
   setError: (error: string | React.ReactNode) => void;
 }
 
-export interface CategoryProps {
-  /**
-   * Called whenever an error occurs
-   *
-   * @param error - The error message
-   */
-  setError: (error: string | React.ReactNode) => void;
-
+export interface CategoryProps extends FormProps {
   categories: Category[];
 }
 
