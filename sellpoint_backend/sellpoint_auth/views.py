@@ -54,20 +54,19 @@ class UserUpdateAPIView(generics.GenericAPIView):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
-class AddressUpdateAPIView(generics.GenericAPIView):
+class AddressUpdateAPIView(generics.UpdateAPIView):
     """
     REST API view for editing the address field
     """
 
     permission_classes = [IsAuthenticated]
-    """
-    def put(self, request, *args, **kwargs):
-        user_self = self.request.user
-        serializer = AddressSerializer(user_self, data = request.data, partial = True)
-        if serializer.is_valid():
-            serializer.save()
+
+    def put(self, request):
+        address = request.user.address
+        serializer = AddressSerializer(address, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)
-    """
 
 
 class SelfAPIView(generics.GenericAPIView):
