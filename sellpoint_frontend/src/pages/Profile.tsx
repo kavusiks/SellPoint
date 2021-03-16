@@ -54,11 +54,7 @@ interface ProfilePageParams {
 
 const ProfilePage: FunctionComponent = () => {
   const session = useSessionContext();
-  let { page } = useParams<ProfilePageParams>();
-
-  if (!page) {
-    page = "personal";
-  }
+  const { page } = useParams<ProfilePageParams>();
 
   const updateUrl = (key: string | null) => {
     if (!key) {
@@ -69,7 +65,7 @@ const ProfilePage: FunctionComponent = () => {
   };
 
   return (
-    <Tab.Container id="profile-tabs" defaultActiveKey={page} onSelect={updateUrl}>
+    <Tab.Container id="profile-tabs" defaultActiveKey={page ?? "personal"} onSelect={updateUrl}>
       <Row noGutters>
         <Col sm={2}>
           <Nav variant="pills" className="flex-column" style={{ margin: "5px" }}>
