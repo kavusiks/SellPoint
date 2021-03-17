@@ -57,6 +57,9 @@ const ProfileButton: FunctionComponent = () => {
   );
 };
 
+/**
+ * Global navbar
+ */
 const NavigationBar: FunctionComponent = () => {
   const session = useSessionContext();
   const history = useHistory();

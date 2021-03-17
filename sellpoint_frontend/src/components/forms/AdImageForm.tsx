@@ -7,10 +7,29 @@ import { CenteredRow, SpaceBetweenCenterRow } from "../styled";
 import "./forms.css";
 import { ConfirmModal } from "../ConfirmModal";
 
+/**
+ * Wrapper for an image that is currently relevant in the open form
+ */
 export class ImageFormData {
+  /**
+   * The local ID for this image, only used within the form to differentiate
+   * between multiple images
+   */
   id: number;
+  /**
+   * The local path to the image, if it has not yet been uploaded. This is
+   * NOT the path on the server, this is the path on the local machine that
+   * has this application open in the browser.
+   */
   path?: File;
+  /**
+   * The description of this image
+   */
   description?: string;
+  /**
+   * If the image has already been uploaded to the server, this will be populated
+   * with the corresponding AdImage instance
+   */
   readonly existing?: AdImage;
 
   constructor({
@@ -30,10 +49,18 @@ export class ImageFormData {
     this.existing = existing;
   }
 
+  /**
+   * @returns If this image exists remotely, i. e. it has already been uploaded
+   */
   existsRemotely = (): boolean => {
     return !!this.existing;
   };
 
+  /**
+   * Deletes this image from the remote server
+   *
+   * @throws Error if the image does not exist remotely
+   */
   delete = async (): Promise<void> => {
     if (!this.existing) {
       throw new Error("Image doesn't exist remotely!");
@@ -42,6 +69,14 @@ export class ImageFormData {
     await AdAPI.deleteImage(this.existing);
   };
 
+  /**
+   * Uploads this image as an image for the given ad
+   *
+   * @param adId - The ID of the ad this image belongs to. This has to
+   * be the ID that has been assigned by the remote backend server.
+   * @returns A promise, which may return undefined if no image is uploaded
+   * or AdImage if an image is succesfully uploaded
+   */
   submit = (adId: number): Promise<AdImage | undefined> => {
     if (this.existsRemotely()) {
       return new Promise((resolve, reject) => resolve(undefined));
@@ -187,11 +222,20 @@ const UploadImageFormPart: FunctionComponent<UploadImageFormPartProps> = ({
   );
 };
 
+/**
+ * Props for the image editor for a single ad. This may contain
+ * multiple images.
+ */
 export interface AdImageMultipleFormPartProps {
   images: ImageFormData[];
   setImages: (images: ImageFormData[]) => void;
 }
 
+/**
+ * Component for editing images related to a single ad
+ *
+ * @param props - The props
+ */
 export const AdImageMultipleFormPart: FunctionComponent<AdImageMultipleFormPartProps> = ({
   images,
   setImages,

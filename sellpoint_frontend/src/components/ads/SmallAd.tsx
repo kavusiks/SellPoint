@@ -12,6 +12,11 @@ import { Button, Image } from "react-bootstrap";
 import "./ads.css";
 import { ChevronExpand } from "react-bootstrap-icons";
 
+/**
+ * A small ad view, suitable for displaying multiple ads in the same place
+ *
+ * @param props - The props
+ */
 const SmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }: AdComponentProps) => {
   return (
     <ShadowedContainer className="ad small">
@@ -38,6 +43,12 @@ const SmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }: AdCompon
   );
 };
 
+/**
+ * A small ad view for showing ads that are owned by the currently authenticated
+ * user
+ *
+ * @param props - The props
+ */
 export const SelfSmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }) => {
   const onDeleted = () => {
     window.location.reload();

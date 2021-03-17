@@ -11,14 +11,6 @@ const AdContainer = styled(Row)`
   align-items: center;
 `;
 
-export interface AdListViewProps {
-  ads: Ad[];
-  perRow?: number;
-  children?: React.ReactNode;
-  self?: boolean;
-  unclickable?: boolean;
-}
-
 const AdLink = styled(Link)`
   width: 100%;
   height: auto;
@@ -31,12 +23,39 @@ const AdDiv = styled("div")`
   padding: 10px;
 `;
 
+/**
+ * Props for the AdListView
+ */
+export interface AdListViewProps {
+  /**
+   * The ads to display in the list view
+   */
+  ads: Ad[];
+  /**
+   * How many ads should be displayed per row
+   */
+  perRow?: number;
+  /**
+   * Children nodes
+   */
+  children?: React.ReactNode;
+  /**
+   * If this view should use the SelfSmallAd component instead of
+   * the SmallAd component
+   */
+  self?: boolean;
+}
+
+/**
+ * Displays a list of Ads
+ *
+ * @param props - The props
+ */
 export const AdListView: FunctionComponent<AdListViewProps> = ({
   ads,
   perRow = 3,
   children,
   self,
-  unclickable,
 }) => {
   // Calculates the minimum width we can set that will not allow another item on this row,
   // e. g. if we want 3 items per row, each item needs to take up at least 26% of the width

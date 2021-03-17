@@ -110,6 +110,11 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
   );
 };
 
+/**
+ * Form for editing an existing ad
+ *
+ * @param props - The props
+ */
 export const EditAdForm: FunctionComponent<EditAdFormProps> = ({ initial, setError }) => {
   const history = useHistory();
 
@@ -142,6 +147,11 @@ export const EditAdForm: FunctionComponent<EditAdFormProps> = ({ initial, setErr
   );
 };
 
+/**
+ * Form for creating a new ad
+ *
+ * @param propts - The props
+ */
 export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormProps) => {
   const history = useHistory();
 

@@ -39,6 +39,11 @@ const AdImagePlaceholder: FunctionComponent = () => {
   );
 };
 
+/**
+ * A full page ad view
+ *
+ * @param props - The props
+ */
 export const LargeAd: FunctionComponent<AdComponentProps> = ({
   ad,
   children,

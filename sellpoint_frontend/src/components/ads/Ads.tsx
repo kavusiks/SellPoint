@@ -6,15 +6,35 @@ import { Ad } from "../../models/ad";
 import { ConfirmModal } from "../ConfirmModal";
 import AdAPI from "../../core/api/ad";
 
+/**
+ * Generic props for any component that interacts with a single Ad
+ */
 export interface AdComponentProps {
+  /**
+   * The ad
+   */
   ad: Ad;
+  /**
+   * Child nodes
+   */
   children?: React.ReactNode;
 }
 
+/**
+ * Props for the AdModifyDialog
+ */
 export interface AdModifyProps extends AdComponentProps {
+  /**
+   * Function to be called after the ad has been deleted
+   */
   onDeleted: () => void;
 }
 
+/**
+ * Generic buttons for editing and deleting an ad
+ *
+ * @param props - The props
+ */
 export const AdModifyDialog: FunctionComponent<AdModifyProps> = ({ ad, children, onDeleted }) => {
   const history = useHistory();
   const [showModal, setShowModal] = useState<boolean>(false);
