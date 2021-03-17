@@ -14,15 +14,11 @@ export interface ProtectedRouteProps extends RouteProps {
    */
   authenticationPath: string;
   /**
-   * The path to redirect to after authenticating
-   */
-  redirectPathOnAuthentication: string;
-  /**
    * Sets the redirectPathOnAuthentication field
    *
    * @param path - The new path for redirectPathOnAuthentication
    */
-  setRedirectPathOnAuthentication: (path: string | undefined) => void;
+  setRedirectPathOnAuthentication: (path: string) => void;
 }
 
 /**
