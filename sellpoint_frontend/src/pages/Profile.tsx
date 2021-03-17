@@ -70,7 +70,7 @@ const ProfilePage: FunctionComponent = () => {
         <Col sm={2}>
           <Nav variant="pills" className="flex-column" style={{ margin: "5px" }}>
             <Nav.Item>
-              <Nav.Link eventKey="personal">Personlig Info</Nav.Link>
+              <Nav.Link eventKey="personal">Personlig Informasjon</Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="ads">Dine Annonser</Nav.Link>

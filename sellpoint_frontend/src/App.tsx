@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import MainPage from "./pages/MainPage";
-import Navigationbar from "./components/NavigationBar";
+import NavigationBar from "./components/NavigationBar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ProtectedRoute, { ProtectedRouteProps } from "./components/Route";
 import { useSessionContext } from "./context/Session";
@@ -23,7 +23,7 @@ const App: FunctionComponent = () => {
 
   return (
     <Router>
-      <Navigationbar />
+      <NavigationBar />
       <Switch>
         <Route path="/" component={MainPage} exact />
 
