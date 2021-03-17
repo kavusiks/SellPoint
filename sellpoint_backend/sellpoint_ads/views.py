@@ -1,4 +1,10 @@
-from django.http.response import HttpResponse, HttpResponseBadRequest
+from django.http.response import (
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseForbidden,
+    HttpResponseNotAllowed,
+    HttpResponseNotFound,
+)
 from rest_framework import generics, status, mixins
 from .serializers import AdCreateSerializer, AdSerializer, ImageSerializer
 from .models import Ad, Image
@@ -9,6 +15,10 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 
 
 class AdCreateAPIView(generics.CreateAPIView):
+    """
+    Special view for posting a new ad
+    """
+
     serializer_class = AdCreateSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -22,6 +32,12 @@ class AdCreateAPIView(generics.CreateAPIView):
 
 
 class AdImageCreateAPIView(generics.CreateAPIView):
+    """
+    Special view for uploading an image for an ad
+    """
+
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request, *args, **kwargs):
         try:
             image_file = request.data["image"]
@@ -30,11 +46,22 @@ class AdImageCreateAPIView(generics.CreateAPIView):
         except KeyError:
             return HttpResponseBadRequest()
 
+        if not ad:
+            return HttpResponseNotFound()
+
+        if not ad.owner == request.user:
+            return HttpResponseForbidden()
+
         image = Image.objects.create(image=image_file, ad=ad, description=description)
         return Response(ImageSerializer(image).data)
 
 
 class AdAPIView(mixins.RetrieveModelMixin, generics.GenericAPIView):
+    """
+    View for interacting with existing ads, allowing extensive information retrieval,
+    updating and deleting.
+    """
+
     serializer_class = AdSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = Ad.objects.all()
@@ -66,6 +93,10 @@ class AdAPIView(mixins.RetrieveModelMixin, generics.GenericAPIView):
 
 
 class AdUserList(generics.ListCreateAPIView):
+    """
+    List-view for getting all ads owned by the currently logged in user
+    """
+
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
     permission_classes = (IsAuthenticated,)
@@ -77,6 +108,11 @@ class AdUserList(generics.ListCreateAPIView):
 
 
 class AdImageAPIView(generics.GenericAPIView):
+    """
+    General purpose view for interacting with images related to
+    a listed ad
+    """
+
     renderer_classes = (
         JPEGRenderer,
         PNGRenderer,
@@ -98,6 +134,10 @@ class AdImageAPIView(generics.GenericAPIView):
 
 @api_view(["GET"])
 def ad_not_sold_list(request):
+    """
+    Fetches all ads that are not sold
+    """
+
     ads = Ad.objects.all().filter(is_sold=False)
     serializer = AdSerializer(ads, many=True)
     return Response(serializer.data)
@@ -105,6 +145,10 @@ def ad_not_sold_list(request):
 
 @api_view(["GET"])
 def ad_all_list(request):
+    """
+    Fetches all ads
+    """
+
     ads = Ad.objects.all()
     serializer = AdSerializer(ads, many=True)
     return Response(serializer.data)
