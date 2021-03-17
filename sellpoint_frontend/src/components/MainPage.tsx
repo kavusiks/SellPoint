@@ -3,8 +3,9 @@ import { Row, Col, DropdownButton, Dropdown, Button, ButtonGroup } from "react-b
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import AdAPI from "../core/api/ad";
-import { Ad } from "../models/ad";
+import { Ad, Category } from "../models/ad";
 import SmallAd from "./ads/SmallAd";
+import { makeCategoriesDropdownComponent } from "./forms/FormParts";
 
 const AdContainer = styled(Row)`
   width: 100%;
@@ -22,56 +23,43 @@ const AdLink = styled(Link)`
 
 export const MainPage: FunctionComponent = () => {
   const [items, setItems] = useState<Ad[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [chosenCategories, setChosenCategories] = useState<string[]>([]);
 
   useEffect(() => {
     AdAPI.getAllAds().then((ads) => setItems(ads));
-    AdAPI.getAllCategories().then((categor) =>
-      categor.forEach((category) => setCategories((state) => [...state, category.name])),
+    AdAPI.getAllCategories().then((category) =>
+      category.forEach((category) => setCategories((state) => [...state, category])),
     );
   }, []);
 
-  const makeCategoriesComponents = () => {
-    const categorylist: JSX.Element[] = [];
-
-    categories.sort().forEach((category) => {
-      categorylist.push(
-        <Dropdown.Item key={category} eventKey={category}>
-          {category}
-        </Dropdown.Item>,
-      );
-    });
-
-    return categorylist;
-  };
-
-  const handleSelect = (e: any) => {
-    if (typeof e === "string") {
-      setChosenCategories((state) => [...state, e]);
-      setCategories((state) => state.filter((category) => category !== e));
+  const handleSelect = (e: string | null) => {
+    if (e == null) {
+      throw new Error("e is null");
     }
+    !chosenCategories.includes(e) ? setChosenCategories((state) => [...state, e]) : void 0;
   };
 
   const makeChosenCategoriesButtons = () => {
-    const categorylist: JSX.Element[] = [];
-
+    const categorylistBtns: JSX.Element[] = [];
+    console.log(chosenCategories);
     chosenCategories.forEach((category) => {
-      categorylist.push(
+      categorylistBtns.push(
         <Button variant="success" onClick={handleRemoveCategory} key={category} id={category}>
-          {category} x
+          {category + " x"}
         </Button>,
       );
     });
 
-    return categorylist;
+    return categorylistBtns;
   };
 
-  const handleRemoveCategory = (e: any) => {
-    if (typeof e.target.id === "string") {
-      setCategories((state) => [...state, e.target.id]);
-      setChosenCategories((state) => state.filter((category) => category !== e.target.id));
+  const handleRemoveCategory = (e: React.MouseEvent<HTMLElement, MouseEvent> | null) => {
+    if (e == null) {
+      throw new Error("e is null");
     }
+    const tempId = e.currentTarget.id;
+    setChosenCategories((state) => state.filter((category) => category !== tempId));
   };
 
   return (
@@ -85,7 +73,7 @@ export const MainPage: FunctionComponent = () => {
             id="dropdown-basic"
             onSelect={handleSelect}
           >
-            {makeCategoriesComponents()}
+            {makeCategoriesDropdownComponent(categories)}
           </DropdownButton>
           <br />
           <ButtonGroup vertical>{makeChosenCategoriesButtons()}</ButtonGroup>

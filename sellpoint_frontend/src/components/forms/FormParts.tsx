@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Button, Col, Form, FormFile, Image } from "react-bootstrap";
+import { Button, Col, Dropdown, Form, FormFile, Image } from "react-bootstrap";
 import { Trash, Upload, Plus } from "react-bootstrap-icons";
 import { Address } from "../../models/user";
 import { AdImage, Category } from "../../models/ad";
@@ -308,4 +308,14 @@ export const SubmitImageMultipleFormPart: FunctionComponent<SubmitImageMultipleF
       {makeImageData()}
     </Col>
   );
+};
+
+export const makeCategoriesDropdownComponent = (categories: Category[]) => {
+  return categories
+    .sort((a, b) => (a.name > b.name ? 1 : -1))
+    .map((category) => (
+      <Dropdown.Item key={category.name} eventKey={category.name}>
+        {category.name}
+      </Dropdown.Item>
+    ));
 };

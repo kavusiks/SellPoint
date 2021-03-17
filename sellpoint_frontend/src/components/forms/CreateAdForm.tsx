@@ -4,17 +4,12 @@ import { useHistory } from "react-router";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
 import { Ad, Category } from "../../models/ad";
-import { CategoryProps, SubmitImageMultipleFormPart, ImageSingleFormData } from "./FormParts";
-
-export const makeCategoriesComponents = (categories: Category[]) => {
-  return categories
-    .sort((a, b) => (a.name > b.name ? 1 : -1))
-    .map((category) => (
-      <Dropdown.Item key={category.name} eventKey={category.name}>
-        {category.name}
-      </Dropdown.Item>
-    ));
-};
+import {
+  CategoryProps,
+  SubmitImageMultipleFormPart,
+  ImageSingleFormData,
+  makeCategoriesDropdownComponent,
+} from "./FormParts";
 
 export const CreateAdForm: FunctionComponent<CategoryProps> = ({
   categories,
@@ -30,7 +25,10 @@ export const CreateAdForm: FunctionComponent<CategoryProps> = ({
   const [category, setCategory] = useState<string>("");
   const [categoryTitle, setCategoryTitle] = useState<string>("Ikke valgt");
 
-  const handleSelect = (e: any) => {
+  const handleSelect = (e: string | null) => {
+    if (e == null) {
+      throw new Error("e is null");
+    }
     if (e === "None") {
       setCategory("");
       setCategoryTitle("Ikke valgt");
@@ -131,7 +129,7 @@ export const CreateAdForm: FunctionComponent<CategoryProps> = ({
               <Dropdown.Divider />
             </>
           ) : null}
-          {makeCategoriesComponents(categories)}
+          {makeCategoriesDropdownComponent(categories)}
         </DropdownButton>
       </Form.Group>
       <SubmitImageMultipleFormPart onUpdate={setImages} />
