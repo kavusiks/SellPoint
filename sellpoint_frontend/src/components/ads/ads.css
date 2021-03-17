@@ -25,7 +25,8 @@
   background: rgba(0, 0, 0, 0.164);
 }
 
-.ad.info {
+.ad.info,
+.ad.desc {
   font-size: 18px;
 }
 

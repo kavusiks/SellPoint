@@ -16,9 +16,16 @@ export interface AdListViewProps {
   perRow?: number;
   children?: React.ReactNode;
   self?: boolean;
+  unclickable?: boolean;
 }
 
 const AdLink = styled(Link)`
+  width: 100%;
+  height: auto;
+  padding: 10px;
+`;
+
+const AdDiv = styled("div")`
   width: 100%;
   height: auto;
   padding: 10px;
@@ -29,6 +36,7 @@ export const AdListView: FunctionComponent<AdListViewProps> = ({
   perRow = 3,
   children,
   self,
+  unclickable,
 }) => {
   // Calculates the minimum width we can set that will not allow another item on this row,
   // e. g. if we want 3 items per row, each item needs to take up at least 26% of the width
@@ -40,11 +48,21 @@ export const AdListView: FunctionComponent<AdListViewProps> = ({
       {children}
       {ads
         .filter((item) => !item.is_sold)
-        .map((item) => (
-          <AdLink key={item.id} to={`/ad/${item.id}`} style={{ flex: `0 ${width}%` }}>
-            {self ? <SelfSmallAd ad={item} /> : <SmallAd ad={item} />}
-          </AdLink>
-        ))}
+        .map((item) => {
+          if (self) {
+            return (
+              <AdDiv key={item.id} style={{ flex: `0 ${width}%` }}>
+                <SelfSmallAd ad={item} />
+              </AdDiv>
+            );
+          }
+
+          return (
+            <AdLink key={item.id} to={`/ad/${item.id}`} style={{ flex: `0 ${width}%` }}>
+              <SmallAd ad={item} />
+            </AdLink>
+          );
+        })}
     </AdContainer>
   );
 };

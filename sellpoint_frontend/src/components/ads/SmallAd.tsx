@@ -7,12 +7,10 @@ import {
   formatDate,
   SpaceBetweenCenterRow,
 } from "../styled";
-import { AdComponentProps } from "./Ads";
+import { AdComponentProps, AdModifyDialog } from "./Ads";
 import { Button, Image } from "react-bootstrap";
 import "./ads.css";
-import { Pencil, Trash } from "react-bootstrap-icons";
-import { useHistory } from "react-router";
-import AdAPI from "../../core/api/ad";
+import { ChevronExpand } from "react-bootstrap-icons";
 
 const SmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }: AdComponentProps) => {
   return (
@@ -41,30 +39,22 @@ const SmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }: AdCompon
 };
 
 export const SelfSmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }) => {
-  const history = useHistory();
-
-  const deleteAd = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    AdAPI.deleteAd(ad).then(() => window.location.reload());
+  const onDeleted = () => {
+    window.location.reload();
   };
-
-  const editAd = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    history.push(`/ad/${ad.id}/edit`);
-  };
-
-  // TODO: Add modal asking to confirm deletion
 
   return (
-    <SmallAd ad={ad}>
-      <Button variant="danger" onClick={deleteAd} style={{ marginRight: "10px" }}>
-        <Trash size={24} style={{ margin: "-1px -4px 1px -4px" }} />
-      </Button>
-      <Button variant="primary" onClick={editAd}>
-        <Pencil size={24} style={{ margin: "-1px -4px 1px -4px" }} />
-      </Button>
-      {children}
-    </SmallAd>
+    <>
+      <SmallAd ad={ad}>
+        <Button variant="info" href={`/ad/${ad.id}`} style={{ marginRight: "10px" }}>
+          <ChevronExpand size={24} style={{ margin: "-1px -4px 1px -4px" }} />
+        </Button>
+
+        <AdModifyDialog ad={ad} onDeleted={onDeleted} />
+
+        {children}
+      </SmallAd>
+    </>
   );
 };
 
