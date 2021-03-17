@@ -55,6 +55,7 @@ const Navigationbar: FunctionComponent = () => {
           <PathAwareButton href="/register" variant="outline-secondary">
             Opprett bruker
           </PathAwareButton>
+
           <PathAwareButton href="/login" variant="outline-success">
             Logg Inn
           </PathAwareButton>
@@ -95,7 +96,6 @@ const Navigationbar: FunctionComponent = () => {
       <Navbar.Brand href="/" className="logo">
         Sell<strong>Point</strong>
       </Navbar.Brand>
-
       <Nav className="mr-auto">
         <Nav.Link href="/ad/create">Ny annonse</Nav.Link>
       </Nav>
