@@ -44,7 +44,7 @@ export class ImageFormData {
     existing?: AdImage;
   }) {
     this.id = id;
-    this.description = description;
+    this.description = description ?? existing?.description;
     this.path = path;
     this.existing = existing;
   }
@@ -78,8 +78,8 @@ export class ImageFormData {
    * or AdImage if an image is succesfully uploaded
    */
   submit = (adId: number): Promise<AdImage | undefined> => {
-    if (this.existsRemotely()) {
-      return new Promise((resolve, reject) => resolve(undefined));
+    if (this.existing) {
+      return AdAPI.updateImage(this.existing.id, this.description);
     }
 
     if (!this.path) {
@@ -93,10 +93,20 @@ export class ImageFormData {
 interface ImageFormPartProps {
   data: ImageFormData;
   onRemove: (id: number) => void;
+  onUpdate: (image: ImageFormData) => void;
 }
 
-const EditImageFormPart: FunctionComponent<ImageFormPartProps> = ({ data, onRemove }) => {
+const EditImageFormPart: FunctionComponent<ImageFormPartProps> = ({ data, onRemove, onUpdate }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const sendImageUpdate = () => {
+    onUpdate(data);
+  };
+
+  const updateDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
+    data.description = e.target.value;
+    sendImageUpdate();
+  };
 
   const confirmRemoveDialog = () => {
     setShowModal(false);
@@ -131,11 +141,11 @@ const EditImageFormPart: FunctionComponent<ImageFormPartProps> = ({ data, onRemo
 
         <Form.Group controlId={`create-ad-image-desc-${data.id}`}>
           <Form.Control
-            value={data.existing?.description ?? ""}
+            value={data.description ?? ""}
             as="textarea"
             placeholder="Beskrivelse"
             rows={2}
-            disabled
+            onChange={updateDescription}
           />
         </Form.Group>
 
@@ -145,11 +155,7 @@ const EditImageFormPart: FunctionComponent<ImageFormPartProps> = ({ data, onRemo
   );
 };
 
-interface UploadImageFormPartProps extends ImageFormPartProps {
-  onUpdate: (image: ImageFormData) => void;
-}
-
-const UploadImageFormPart: FunctionComponent<UploadImageFormPartProps> = ({
+const UploadImageFormPart: FunctionComponent<ImageFormPartProps> = ({
   data,
   onRemove,
   onUpdate,

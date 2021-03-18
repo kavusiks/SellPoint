@@ -93,6 +93,17 @@ class AdAPI {
     return response.data;
   }
 
+  async updateImage(id: number, description?: string): Promise<AdImage> {
+    const formData = new FormData();
+
+    if (description) {
+      formData.append("description", description);
+    }
+
+    const response = await client.put(`ad/image/${id}/`, formData);
+    return response.data;
+  }
+
   /**
    * Deletes the given image
    *

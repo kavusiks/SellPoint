@@ -7,10 +7,7 @@ export const MainPage: FunctionComponent = () => {
   const [items, setItems] = useState<Ad[]>([]);
 
   useEffect(() => {
-    AdAPI.getAllAds().then((ads) => {
-      console.log(ads);
-      setItems(ads);
-    });
+    AdAPI.getAllAds().then((ads) => setItems(ads));
   }, []);
 
   return <AdListView ads={items} />;

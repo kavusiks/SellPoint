@@ -131,6 +131,19 @@ class AdImageAPIView(generics.GenericAPIView):
         image.delete()
         return Response(status=status.HTTP_200_OK)
 
+    def put(self, request, pk):
+        image = Image.objects.get(id=pk)
+        if not image.ad.owner == request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        description = request.data.get("description")
+        image.description = description
+        image.save()
+
+        print("Updating the thing!")
+
+        return Response(ImageSerializer(image).data, status=status.HTTP_200_OK)
+
 
 @api_view(["GET"])
 def ad_not_sold_list(request):
