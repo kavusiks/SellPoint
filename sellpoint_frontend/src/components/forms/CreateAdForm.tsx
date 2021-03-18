@@ -3,7 +3,7 @@ import { Button, Col, Form, Dropdown, DropdownButton } from "react-bootstrap";
 import { useHistory } from "react-router";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
-import { Ad, Category } from "../../models/ad";
+import { Ad } from "../../models/ad";
 import {
   CategoryProps,
   SubmitImageMultipleFormPart,

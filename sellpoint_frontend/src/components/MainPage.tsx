@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
-import { Row, Col, DropdownButton, Dropdown, Button, ButtonGroup } from "react-bootstrap";
+import { Row, Col, DropdownButton, Button, ButtonGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import AdAPI from "../core/api/ad";
-import { Ad, Category } from "../models/ad";
+import { Ad } from "../models/ad";
 import SmallAd from "./ads/SmallAd";
 import { makeCategoriesDropdownComponent } from "./forms/FormParts";
 
@@ -23,13 +23,13 @@ const AdLink = styled(Link)`
 
 export const MainPage: FunctionComponent = () => {
   const [items, setItems] = useState<Ad[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [chosenCategories, setChosenCategories] = useState<string[]>([]);
 
   useEffect(() => {
     AdAPI.getAllAds().then((ads) => setItems(ads));
     AdAPI.getAllCategories().then((category) =>
-      category.forEach((category) => setCategories((state) => [...state, category])),
+      category.forEach((category) => setCategories((state) => [...state, category.name])),
     );
   }, []);
 
@@ -38,20 +38,19 @@ export const MainPage: FunctionComponent = () => {
       throw new Error("e is null");
     }
     !chosenCategories.includes(e) ? setChosenCategories((state) => [...state, e]) : void 0;
+    setCategories((state) => state.filter((cat) => cat !== e));
   };
 
   const makeChosenCategoriesButtons = () => {
-    const categorylistBtns: JSX.Element[] = [];
-    console.log(chosenCategories);
-    chosenCategories.forEach((category) => {
-      categorylistBtns.push(
-        <Button variant="success" onClick={handleRemoveCategory} key={category} id={category}>
-          {category + " x"}
-        </Button>,
-      );
-    });
-
-    return categorylistBtns;
+    return chosenCategories
+      .sort((a, b) => (a > b ? 1 : -1))
+      .map((category) => {
+        return (
+          <Button variant="success" onClick={handleRemoveCategory} key={category} id={category}>
+            {category + " x"}
+          </Button>
+        );
+      });
   };
 
   const handleRemoveCategory = (e: React.MouseEvent<HTMLElement, MouseEvent> | null) => {
@@ -60,6 +59,7 @@ export const MainPage: FunctionComponent = () => {
     }
     const tempId = e.currentTarget.id;
     setChosenCategories((state) => state.filter((category) => category !== tempId));
+    setCategories((state) => [...state, tempId]);
   };
 
   return (

@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Button, Col, Dropdown, Form, FormFile, Image } from "react-bootstrap";
 import { Trash, Upload, Plus } from "react-bootstrap-icons";
 import { Address } from "../../models/user";
-import { AdImage, Category } from "../../models/ad";
+import { AdImage } from "../../models/ad";
 import AdAPI from "../../core/api/ad";
 import { CenteredRow, SpaceBetweenCenterRow } from "../styled";
 import "./forms.css";
@@ -20,7 +20,7 @@ export interface FormProps {
 }
 
 export interface CategoryProps extends FormProps {
-  categories: Category[];
+  categories: string[];
 }
 
 /**
@@ -310,12 +310,12 @@ export const SubmitImageMultipleFormPart: FunctionComponent<SubmitImageMultipleF
   );
 };
 
-export const makeCategoriesDropdownComponent = (categories: Category[]) => {
+export const makeCategoriesDropdownComponent = (categories: string[]) => {
   return categories
-    .sort((a, b) => (a.name > b.name ? 1 : -1))
+    .sort((a, b) => (a > b ? 1 : -1))
     .map((category) => (
-      <Dropdown.Item key={category.name} eventKey={category.name}>
-        {category.name}
+      <Dropdown.Item key={category} eventKey={category}>
+        {category}
       </Dropdown.Item>
     ));
 };
