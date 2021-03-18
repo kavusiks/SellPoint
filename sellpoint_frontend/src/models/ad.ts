@@ -18,3 +18,8 @@ export interface Ad {
   thumbnail?: AdImage;
   images?: AdImage[];
 }
+
+export interface FavoriteAd {
+  owner: User;
+  ad: Ad;
+}

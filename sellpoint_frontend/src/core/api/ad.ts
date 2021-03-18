@@ -1,4 +1,5 @@
-import { Ad, AdImage } from "../../models/ad";
+import { Ad, AdImage, FavoriteAd } from "../../models/ad";
+import User from "../../models/user";
 import client from "../client";
 
 class AdAPI {
@@ -30,6 +31,24 @@ class AdAPI {
     }
 
     const response = await client.post(`ad/create/image/${id}/`, formData);
+    return response.data;
+  }
+
+  async getAllFavorites(): Promise<FavoriteAd[]> {
+    const response = await client.get(`list/favorite`);
+    return response.data;
+  }
+
+  async getAllFavoritesByUserId(id: number): Promise<Ad> {
+    const response = await client.get(`ad/favorite/user/${id}/`);
+    return response.data;
+  }
+
+  async createFavorite(user: User, ad: Ad): Promise<FavoriteAd> {
+    const response = await client.post("favorite/create/", {
+      user: user,
+      ad: ad,
+    });
     return response.data;
   }
 }
