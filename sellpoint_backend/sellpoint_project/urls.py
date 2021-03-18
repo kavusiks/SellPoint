@@ -26,5 +26,4 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("ad/", include("sellpoint_ads.urls")),
     path("auth/", include("sellpoint_auth.urls")),
-    path("favorite/", include("sellpoint_favorite.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
