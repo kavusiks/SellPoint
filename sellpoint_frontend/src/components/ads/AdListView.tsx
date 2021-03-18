@@ -65,23 +65,21 @@ export const AdListView: FunctionComponent<AdListViewProps> = ({
   return (
     <AdContainer noGutters>
       {children}
-      {ads
-        .filter((item) => !item.is_sold)
-        .map((item) => {
-          if (self) {
-            return (
-              <AdDiv key={item.id} style={{ flex: `0 ${width}%` }}>
-                <SelfSmallAd ad={item} />
-              </AdDiv>
-            );
-          }
-
+      {ads.reverse().map((item) => {
+        if (self) {
           return (
-            <AdLink key={item.id} to={`/ad/${item.id}`} style={{ flex: `0 ${width}%` }}>
-              <SmallAd ad={item} />
-            </AdLink>
+            <AdDiv key={item.id} style={{ flex: `0 ${width}%` }}>
+              <SelfSmallAd ad={item} />
+            </AdDiv>
           );
-        })}
+        }
+
+        return (
+          <AdLink key={item.id} to={`/ad/${item.id}`} style={{ flex: `0 ${width}%` }}>
+            <SmallAd ad={item} />
+          </AdLink>
+        );
+      })}
     </AdContainer>
   );
 };

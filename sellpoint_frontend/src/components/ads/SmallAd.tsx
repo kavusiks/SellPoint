@@ -8,7 +8,7 @@ import {
   SpaceBetweenCenterRow,
 } from "../styled";
 import { AdComponentProps, AdModifyDialog } from "./Ads";
-import { Button, Image } from "react-bootstrap";
+import { Badge, Button, Image } from "react-bootstrap";
 import "./ads.css";
 import { ChevronExpand } from "react-bootstrap-icons";
 
@@ -25,12 +25,16 @@ const SmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }: AdCompon
       </CenteredRow>
       {children ? (
         <SpaceBetweenCenterRow noGutters>
-          <h2>{ad.title}</h2>
+          <h2>
+            {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+          </h2>
           <RightCenterRow noGutters>{children}</RightCenterRow>
         </SpaceBetweenCenterRow>
       ) : (
         <LeftCenterRow noGutters>
-          <h2>{ad.title}</h2>
+          <h2>
+            {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+          </h2>
         </LeftCenterRow>
       )}
       <LeftCenterRow noGutters>

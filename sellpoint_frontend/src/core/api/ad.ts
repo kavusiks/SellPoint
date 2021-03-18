@@ -43,6 +43,7 @@ class AdAPI {
       title: ad.title,
       price: ad.price,
       description: ad.description,
+      is_sold: ad.is_sold,
     });
     return response.data;
   }
@@ -58,6 +59,7 @@ class AdAPI {
       title: ad.title,
       price: ad.price,
       description: ad.description,
+      is_sold: ad.is_sold,
     });
     return response.data;
   }

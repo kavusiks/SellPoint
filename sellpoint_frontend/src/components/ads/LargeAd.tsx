@@ -7,7 +7,7 @@ import {
   SpaceBetweenCenterRow,
 } from "../styled";
 import { AdComponentProps, AdModifyDialog } from "./Ads";
-import { Carousel, Image } from "react-bootstrap";
+import { Carousel, Image, Badge } from "react-bootstrap";
 import { AdImage } from "../../models/ad";
 import "./ads.css";
 import { useSessionContext } from "../../context/Session";
@@ -93,7 +93,9 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
         // Check if this is our own ad, if so we should display edit buttons etc.
         session.user && ad.owner?.email === session.user.email ? (
           <SpaceBetweenCenterRow noGutters>
-            <h2>{ad.title}</h2>
+            <h2>
+              {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+            </h2>
             <RightCenterRow noGutters>
               <AdModifyDialog ad={ad} onDeleted={() => history.push("/")} />
             </RightCenterRow>
@@ -102,7 +104,9 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
         ) : (
           <LeftCenterRow noGutters>
             <div className="ad title">
-              <h1>{ad.title}</h1>
+              <h1>
+                {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+              </h1>
             </div>
             <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
           </LeftCenterRow>

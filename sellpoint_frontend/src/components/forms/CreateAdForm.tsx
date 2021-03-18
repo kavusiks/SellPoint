@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import { Button, Col, Form } from "react-bootstrap";
+import { Button, Col, Form, FormCheck } from "react-bootstrap";
 import { useHistory } from "react-router";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
@@ -26,6 +26,7 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
   const [title, setTitle] = useState<string>(initial?.title ?? "");
   const [price, setPrice] = useState<number>(initial?.price ?? 0);
   const [description, setDescription] = useState<string>(initial?.description ?? "");
+  const [sold, setSold] = useState<boolean>(initial?.is_sold ?? false);
   const [validated, setValidated] = useState<boolean>(false);
 
   // Not pretty but it will work. Either maps the existing images as their
@@ -53,6 +54,7 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
       title: title,
       price: price,
       description: description,
+      is_sold: sold,
     };
 
     submitAd(tempAd, images);
@@ -68,7 +70,7 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
         <hr style={{ margin: "5px 0px 5px 0px" }} />
       </Col>
 
-      <Form.Group as={Col} controlId="create-ad-title">
+      <Form.Group as={Col} controlId="form-ad-title">
         <Form.Label>Tittel</Form.Label>
         <Form.Control
           autoFocus
@@ -79,7 +81,7 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
           required
         />
       </Form.Group>
-      <Form.Group as={Col} controlId="create-ad-price">
+      <Form.Group as={Col} controlId="form-ad-price">
         <Form.Label>Pris</Form.Label>
         <Form.Control
           type="number"
@@ -89,7 +91,7 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
           required
         />
       </Form.Group>
-      <Form.Group as={Col} controlId="create-ad-description">
+      <Form.Group as={Col} controlId="form-ad-description">
         <Form.Label>Beskrivelse</Form.Label>
         <Form.Control
           as="textarea"
@@ -99,6 +101,12 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
           onChange={(e) => setDescription(e.target.value)}
           required
         />
+      </Form.Group>
+      <Form.Group as={Col} controlId="form-ad-sold">
+        <FormCheck>
+          <FormCheck.Input checked={sold} onChange={() => setSold(!sold)} />
+          <FormCheck.Label>Solgt</FormCheck.Label>
+        </FormCheck>
       </Form.Group>
 
       <AdImageMultipleFormPart images={images} setImages={setImages} />
