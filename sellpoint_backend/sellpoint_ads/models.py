@@ -61,3 +61,11 @@ class Image(models.Model):
 
     def get_url(self):
         return BASE_URL + reverse("ad-detail-image", args=[self.id])
+
+
+class FavoriteAd(models.Model):
+    user = models.ForeignKey(User, on_delete=CASCADE)
+    favorite_ad = models.ForeignKey(Ad, on_delete=CASCADE)
+
+    class Meta:
+        unique_together = (("user", "favorite_ad"),)

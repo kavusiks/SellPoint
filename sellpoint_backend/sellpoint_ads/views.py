@@ -1,7 +1,7 @@
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from rest_framework import generics
-from .serializers import AdCreateSerializer, AdSerializer, ImageSerializer
-from .models import Ad, Image
+from .serializers import AdCreateSerializer, AdSerializer, ImageSerializer, FavoriteAdSerializer, FavoriteCreateSerializer
+from .models import Ad, Image, FavoriteAd
 from .renderers import JPEGRenderer, PNGRenderer
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.response import Response
@@ -30,7 +30,8 @@ class AdImageCreateAPIView(generics.CreateAPIView):
         except KeyError:
             return HttpResponseBadRequest()
 
-        image = Image.objects.create(image=image_file, ad=ad, description=description)
+        image = Image.objects.create(
+            image=image_file, ad=ad, description=description)
         return Response(ImageSerializer(image).data)
 
 
@@ -65,3 +66,30 @@ def ad_detail(request, pk):
 def ad_image_detail(request, pk):
     image = Image.objects.get(id=pk)
     return Response(image.image)
+
+
+@api_view(["GET"])
+def favorite_ads_list(request):
+    favorite_ads = FavoriteAd.objects.all()
+    serializer = FavoriteAdSerializer(favorite_ads, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def favorite_detail_user(request, pk):
+    favorite_ad = FavoriteAd.objects.filter(user=pk).all()
+    serializer = FavoriteAdSerializer(favorite_ad, many=True)
+    return Response(serializer.data)
+
+
+class FavoriteCreateAPIView(generics.CreateAPIView):
+    serializer_class = FavoriteCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        favorite = serializer.save()
+
+        return Response(FavoriteCreateSerializer(favorite, context=self.get_serializer_context()).data)
