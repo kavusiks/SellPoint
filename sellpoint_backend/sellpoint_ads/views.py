@@ -1,5 +1,5 @@
 from django.http.response import HttpResponse, HttpResponseBadRequest
-from rest_framework import generics
+from rest_framework import generics, status
 from .serializers import (
     AdCreateSerializer,
     AdSerializer,
