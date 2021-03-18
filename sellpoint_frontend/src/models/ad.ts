@@ -20,6 +20,6 @@ export interface Ad {
 }
 
 export interface FavoriteAd {
-  owner: User;
-  ad: Ad;
+  user: User;
+  favorite_ad: Ad;
 }

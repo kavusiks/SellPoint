@@ -44,10 +44,10 @@ class AdAPI {
     return response.data;
   }
 
-  async createFavorite(user: User, ad: Ad): Promise<FavoriteAd> {
-    const response = await client.post("favorite/create/", {
-      user: user,
-      ad: ad,
+  async createFavorite(favorite_ad: FavoriteAd): Promise<FavoriteAd> {
+    const response = await client.post("ad/create/favorite/", {
+      user: favorite_ad.user,
+      ad: favorite_ad.favorite_ad,
     });
     return response.data;
   }

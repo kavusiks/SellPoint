@@ -2,9 +2,11 @@ import React, { FunctionComponent } from "react";
 import { CenteredRow, LeftCenterRow, ShadowedContainer } from "../styled";
 import { AdComponentProps } from "./Ads";
 import { Button, Carousel, Image } from "react-bootstrap";
-import { AdImage } from "../../models/ad";
+import { AdImage, FavoriteAd, Ad } from "../../models/ad";
 import "./ads.css";
 import { useSessionContext } from "../../context/Session";
+import User from "../../models/user";
+import AdAPI from "../../core/api/ad";
 
 interface AdImageProps {
   image: AdImage;
@@ -67,13 +69,29 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
     return images;
   };
 
+  const handleAddFavoriteAd = () => {
+    if (session.user) {
+      const userAccount: User = session.user;
+      const favoriteAd: Ad = ad;
+
+      const tempFavoriteAd: FavoriteAd = {
+        user: userAccount,
+        favorite_ad: favoriteAd,
+      };
+
+      console.log(tempFavoriteAd);
+
+      AdAPI.createFavorite(tempFavoriteAd);
+    }
+  };
+
   // Shows the favoritebutton if a user is logged in and the owner of the ad
   // is not the user
   const makeFavoriteButton = () => {
     return session.user && ad.owner ? (
       session.isAuthenticated && ad.owner.email !== session.user.email ? (
         <>
-          <Button>Lagre annonsen</Button>
+          <Button onClick={handleAddFavoriteAd}>Lagre annonsen</Button>
           <br />
         </>
       ) : null
