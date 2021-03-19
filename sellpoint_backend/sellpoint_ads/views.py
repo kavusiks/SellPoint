@@ -1,5 +1,5 @@
 from django.http.response import HttpResponse, HttpResponseBadRequest
-from rest_framework import generics
+from rest_framework import generics, mixins, status
 from .serializers import AdCreateSerializer, AdSerializer, ImageSerializer, FavoriteAdSerializer, FavoriteCreateSerializer
 from .models import Ad, Image, FavoriteAd
 from .renderers import JPEGRenderer, PNGRenderer
@@ -93,3 +93,25 @@ class FavoriteCreateAPIView(generics.CreateAPIView):
         favorite = serializer.save()
 
         return Response(FavoriteCreateSerializer(favorite, context=self.get_serializer_context()).data)
+
+
+class FavoriteDeleteAPIView(mixins.RetrieveModelMixin, generics.GenericAPIView):
+    """
+    View for deleting an instance of FavoriteAd
+    """
+
+    serializer_class = FavoriteAdSerializer
+    # permission_classes = [IsAuthenticated]
+    queryset = FavoriteAd.objects.all()
+
+    def get(self, request, user_id, ad_id):
+        return self.retrieve(self, request, user_id, ad_id)
+
+    def delete(self, request, user_id, ad_id):
+        favorite_ad = FavoriteAd.objects.get(user=user_id, favorite_ad=ad_id)
+
+        if not favorite_ad:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        favorite_ad.delete()
+        return Response(status=status.HTTP_200_OK)
