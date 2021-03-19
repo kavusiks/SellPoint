@@ -1,11 +1,10 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { CenteredRow, LeftCenterRow, ShadowedContainer } from "../styled";
 import { AdComponentProps } from "./Ads";
 import { Button, Carousel, Image } from "react-bootstrap";
 import { AdImage, FavoriteAd, Ad } from "../../models/ad";
 import "./ads.css";
 import { useSessionContext } from "../../context/Session";
-import User from "../../models/user";
 import AdAPI from "../../core/api/ad";
 
 interface AdImageProps {
@@ -40,6 +39,18 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
 }: AdComponentProps) => {
   const session = useSessionContext();
 
+  const [isFavorite, setIsFavorite] = useState<boolean>();
+
+  useEffect(() => {
+    if (session.user?.id) {
+      AdAPI.getAllFavoritesByUserId(session.user.id).then((favorites) =>
+        favorites.filter((a) => a.favorite_ad == ad.id).length
+          ? setIsFavorite(true)
+          : setIsFavorite(false),
+      );
+    }
+  }, []);
+
   const isThumbnail = (img: AdImage): boolean => {
     return !!ad.thumbnail && ad.thumbnail.url === img.url;
   };
@@ -70,19 +81,22 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   };
 
   const handleAddFavoriteAd = () => {
-    if (session.user) {
-      const userAccount: User = session.user;
-      const favoriteAd: Ad = ad;
+    if (session.user?.id && ad.id) {
+      const userAccount: number = session.user.id;
+      const favoriteAd: number = ad.id;
 
       const tempFavoriteAd: FavoriteAd = {
         user: userAccount,
         favorite_ad: favoriteAd,
       };
 
-      console.log(tempFavoriteAd);
-
       AdAPI.createFavorite(tempFavoriteAd);
+      setIsFavorite(true);
     }
+  };
+
+  const handleRemoveFavoriteAd = () => {
+    setIsFavorite(false);
   };
 
   // Shows the favoritebutton if a user is logged in and the owner of the ad
@@ -90,10 +104,17 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   const makeFavoriteButton = () => {
     return session.user && ad.owner ? (
       session.isAuthenticated && ad.owner.email !== session.user.email ? (
-        <>
-          <Button onClick={handleAddFavoriteAd}>Lagre annonsen</Button>
-          <br />
-        </>
+        isFavorite ? (
+          <>
+            <Button onClick={handleRemoveFavoriteAd}>Fjern lagret annonse</Button>
+            <br />
+          </>
+        ) : (
+          <>
+            <Button onClick={handleAddFavoriteAd}>Lagre annonsen</Button>
+            <br />
+          </>
+        )
       ) : null
     ) : null;
   };

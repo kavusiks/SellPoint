@@ -60,4 +60,7 @@ export default interface User {
    * If the user has admin rights
    */
   is_staff?: boolean;
+
+
+  id?: number;
 }
