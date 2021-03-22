@@ -13,15 +13,20 @@ const ProfilePage: FunctionComponent = () => {
     session.updateSelfUser().then(() => history.push("/"));
   };
 
+  const goEditProfile = () => {
+    session.updateSelfUser().then(() => history.push("/editprofile"));
+  };
   return (
     <Container fluid>
       <CenteredRow noGutters>
         <FormContainer style={{ maxWidth: "80%", width: "auto" }}>
           <h1>Min profil</h1>
           {session.user ? <ProfileDisplay user={session.user} /> : <DefaultSpinner />}
-
           <Button style={{ marginTop: "10px" }} variant="primary" onClick={goBack}>
             Tilbake
+          </Button>
+          <Button style={{ marginTop: "10px" }} variant="primary" onClick={goEditProfile}>
+            Rediger
           </Button>
         </FormContainer>
       </CenteredRow>
