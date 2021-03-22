@@ -152,8 +152,9 @@ export const useErrorState = (): ErrorState => {
 
 /**
  * Utility function for authentication pages. Automatically redirects
- * a user to `/` if they are already authenticated, and attempt
- * to load this user, or the user is loaded while they are on this page.
+ * a user to `/` or the set redirect path if they are already authenticated,
+ * and attempt to load this user, or the user is loaded while they are on
+ * this page.
  */
 export const useAuthenticationPage = (): void => {
   const session = useSessionContext();
@@ -161,7 +162,9 @@ export const useAuthenticationPage = (): void => {
 
   useEffect(() => {
     if (session.user) {
-      history.push("/");
+      const redirect = session.redirectPath ?? "/";
+      history.push(redirect);
+      session.setRedirectPath("/");
     }
-  }, [history, session.user]);
+  }, [history, session]);
 };
