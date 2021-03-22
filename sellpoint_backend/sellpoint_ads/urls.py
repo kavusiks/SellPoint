@@ -19,4 +19,6 @@ urlpatterns = [
          name="favorite-create"),
     path("favorite/user/<str:pk>/", views.favorite_detail_user, name="favorite-detail"),
     path("<str:pk>/favorite/delete/", views.FavoriteDeleteAPIView.as_view(), name="favorite-delete"),
+    path("list/self/", views.AdUserList.as_view(), name="ad-user-list"),
+    path("<str:pk>/update/", views.AdUpdateAPIView.as_view(), name="ad-update"),
 ]
