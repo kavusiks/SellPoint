@@ -95,20 +95,21 @@ class FavoriteCreateAPIView(generics.CreateAPIView):
         return Response(FavoriteCreateSerializer(favorite, context=self.get_serializer_context()).data)
 
 
-class FavoriteDeleteAPIView(mixins.RetrieveModelMixin, generics.GenericAPIView):
+class FavoriteDeleteAPIView(generics.GenericAPIView):
     """
     View for deleting an instance of FavoriteAd
     """
 
     serializer_class = FavoriteAdSerializer
-    # permission_classes = [IsAuthenticated]
+    # permission_classes = (IsAuthenticated,)
     queryset = FavoriteAd.objects.all()
 
-    def get(self, request, user_id, ad_id):
-        return self.retrieve(self, request, user_id, ad_id)
+    def get(self, request, pk):
+        favorite_ad = FavoriteAd.objects.filter(user=request.user and favorite_ad=pk)
+        return self.retrieve(self, request)
 
-    def delete(self, request, user_id, ad_id):
-        favorite_ad = FavoriteAd.objects.get(user=user_id, favorite_ad=ad_id)
+    def delete(self, request,  pk):
+        favorite_ad = FavoriteAd.objects.filter(user=request.user and favorite_ad=pk)
 
         if not favorite_ad:
             return Response(status=status.HTTP_404_NOT_FOUND)

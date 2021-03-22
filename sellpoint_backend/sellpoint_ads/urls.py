@@ -18,5 +18,5 @@ urlpatterns = [
     path("favorite/create/", views.FavoriteCreateAPIView.as_view(),
          name="favorite-create"),
     path("favorite/user/<str:pk>/", views.favorite_detail_user, name="favorite-detail"),
-    path("favorite/delete/", views.FavoriteDeleteAPIView.as_view(), name="favorite-delete"),
+    path("<str:pk>/favorite/delete/", views.FavoriteDeleteAPIView.as_view(), name="favorite-delete"),
 ]
