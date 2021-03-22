@@ -11,7 +11,7 @@ import UserAPI from "../core/api/user";
  */
 export const useProviderValue = (): Session => {
   const [user, setUser] = useState<User | undefined>(undefined);
-  const [redirectPath, setRedirectPathState] = useState<string | undefined>(undefined);
+  const [redirectPath, setRedirectPathState] = useState<string>("/");
 
   const updateSelfUser = () =>
     new Promise<void>((resolve, reject) => {
@@ -32,7 +32,7 @@ export const useProviderValue = (): Session => {
         });
     });
 
-  const setRedirectPath = (redirectPath: string | undefined) => {
+  const setRedirectPath = (redirectPath: string) => {
     // This ensures that we can never want to redirect someone to
     // an authentication endpoint when authenticating
     if (redirectPath === "/login" || redirectPath === "/signup") {

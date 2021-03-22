@@ -1,11 +1,18 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { CenteredRow, LeftCenterRow, ShadowedContainer } from "../styled";
-import { AdComponentProps } from "./Ads";
-import { Button, Carousel, Image } from "react-bootstrap";
 import { AdImage, FavoriteAd, Ad } from "../../models/ad";
 import "./ads.css";
 import { useSessionContext } from "../../context/Session";
 import AdAPI from "../../core/api/ad";
+import {
+  CenteredRow,
+  LeftCenterRow,
+  RightCenterRow,
+  ShadowedContainer,
+  SpaceBetweenCenterRow,
+} from "../styled";
+import { AdComponentProps, AdModifyDialog } from "./Ads";
+import { Carousel, Image, Badge, Button } from "react-bootstrap";
+import { useHistory } from "react-router";
 
 interface AdImageProps {
   image: AdImage;
@@ -33,11 +40,17 @@ const AdImagePlaceholder: FunctionComponent = () => {
   );
 };
 
+/**
+ * A full page ad view
+ *
+ * @param props - The props
+ */
 export const LargeAd: FunctionComponent<AdComponentProps> = ({
   ad,
   children,
 }: AdComponentProps) => {
   const session = useSessionContext();
+  const history = useHistory();
 
   const [isFavorite, setIsFavorite] = useState<boolean>();
 
@@ -128,11 +141,30 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
           })}
         </Carousel>
       </CenteredRow>
-      <LeftCenterRow noGutters>
-        <div className="ad title">
-          <h1>{ad.title}</h1>
-        </div>
-      </LeftCenterRow>
+      {
+        // Check if this is our own ad, if so we should display edit buttons etc.
+        session.user && ad.owner?.email === session.user.email ? (
+          <SpaceBetweenCenterRow noGutters>
+            <h2>
+              {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+            </h2>
+            <RightCenterRow noGutters>
+              <AdModifyDialog ad={ad} onDeleted={() => history.push("/")} />
+            </RightCenterRow>
+            <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
+          </SpaceBetweenCenterRow>
+        ) : (
+          <LeftCenterRow noGutters>
+            <div className="ad title">
+              <h1>
+                {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+              </h1>
+            </div>
+            <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
+          </LeftCenterRow>
+        )
+      }
+
       <LeftCenterRow noGutters>
         <div className="ad info">
           <p>
@@ -143,11 +175,13 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
             <br />
             <strong>Telefonnummer: </strong> {ad.owner?.phone_number}
             <br />
-            <strong>E-mail: </strong> {ad.owner?.email}
+            <strong>E-mail: </strong> <a href={"mailto:" + ad.owner?.email}>{ad.owner?.email}</a>
             <br />
-            <br />
-            {ad.description}
           </p>
+        </div>
+        <hr style={{ width: "100%", margin: "10px 0px 10px 0px" }} />
+        <div className="ad desc">
+          <p>{ad.description}</p>
         </div>
       </LeftCenterRow>
       {children}

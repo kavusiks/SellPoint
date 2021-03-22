@@ -135,29 +135,29 @@ Create an ad
   "title": "test",
   "description": "test",
   "price": 100
-  }
+}
 ```
 
 ### Response
 
 ```json
 {
-    "id": 1,
-    "owner": {
-        "email": "test@test.org",
-        "first_name": "test",
-        "last_name": "test",
-        "phone_number": "98989898"
-    },
-    "thumbnail": null,
-    "images": [],
-    "title": "test",
-    "description": "test",
-    "price": 100,
-    "created_at": "2021-03-11T22:40:10.507173Z",
-    "last_modified": "2021-03-11T22:40:10.507208Z",
-    "is_sold": false,
-    "category": null
+  "id": 1,
+  "owner": {
+    "email": "test@test.org",
+    "first_name": "test",
+    "last_name": "test",
+    "phone_number": "98989898"
+  },
+  "thumbnail": null,
+  "images": [],
+  "title": "test",
+  "description": "test",
+  "price": 100,
+  "created_at": "2021-03-11T22:40:10.507173Z",
+  "last_modified": "2021-03-11T22:40:10.507208Z",
+  "is_sold": false,
+  "category": null
 }
 ```
 
@@ -169,26 +169,26 @@ Return the ad with given id
 
 ```json
 {
-    "id": 1,
-    "owner": {
-        "email": "test@test.no",
-        "first_name": "test",
-        "last_name": "test",
-        "phone_number": "98989898"
-    },
-    "thumbnail": null,
-    "images": [],
-    "title": "test",
-    "description": "test",
-    "price": 100,
-    "created_at": "2021-03-11T22:40:10.507173Z",
-    "last_modified": "2021-03-11T22:40:10.507208Z",
-    "is_sold": false,
-    "category": null
+  "id": 1,
+  "owner": {
+    "email": "test@test.no",
+    "first_name": "test",
+    "last_name": "test",
+    "phone_number": "98989898"
+  },
+  "thumbnail": null,
+  "images": [],
+  "title": "test",
+  "description": "test",
+  "price": 100,
+  "created_at": "2021-03-11T22:40:10.507173Z",
+  "last_modified": "2021-03-11T22:40:10.507208Z",
+  "is_sold": false,
+  "category": null
 }
 ```
 
-## PUT ad/$id/update/
+## PUT ad/$id/
 
 Update the ad with given id
 
@@ -199,7 +199,7 @@ Update the ad with given id
   "title": "test",
   "description": "test",
   "price": "100"
-  }
+}
 ```
 
 ### Response
@@ -210,8 +210,12 @@ Update the ad with given id
   "description": "test",
   "price": "100",
   "category": null
-  }
+}
 ```
+
+## DELETE ad/$id/
+
+Delete the ad with given id
 
 ## GET ad/list/
 
@@ -220,13 +224,14 @@ Return a list of all ads
 ### Response
 
 ```json
-[{
+[
+  {
     "id": 1,
     "owner": {
-        "email": "test@test.no",
-        "first_name": "test",
-        "last_name": "test",
-        "phone_number": "98989898"
+      "email": "test@test.no",
+      "first_name": "test",
+      "last_name": "test",
+      "phone_number": "98989898"
     },
     "thumbnail": null,
     "images": [],
@@ -237,14 +242,14 @@ Return a list of all ads
     "last_modified": "2021-03-11T22:40:10.507208Z",
     "is_sold": false,
     "category": null
-},
+  },
   {
     "id": 2,
     "owner": {
-        "email": "admin@admin.no",
-        "first_name": "test",
-        "last_name": "test",
-        "phone_number": "98989898"
+      "email": "admin@admin.no",
+      "first_name": "test",
+      "last_name": "test",
+      "phone_number": "98989898"
     },
     "thumbnail": null,
     "images": [],
@@ -255,9 +260,8 @@ Return a list of all ads
     "last_modified": "2021-03-11T22:40:10.507208Z",
     "is_sold": true,
     "category": null
-}
-  ]
-
+  }
+]
 ```
 
 ## GET ad/list/not-sold/
@@ -279,10 +283,10 @@ Return a list with all the ads created by user logged in
   {
     "id": 1,
     "owner": {
-        "email": "test@test.no",
-        "first_name": "test",
-        "last_name": "test",
-        "phone_number": "98989898"
+      "email": "test@test.no",
+      "first_name": "test",
+      "last_name": "test",
+      "phone_number": "98989898"
     },
     "thumbnail": null,
     "images": [],
@@ -293,14 +297,14 @@ Return a list with all the ads created by user logged in
     "last_modified": "2021-03-11T22:40:10.507208Z",
     "is_sold": false,
     "category": null
-},
-{
+  },
+  {
     "id": 2,
     "owner": {
-        "email": "test@test.no",
-        "first_name": "test",
-        "last_name": "test",
-        "phone_number": "98989898"
+      "email": "test@test.no",
+      "first_name": "test",
+      "last_name": "test",
+      "phone_number": "98989898"
     },
     "thumbnail": null,
     "images": [],
@@ -311,7 +315,7 @@ Return a list with all the ads created by user logged in
     "last_modified": "2021-03-11T22:40:10.507208Z",
     "is_sold": false,
     "category": null
-}
+  }
 ]
 ```
 
@@ -324,7 +328,7 @@ Create an image
 ```json
 {
   "image": "FILE.IMAGE",
-  "ad": 1, 
+  "ad": 1,
   "description": "test"
 }
 ```
@@ -333,9 +337,9 @@ Create an image
 
 ```json
 {
-    "id": 1,
-    "url": "http://localhost:8000/ad/image/1/",
-    "description": "Test"
+  "id": 1,
+  "url": "http://localhost:8000/ad/image/1/",
+  "description": "Test"
 }
 ```
 
@@ -347,3 +351,10 @@ Return the image with given id
 
 Returns `image/jpeg`
 
+## PUT ad/image/$id/
+
+Update the description of an image. Accepts form data "description".
+
+## DELETE ad/image/$id/
+
+Delete the given image.

@@ -3,7 +3,6 @@ import { Button, Form } from "react-bootstrap";
 import { useSessionContext } from "../../context/Session";
 import AuthenticationService from "../../core/auth";
 import { CenteredRow, LeftCenterRow } from "../styled";
-import { useHistory } from "react-router";
 import { FormProps } from "./FormParts";
 import styled from "styled-components";
 
@@ -19,7 +18,6 @@ const StyledButton = styled(Button)`
  */
 export const LoginForm: FunctionComponent<FormProps> = ({ setError }: FormProps) => {
   const session = useSessionContext();
-  const history = useHistory();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [remember, setRemember] = useState<boolean>(false);
@@ -29,19 +27,16 @@ export const LoginForm: FunctionComponent<FormProps> = ({ setError }: FormProps)
     setValidated(true);
 
     e.preventDefault();
+    e.stopPropagation();
 
     const form = e.target as HTMLFormElement;
     if (!form.checkValidity()) {
-      e.stopPropagation();
       return;
     }
 
     AuthenticationService.login(email, password, remember)
       .then((tokens) => {
-        session
-          .updateSelfUser()
-          .then(() => history.push(session.redirectPath ?? "/"))
-          .catch((error) => setError("En uforventet error oppstod!"));
+        session.updateSelfUser().catch((error) => setError("En uforventet error oppstod!"));
       })
       .catch((error) => {
         if (error.response.status === 401) {
