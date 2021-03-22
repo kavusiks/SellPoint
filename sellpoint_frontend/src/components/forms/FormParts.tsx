@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Button, Col, Dropdown, Form, FormFile, Image } from "react-bootstrap";
-import { Trash, Upload, Plus } from "react-bootstrap-icons";
+import { Col, Dropdown, Form } from "react-bootstrap";
 import { Address } from "../../models/user";
 import "./forms.css";
 
@@ -130,8 +129,6 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
     </>
   );
 };
-
-
 
 export const makeCategoriesDropdownComponent = (categories: string[]) => {
   return categories

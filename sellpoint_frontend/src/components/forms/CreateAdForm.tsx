@@ -4,11 +4,7 @@ import { useHistory } from "react-router";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
 import { Ad } from "../../models/ad";
-import {
-  FormProps,
-  CategoryProps,
-  makeCategoriesDropdownComponent,
-} from "./FormParts";
+import { FormProps, CategoryProps, makeCategoriesDropdownComponent } from "./FormParts";
 import { AdImageMultipleFormPart, ImageFormData } from "./AdImageForm";
 
 interface EditAdFormProps extends FormProps {
@@ -139,10 +135,9 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
               <Dropdown.Divider />
             </>
           ) : null}
-          {makeCategoriesDropdownComponent(categories)}
         </DropdownButton>
       </Form.Group>
-      
+
       <Form.Group as={Col} controlId="form-ad-sold">
         <FormCheck>
           <FormCheck.Input checked={sold} onChange={() => setSold(!sold)} />

@@ -22,7 +22,7 @@ const CreateAdPage: FunctionComponent = () => {
             <h1>Opprett annonse</h1>
           </CenteredRow>
           <CenteredRow noGutters>
-            <CreateAdForm categories={categories} setError={setError} />
+            <CreateAdForm setError={setError} />
           </CenteredRow>
         </FormContainer>
       </CenteredRow>
