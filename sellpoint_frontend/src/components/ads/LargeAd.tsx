@@ -136,4 +136,12 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   );
 };
 
+/*{session.user?.is_staff ? (
+  <Button className="button" href={adminPath} variant="outline-primary">
+    Rediger Annonse
+  </Button>
+) : null}
+</>
+);*/
+
 export default LargeAd;
