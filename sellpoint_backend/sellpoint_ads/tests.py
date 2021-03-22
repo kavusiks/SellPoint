@@ -92,7 +92,7 @@ class AdUpdateTestCase(APITestCase):
         testing that we can update one ad,
         only if we are the owner of the ad.
         """
-        url_update = reverse("ad-update", args=["1"])
+        url_update = reverse("ad-detail", args=["1"])
         response = self.client.put(url_update, self.ad_update_data, format="json")
 
         # Checks if the ad is updated
@@ -118,7 +118,7 @@ class AdUpdateTestCase(APITestCase):
         )
         another_token = AccessToken.for_user(another_user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(another_token))
-        url_update = reverse("ad-update", args=["1"])
+        url_update = reverse("ad-detail", args=["1"])
         response = self.client.put(url_update, self.ad_update_data, format="json")
         # Checks that its not possible to update the ad
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

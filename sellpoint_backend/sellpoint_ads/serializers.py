@@ -20,7 +20,7 @@ class ImageSerializer(serializers.ModelSerializer):
 class AdCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
-        fields = ["title", "description", "price", "category"]
+        fields = ["title", "description", "price", "category", "is_sold"]
 
     def create(self, validated_data):
         owner = self.context["request"].user

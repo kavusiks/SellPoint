@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
-import CreateAdForm from "../components/forms/CreateAdForm";
+import { CreateAdForm } from "../components/forms/CreateAdForm";
 import { CenteredRow, FormContainer, useErrorState } from "../components/styled";
 import AdAPI from "../core/api/ad";
 
