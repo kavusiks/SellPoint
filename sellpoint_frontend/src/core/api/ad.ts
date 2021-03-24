@@ -14,10 +14,27 @@ class AdAPI {
   }
 
   /**
+   * @param id - The ID for the user
+   * @returns All existing favorite ads for the user
+   */
+  async getAllFavoriteAdsByUserId(id: number): Promise<Ad[]> {
+    const response = await client.get(`ad/list/by-favorite/${id}/`);
+    return response.data;
+  }
+
+  /**
    * @returns All ads belonging to the currently authenticated user
    */
   async getOwnAds(): Promise<Ad[]> {
     const response = await client.get(`ad/list/self/`);
+    return response.data;
+  }
+
+  /**
+   * @returns All favorite ads belonging to the currently authenticated user
+   */
+  async getMyFavoriteAds(): Promise<Ad[]> {
+    const response = await client.get(`ad/favorite/list/self/`);
     return response.data;
   }
 

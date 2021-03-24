@@ -49,28 +49,33 @@ const SelfAdsView: FunctionComponent = () => {
 };
 
 const SelfFavoriteAdsView: FunctionComponent = () => {
-  const [items, setItems] = useState<Ad[]>([]);
+  const session = useSessionContext();
+  const [favItems, setFavItems] = useState<Ad[]>([]);
+  const [userId, setUserId] = useState<number>(0);
 
   useEffect(() => {
-    AdAPI.getOwnAds().then((ads) => setItems(ads));
+    AdAPI.getMyFavoriteAds().then((ads) => setFavItems(ads));
   }, []);
+  /*
+  useEffect(() => {
+    if (session.user?.id) {
+      setUserId(session.user.id);
+    }
+    AdAPI.getAllFavoriteAdsByUserId(userId).then((ads) => setFavItems(ads));
+  }, favItems);
+  */
 
-  if (items.length === 0) {
+  if (favItems.length === 0) {
     return (
       <Container>
         <CenteredRow>
-          <h3 style={{ color: "lightgray" }}>Du har ikke lagt ut noen annonser</h3>
-        </CenteredRow>
-        <CenteredRow style={{ marginTop: "30px" }}>
-          <Button variant="outline-info" href="/ad/create">
-            Lag ny annonse
-          </Button>
+          <h3 style={{ color: "lightgray" }}>Du har ikke lagt til noen favoritter</h3>
         </CenteredRow>
       </Container>
     );
   }
 
-  return <AdListView perRow={1} ads={items} self />;
+  return <AdListView perRow={1} ads={favItems} self />;
 };
 
 interface ProfilePageParams {
