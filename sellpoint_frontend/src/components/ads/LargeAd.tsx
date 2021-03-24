@@ -7,7 +7,7 @@ import {
   SpaceBetweenCenterRow,
 } from "../styled";
 import { AdComponentProps, AdModifyDialog } from "./Ads";
-import { Carousel, Image, Badge } from "react-bootstrap";
+import { Carousel, Image, Badge, Button } from "react-bootstrap";
 import { AdImage } from "../../models/ad";
 import "./ads.css";
 import { useSessionContext } from "../../context/Session";
@@ -50,6 +50,8 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
 }: AdComponentProps) => {
   const session = useSessionContext();
   const history = useHistory();
+  const currentLocation = window.location.href;
+  const adID = currentLocation.split("/").pop();
 
   const isThumbnail = (img: AdImage): boolean => {
     return !!ad.thumbnail && ad.thumbnail.url === img.url;
@@ -131,17 +133,20 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
           <p>{ad.description}</p>
         </div>
       </LeftCenterRow>
+      <div>
+        {session.user?.is_staff ? (
+          <Button
+            className="adminButton"
+            href={"http://127.0.0.1:8000/admin/sellpoint_ads/ad/" + adID + "/change/"}
+            variant="outline-primary"
+          >
+            Rediger Annonse
+          </Button>
+        ) : null}
+      </div>
       {children}
     </ShadowedContainer>
   );
 };
-
-/*{session.user?.is_staff ? (
-  <Button className="button" href={adminPath} variant="outline-primary">
-    Rediger Annonse
-  </Button>
-) : null}
-</>
-);*/
 
 export default LargeAd;
