@@ -63,9 +63,10 @@ export interface Ad {
    * All images uploaded for this ad
    */
   images?: AdImage[];
-  category?: string;
+  category?: number;
 }
 
 export interface Category {
+  id: number;
   name: string;
 }

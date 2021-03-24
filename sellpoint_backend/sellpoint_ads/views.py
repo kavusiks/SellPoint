@@ -12,7 +12,7 @@ from .serializers import (
     ImageSerializer,
     CategorySerializer,
 )
-from .models import Ad, Image
+from .models import Ad, Image, Category
 from .renderers import JPEGRenderer, PNGRenderer
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.response import Response
@@ -171,7 +171,7 @@ def ad_all_list(request):
     serializer = AdSerializer(ads, many=True)
     return Response(serializer.data)
 
-
+"""
 @api_view(["GET"])
 def ad_detail(request, pk):
     ads = Ad.objects.get(id=pk)
@@ -188,7 +188,7 @@ def ad_detail(request, pk):
 )
 def ad_image_detail(request, pk):
     image = Image.objects.get(id=pk)
-    return Response(image.image)
+    return Response(image.image)"""
 
 
 @api_view(["GET"])
@@ -196,3 +196,12 @@ def category_all_list(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
+
+
+@api_view(["GET"])
+def get_category(request, pk):
+    category = Category.objects.get(id=pk)
+    serializer = CategorySerializer(category, many=False)
+    return Response(serializer.data)
+
+

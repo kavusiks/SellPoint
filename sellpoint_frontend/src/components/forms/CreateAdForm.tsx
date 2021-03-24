@@ -4,7 +4,9 @@ import { useHistory } from "react-router";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
 import { Ad } from "../../models/ad";
-import { FormProps, CategoryProps, makeCategoriesDropdownComponent } from "./FormParts";
+import { FormProps } from "./FormParts";
+import { CategoryDropdown } from "../category/CategoryDropdown";
+import { CategoriesForCreateAd } from "../category/CategoriesForCreateAd";
 import { AdImageMultipleFormPart, ImageFormData } from "./AdImageForm";
 
 interface EditAdFormProps extends FormProps {
@@ -28,21 +30,8 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
   const [description, setDescription] = useState<string>(initial?.description ?? "");
   const [sold, setSold] = useState<boolean>(initial?.is_sold ?? false);
   const [validated, setValidated] = useState<boolean>(false);
-  const [category, setCategory] = useState<string>("");
+  const [category, setCategory] = useState<number | undefined>(undefined);
   const [categoryTitle, setCategoryTitle] = useState<string>("Ikke valgt");
-
-  const handleSelect = (e: string | null) => {
-    if (e == null) {
-      throw new Error("e is null");
-    }
-    if (e === "None") {
-      setCategory("");
-      setCategoryTitle("Ikke valgt");
-    } else {
-      setCategory(e);
-      setCategoryTitle(e);
-    }
-  };
 
   // Not pretty but it will work. Either maps the existing images as their
   // form part object representations or just makes a new empty list.
@@ -120,22 +109,12 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
       </Form.Group>
       <Form.Group as={Col} controlId="create-ad-category">
         <Form.Label>Velg en kategori</Form.Label>
-
-        <DropdownButton
-          title={categoryTitle}
-          variant="outline-secondary"
-          id="dropdown-basic"
-          onSelect={handleSelect}
-        >
-          {category ? (
-            <>
-              <Dropdown.Item key="None" eventKey="None">
-                Ingen
-              </Dropdown.Item>
-              <Dropdown.Divider />
-            </>
-          ) : null}
-        </DropdownButton>
+        <CategoriesForCreateAd
+          chosenCategory={category}
+          setChosenCategory={setCategory}
+          categoryTitle={categoryTitle}
+          setCategoryTitle={setCategoryTitle}
+        />
       </Form.Group>
 
       <Form.Group as={Col} controlId="form-ad-sold">
@@ -206,6 +185,7 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
           setError("En uforventet error oppstod (Manglende ID)!");
           return;
         }
+        console.log(tempAd.category);
 
         const id: number = ad.id;
         Promise.all(images.map((image) => image.submit(id))).then(() =>

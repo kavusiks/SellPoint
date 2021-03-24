@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Col, Dropdown, Form } from "react-bootstrap";
+import { Col, Form } from "react-bootstrap";
 import { Address } from "../../models/user";
 import "./forms.css";
 
@@ -13,10 +13,6 @@ export interface FormProps {
    * @param error - The error message
    */
   setError: (error: string | React.ReactNode) => void;
-}
-
-export interface CategoryProps extends FormProps {
-  categories: string[];
 }
 
 /**
@@ -128,14 +124,4 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
       </Form.Row>
     </>
   );
-};
-
-export const makeCategoriesDropdownComponent = (categories: string[]) => {
-  return categories
-    .sort((a, b) => (a > b ? 1 : -1))
-    .map((category) => (
-      <Dropdown.Item key={category} eventKey={category}>
-        {category}
-      </Dropdown.Item>
-    ));
 };
