@@ -1,8 +1,8 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { ButtonGroup, Dropdown, DropdownButton, Button } from "react-bootstrap";
+import { ButtonGroup, DropdownButton, Button } from "react-bootstrap";
 import AdAPI from "../../core/api/ad";
 import { Ad, Category } from "../../models/ad";
-import { CategoryDropdown } from "../category/CategoryDropdown";
+import { CategoryDropdown } from "./CategoryDropdown";
 
 export interface FilterAdsByCategoryProps {
   filteredAds: Ad[];
@@ -18,26 +18,23 @@ export const CategoriesForFilterAds: FunctionComponent<FilterAdsByCategoryProps>
   const [items, setItems] = useState<Ad[]>([]);
 
   useEffect(() => {
-    console.log("Kjører useEffect");
     AdAPI.getAllAds().then((ads) => setAllItems(ads));
-    filteredAds.forEach((ad) => {
-      setItems((state) => [...state, ad]);
-    });
-    setFilteredAds(filteredAds);
   }, []);
 
-  const filterAds = () => {
+  useEffect(() => {
     setItems([]);
-    allItems.forEach((ad) => {
-      chosenCategories.filter((category) =>
-        ad.category === category.id ? setItems((state) => [...state, ad]) : void 0,
-      );
-      console.log(ad.category);
-    });
-    chosenCategories.filter((cat) => console.log(cat));
-    console.log("dsasda", chosenCategories);
+    chosenCategories.length === 0
+      ? setItems(allItems)
+      : chosenCategories.filter((category) =>
+          AdAPI.getAdsbyCategoryId(category.id).then((ads) =>
+            ads.forEach((ad) => setItems((state) => [...state, ad])),
+          ),
+        );
+  }, [chosenCategories]);
+
+  useEffect(() => {
     setFilteredAds(items);
-  };
+  }, [items]);
 
   const handleSelect = async (e: string | null) => {
     if (e == null) {
@@ -47,22 +44,11 @@ export const CategoriesForFilterAds: FunctionComponent<FilterAdsByCategoryProps>
     chosenCategories.filter((category) => category.id === tempCat.id).length === 0
       ? setChosenCategories((state) => [...state, tempCat])
       : void 0;
-
-    /*chosenCategories.filter((category) =>
-      allItems.filter((ad) =>
-        ad.category === category.id ? setItems((state) => [...state, ad]) : void 0,
-      ),
-    );*/
-    console.log("chosen", chosenCategories);
-    console.log("de", items);
-    filterAds();
-    setFilteredAds(items);
   };
 
   const makeChosenCategoriesButtons = () => {
     //filterAds();
     const categorylistBtns: JSX.Element[] = [];
-    console.log("JEG KJØRERs");
 
     chosenCategories.forEach((category) => {
       categorylistBtns.push(

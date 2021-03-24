@@ -112,6 +112,16 @@ class AdAPI {
     const response = await client.get(`ad/category/${id}/`);
     return response.data;
   }
+  /**
+   * Fetches all information about the cagtegory with the given id
+   *
+   * @param categoryId - The category Id
+   * @returns All existing ads with the given id
+   */
+  async getAdsbyCategoryId(categoryId: number): Promise<Ad[]> {
+    const response = await client.get(`ad/list/bycategory/${categoryId}/`);
+    return response.data;
+  }
 
   async updateImage(id: number, description?: string): Promise<AdImage> {
     const formData = new FormData();

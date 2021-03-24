@@ -1,12 +1,11 @@
 import React, { FunctionComponent, useState } from "react";
-import { Button, Col, Form, Dropdown, DropdownButton, FormCheck } from "react-bootstrap";
+import { Button, Col, Form, FormCheck } from "react-bootstrap";
 import { useHistory } from "react-router";
 import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
 import { Ad } from "../../models/ad";
 import { FormProps } from "./FormParts";
-import { CategoryDropdown } from "../category/CategoryDropdown";
-import { CategoriesForCreateAd } from "../category/CategoriesForCreateAd";
+import { CategoriesForCreateAd } from "../category/CategoriesCreateAd";
 import { AdImageMultipleFormPart, ImageFormData } from "./AdImageForm";
 
 interface EditAdFormProps extends FormProps {

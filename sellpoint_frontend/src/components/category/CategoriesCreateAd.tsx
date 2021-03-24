@@ -1,7 +1,7 @@
 import React, { Fragment, FunctionComponent, useState } from "react";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import AdAPI from "../../core/api/ad";
-import { CategoryDropdown } from "../category/CategoryDropdown";
+import { CategoryDropdown } from "./CategoryDropdown";
 
 export interface CreateAdCategoryProps {
   chosenCategory: number | undefined;
