@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent, useState } from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import AdAPI from "../../core/api/ad";
 import { CategoryDropdown } from "./CategoryDropdown";

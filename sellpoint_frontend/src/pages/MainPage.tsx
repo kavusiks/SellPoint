@@ -7,7 +7,6 @@ import { CategoriesForFilterAds } from "../components/category/CategoryFilterAds
 
 export const MainPage: FunctionComponent = () => {
   const [items, setItems] = useState<Ad[]>([]);
-  const [chosenCategories, setChosenCategories] = useState<string[]>([]);
 
   useEffect(() => {
     AdAPI.getAllAds().then((ads) => setItems(ads));

@@ -30,10 +30,12 @@ export const CategoriesForFilterAds: FunctionComponent<FilterAdsByCategoryProps>
             ads.forEach((ad) => setItems((state) => [...state, ad])),
           ),
         );
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [chosenCategories]);
 
   useEffect(() => {
     setFilteredAds(items);
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [items]);
 
   const handleSelect = async (e: string | null) => {
