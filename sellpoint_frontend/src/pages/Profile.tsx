@@ -4,7 +4,7 @@ import { AdListView } from "../components/ads/AdListView";
 import { ProfileDisplay } from "../components/Profile";
 import { CenteredRow, DefaultSpinner } from "../components/styled";
 import { useSessionContext } from "../context/Session";
-import { Ad } from "../models/ad";
+import { Ad, FavoriteAd } from "../models/ad";
 import AdAPI from "../core/api/ad";
 import { useParams } from "react-router";
 
@@ -24,6 +24,31 @@ const ProfilePageTab: FunctionComponent<ProfilePageTabProps> = ({ title, childre
 };
 
 const SelfAdsView: FunctionComponent = () => {
+  const [items, setItems] = useState<Ad[]>([]);
+
+  useEffect(() => {
+    AdAPI.getOwnAds().then((ads) => setItems(ads));
+  }, []);
+
+  if (items.length === 0) {
+    return (
+      <Container>
+        <CenteredRow>
+          <h3 style={{ color: "lightgray" }}>Du har ikke lagt ut noen annonser</h3>
+        </CenteredRow>
+        <CenteredRow style={{ marginTop: "30px" }}>
+          <Button variant="outline-info" href="/ad/create">
+            Lag ny annonse
+          </Button>
+        </CenteredRow>
+      </Container>
+    );
+  }
+
+  return <AdListView perRow={1} ads={items} self />;
+};
+
+const SelfFavoriteAdsView: FunctionComponent = () => {
   const [items, setItems] = useState<Ad[]>([]);
 
   useEffect(() => {
@@ -75,6 +100,9 @@ const ProfilePage: FunctionComponent = () => {
             <Nav.Item>
               <Nav.Link eventKey="ads">Dine Annonser</Nav.Link>
             </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="favorites">Dine Favoritter</Nav.Link>
+            </Nav.Item>
           </Nav>
         </Col>
         <Col sm={10}>
@@ -87,6 +115,11 @@ const ProfilePage: FunctionComponent = () => {
             <Tab.Pane eventKey="ads">
               <ProfilePageTab title="Dine Annonser">
                 <SelfAdsView />
+              </ProfilePageTab>
+            </Tab.Pane>
+            <Tab.Pane eventKey="favorites">
+              <ProfilePageTab title="Dine Favoritter">
+                <SelfFavoriteAdsView />
               </ProfilePageTab>
             </Tab.Pane>
           </Tab.Content>
