@@ -52,7 +52,8 @@ class AdImageCreateAPIView(generics.CreateAPIView):
         if not ad.owner == request.user:
             return HttpResponseForbidden()
 
-        image = Image.objects.create(image=image_file, ad=ad, description=description)
+        image = Image.objects.create(
+            image=image_file, ad=ad, description=description)
         return Response(ImageSerializer(image).data)
 
 
@@ -181,6 +182,22 @@ def favorite_detail_user(request, pk):
     return Response(serializer.data)
 
 
+@api_view(["GET"])
+def favorite_detail(request, user_id, ad_id):
+    permission_classes = [IsAuthenticated]
+
+    favorite_ad = FavoriteAd.objects.get(user=user_id, favorite_ad=ad_id)
+    serializer = FavoriteAdSerializer(favorite_ad, many=False)
+    return Response(serializer.data)
+
+
+@api_view(["DELETE"])
+def favorite_delete(request, user_id, ad_id):
+    favorite_ad = FavoriteAd.objects.get(user=user_id, favorite_ad=ad_id)
+    favorite_ad.delete()
+    return Response("Item successfully deleted!")
+
+
 class FavoriteCreateAPIView(generics.CreateAPIView):
     serializer_class = FavoriteCreateSerializer
     permission_classes = [IsAuthenticated]
@@ -192,26 +209,3 @@ class FavoriteCreateAPIView(generics.CreateAPIView):
         favorite = serializer.save()
 
         return Response(FavoriteCreateSerializer(favorite, context=self.get_serializer_context()).data)
-
-
-class FavoriteDeleteAPIView(generics.GenericAPIView):
-    """
-    View for deleting an instance of FavoriteAd
-    """
-
-    serializer_class = FavoriteAdSerializer
-    # permission_classes = (IsAuthenticated,)
-    queryset = FavoriteAd.objects.all()
-
-    # def get(self, request, pk):
-    #     favorite_ad = FavoriteAd.objects.filter(user=request.user and favorite_ad=pk)
-    #     return self.retrieve(self, request)
-
-    # def delete(self, request,  pk):
-    #     favorite_ad = FavoriteAd.objects.filter(user=request.user and favorite_ad=pk)
-
-    #     if not favorite_ad:
-    #         return Response(status=status.HTTP_404_NOT_FOUND)
-
-    #     favorite_ad.delete()
-    #     return Response(status=status.HTTP_200_OK)

@@ -103,6 +103,10 @@ class AdAPI {
     return response.data;
   }
 
+  async deleteFavorite(favorite_ad: FavoriteAd): Promise<void> {
+    await client.delete(`ad/favorite/delete/${favorite_ad.user}-${favorite_ad.favorite_ad}/`);
+  }
+
   async createFavorite(favorite_ad: FavoriteAd): Promise<FavoriteAd> {
     const response = await client.post("ad/favorite/create/", {
       user: favorite_ad.user,
@@ -110,6 +114,7 @@ class AdAPI {
     });
     return response.data;
   }
+
   async updateImage(id: number, description?: string): Promise<AdImage> {
     const formData = new FormData();
 

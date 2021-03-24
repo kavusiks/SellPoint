@@ -11,8 +11,10 @@ import {
   SpaceBetweenCenterRow,
 } from "../styled";
 import { AdComponentProps, AdModifyDialog } from "./Ads";
-import { Carousel, Image, Badge, Button } from "react-bootstrap";
+import { Carousel, Image, Badge, Button, Row, Col, Toast } from "react-bootstrap";
 import { useHistory } from "react-router";
+import { Heart } from "react-bootstrap-icons";
+import { ConfirmModal } from "../ConfirmModal";
 
 interface AdImageProps {
   image: AdImage;
@@ -53,6 +55,8 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   const history = useHistory();
 
   const [isFavorite, setIsFavorite] = useState<boolean>();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showToast, setToast] = useState(false);
 
   useEffect(() => {
     if (session.user?.id) {
@@ -105,11 +109,35 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
 
       AdAPI.createFavorite(tempFavoriteAd);
       setIsFavorite(true);
+      showConfirmationToast();
     }
   };
 
   const handleRemoveFavoriteAd = () => {
-    setIsFavorite(false);
+    if (session.user?.id && ad.id) {
+      const userAccount: number = session.user.id;
+      const favoriteAd: number = ad.id;
+
+      const tempFavoriteAd: FavoriteAd = {
+        user: userAccount,
+        favorite_ad: favoriteAd,
+      };
+
+      AdAPI.deleteFavorite(tempFavoriteAd);
+      setIsFavorite(false);
+    }
+  };
+
+  const deleteFavoriteDialog = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setShowModal(true);
+  };
+
+  const removeToast = () => {
+    setToast(false);
+  };
+
+  const showConfirmationToast = () => {
+    setToast(true);
   };
 
   // Shows the favoritebutton if a user is logged in and the owner of the ad
@@ -119,12 +147,16 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
       session.isAuthenticated && ad.owner.email !== session.user.email ? (
         isFavorite ? (
           <>
-            <Button onClick={handleRemoveFavoriteAd}>Fjern lagret annonse</Button>
+            <Button variant="success" onClick={deleteFavoriteDialog}>
+              <Heart /> Fjern lagret annonse
+            </Button>
             <br />
           </>
         ) : (
           <>
-            <Button onClick={handleAddFavoriteAd}>Lagre annonsen</Button>
+            <Button variant="outline-success" onClick={handleAddFavoriteAd}>
+              <Heart /> Lagre annonsen
+            </Button>
             <br />
           </>
         )
@@ -133,59 +165,87 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   };
 
   return (
-    <ShadowedContainer className="ad large">
-      <CenteredRow noGutters>
-        <Carousel interval={null} slide={false}>
-          {makeCarouselComponents().map((component, idx) => {
-            return <Carousel.Item key={idx}>{component}</Carousel.Item>;
-          })}
-        </Carousel>
-      </CenteredRow>
-      {
-        // Check if this is our own ad, if so we should display edit buttons etc.
-        session.user && ad.owner?.email === session.user.email ? (
-          <SpaceBetweenCenterRow noGutters>
-            <h2>
-              {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
-            </h2>
-            <RightCenterRow noGutters>
-              <AdModifyDialog ad={ad} onDeleted={() => history.push("/")} />
-            </RightCenterRow>
-            <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
-          </SpaceBetweenCenterRow>
-        ) : (
-          <LeftCenterRow noGutters>
-            <div className="ad title">
-              <h1>
-                {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
-              </h1>
-            </div>
-            <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
-          </LeftCenterRow>
-        )
-      }
+    <>
+      <ShadowedContainer className="ad large">
+        <ConfirmModal
+          show={showModal}
+          setShow={setShowModal}
+          onConfirm={handleRemoveFavoriteAd}
+          confirmMessage="Slett Annonsen"
+        >
+          Er du sikker på at du vil slette annonsen &apos;{ad.title}&apos; fra dine favoritter?
+        </ConfirmModal>
+        <CenteredRow noGutters>
+          <Carousel interval={null} slide={false}>
+            {makeCarouselComponents().map((component, idx) => {
+              return <Carousel.Item key={idx}>{component}</Carousel.Item>;
+            })}
+          </Carousel>
+        </CenteredRow>
 
-      <LeftCenterRow noGutters>
-        <div className="ad info">
-          <p>
-            {makeFavoriteButton()}
-            <strong>Pris:</strong> {ad.price},-
-            <br />
-            <strong>Selger: </strong> {ad.owner?.first_name} {ad.owner?.last_name}
-            <br />
-            <strong>Telefonnummer: </strong> {ad.owner?.phone_number}
-            <br />
-            <strong>E-mail: </strong> <a href={"mailto:" + ad.owner?.email}>{ad.owner?.email}</a>
-            <br />
-          </p>
-        </div>
-        <hr style={{ width: "100%", margin: "10px 0px 10px 0px" }} />
-        <div className="ad desc">
-          <p>{ad.description}</p>
-        </div>
-      </LeftCenterRow>
-      {children}
-    </ShadowedContainer>
+        <Toast
+          style={{
+            position: "fixed",
+            top: 10,
+          }}
+          onClose={removeToast}
+          show={showToast}
+          delay={3000}
+          autohide
+        >
+          <Toast.Header>
+            <p style={{ fontSize: 25 }} className="mr-auto">
+              Annonsen ble lagret!
+            </p>
+          </Toast.Header>
+        </Toast>
+
+        {
+          // Check if this is our own ad, if so we should display edit buttons etc.
+          session.user && ad.owner?.email === session.user.email ? (
+            <SpaceBetweenCenterRow noGutters>
+              <h2>
+                {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+              </h2>
+              <RightCenterRow noGutters>
+                <AdModifyDialog ad={ad} onDeleted={() => history.push("/")} />
+              </RightCenterRow>
+              <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
+            </SpaceBetweenCenterRow>
+          ) : (
+            <LeftCenterRow noGutters>
+              <div className="ad title">
+                <h1>
+                  {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+                </h1>
+              </div>
+              <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
+            </LeftCenterRow>
+          )
+        }
+
+        <LeftCenterRow noGutters>
+          <div className="ad info">
+            <p>
+              {makeFavoriteButton()}
+              <strong>Pris:</strong> {ad.price},-
+              <br />
+              <strong>Selger: </strong> {ad.owner?.first_name} {ad.owner?.last_name}
+              <br />
+              <strong>Telefonnummer: </strong> {ad.owner?.phone_number}
+              <br />
+              <strong>E-mail: </strong> <a href={"mailto:" + ad.owner?.email}>{ad.owner?.email}</a>
+              <br />
+            </p>
+          </div>
+          <hr style={{ width: "100%", margin: "10px 0px 10px 0px" }} />
+          <div className="ad desc">
+            <p>{ad.description}</p>
+          </div>
+        </LeftCenterRow>
+        {children}
+      </ShadowedContainer>
+    </>
   );
 };
 
