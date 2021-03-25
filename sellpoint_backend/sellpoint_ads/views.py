@@ -172,26 +172,6 @@ def ad_all_list(request):
     return Response(serializer.data)
 
 
-"""
-@api_view(["GET"])
-def ad_detail(request, pk):
-    ads = Ad.objects.get(id=pk)
-    serializer = AdSerializer(ads, many=False)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-@renderer_classes(
-    (
-        JPEGRenderer,
-        PNGRenderer,
-    )
-)
-def ad_image_detail(request, pk):
-    image = Image.objects.get(id=pk)
-    return Response(image.image)"""
-
-
 @api_view(["GET"])
 def category_all_list(request):
     categories = Category.objects.all()
