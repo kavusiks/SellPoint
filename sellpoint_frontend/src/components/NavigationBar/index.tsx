@@ -50,8 +50,9 @@ const ProfileButton: FunctionComponent = () => {
       <Dropdown.Toggle split variant="outline-secondary" id="profile-split" />
 
       <Dropdown.Menu>
-        <Dropdown.Item href="/profile/personal">Personlig Informasjon</Dropdown.Item>
-        <Dropdown.Item href="/profile/ads">Dine Annonser</Dropdown.Item>
+        <Dropdown.Item href="/profile/personal">Personlig informasjon</Dropdown.Item>
+        <Dropdown.Item href="/profile/ads">Dine annonser</Dropdown.Item>
+        <Dropdown.Item href="/profile/favorites">Lagrede annonser</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );

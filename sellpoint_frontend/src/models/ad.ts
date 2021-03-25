@@ -64,3 +64,8 @@ export interface Ad {
    */
   images?: AdImage[];
 }
+
+export interface FavoriteAd {
+  user: number;
+  favorite_ad: number;
+}
