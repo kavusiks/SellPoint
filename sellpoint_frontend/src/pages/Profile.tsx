@@ -75,7 +75,7 @@ const SelfFavoriteAdsView: FunctionComponent = () => {
     );
   }
 
-  return <AdListView perRow={1} ads={favItems} self />;
+  return <AdListView perRow={1} ads={favItems} />;
 };
 
 interface ProfilePageParams {
