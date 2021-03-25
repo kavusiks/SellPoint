@@ -1,4 +1,4 @@
-import { Ad, AdImage, Category } from "../../models/ad";
+import { Ad, AdImage, Category, FavoriteAd } from "../../models/ad";
 import client from "../client";
 
 /**
@@ -14,10 +14,27 @@ class AdAPI {
   }
 
   /**
+   * @param id - The ID for the user
+   * @returns All existing favorite ads for the user
+   */
+  async getAllFavoriteAdsByUserId(id: number): Promise<Ad[]> {
+    const response = await client.get(`ad/list/by-favorite/${id}/`);
+    return response.data;
+  }
+
+  /**
    * @returns All ads belonging to the currently authenticated user
    */
   async getOwnAds(): Promise<Ad[]> {
     const response = await client.get(`ad/list/self/`);
+    return response.data;
+  }
+
+  /**
+   * @returns All favorite ads belonging to the currently authenticated user
+   */
+  async getMyFavoriteAds(): Promise<Ad[]> {
+    const response = await client.get(`ad/favorite/list/self/`);
     return response.data;
   }
 
@@ -120,6 +137,27 @@ class AdAPI {
    */
   async getAdsbyCategoryId(categoryId: number): Promise<Ad[]> {
     const response = await client.get(`ad/list/bycategory/${categoryId}/`);
+    return response.data;
+  }
+  async getAllFavorites(): Promise<FavoriteAd[]> {
+    const response = await client.get(`favorite/list/`);
+    return response.data;
+  }
+
+  async getAllFavoritesByUserId(id: number): Promise<FavoriteAd[]> {
+    const response = await client.get(`ad/favorite/user/${id}/`);
+    return response.data;
+  }
+
+  async deleteFavorite(favorite_ad: FavoriteAd): Promise<void> {
+    await client.delete(`ad/favorite/delete/${favorite_ad.user}-${favorite_ad.favorite_ad}/`);
+  }
+
+  async createFavorite(favorite_ad: FavoriteAd): Promise<FavoriteAd> {
+    const response = await client.post("ad/favorite/create/", {
+      user: favorite_ad.user,
+      favorite_ad: favorite_ad.favorite_ad,
+    });
     return response.data;
   }
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Ad, Image, Category
+from .models import Ad, Image, FavoriteAd, Category
 from sellpoint_auth.models import User
 
 
@@ -41,3 +41,20 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = "__all__"
+class FavoriteAdSerializer(serializers.ModelSerializer):
+    """
+    Serializer for all favorite ads
+    """
+
+    class Meta:
+        model = FavoriteAd
+        fields = "__all__"
+
+
+class FavoriteCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteAd
+        fields = ["user", "favorite_ad"]
+
+    def create(self, validated_data):
+        return FavoriteAd.objects.create(**validated_data)

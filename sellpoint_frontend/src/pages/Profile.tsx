@@ -48,6 +48,26 @@ const SelfAdsView: FunctionComponent = () => {
   return <AdListView perRow={1} ads={items} self />;
 };
 
+const SelfFavoriteAdsView: FunctionComponent = () => {
+  const [favItems, setFavItems] = useState<Ad[]>([]);
+
+  useEffect(() => {
+    AdAPI.getMyFavoriteAds().then((ads) => setFavItems(ads));
+  }, []);
+
+  if (favItems.length === 0) {
+    return (
+      <Container>
+        <CenteredRow>
+          <h3 style={{ color: "lightgray" }}>Du har ikke lagt til noen favoritter</h3>
+        </CenteredRow>
+      </Container>
+    );
+  }
+
+  return <AdListView perRow={1} ads={favItems} />;
+};
+
 interface ProfilePageParams {
   page: string;
 }
@@ -75,6 +95,9 @@ const ProfilePage: FunctionComponent = () => {
             <Nav.Item>
               <Nav.Link eventKey="ads">Dine Annonser</Nav.Link>
             </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="favorites">Dine Favoritter</Nav.Link>
+            </Nav.Item>
           </Nav>
         </Col>
         <Col sm={10}>
@@ -87,6 +110,11 @@ const ProfilePage: FunctionComponent = () => {
             <Tab.Pane eventKey="ads">
               <ProfilePageTab title="Dine Annonser">
                 <SelfAdsView />
+              </ProfilePageTab>
+            </Tab.Pane>
+            <Tab.Pane eventKey="favorites">
+              <ProfilePageTab title="Dine Favoritter">
+                <SelfFavoriteAdsView />
               </ProfilePageTab>
             </Tab.Pane>
           </Tab.Content>
