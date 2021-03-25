@@ -18,7 +18,7 @@ urlpatterns = [
     path("image/<str:pk>/", views.AdImageAPIView.as_view(), name="ad-detail-image"),
     path("list/self/", views.AdUserList.as_view(), name="ad-user-list"),
     path(
-        "list/bycategory/<str:category_id>/",
+        "list/bycategory/<int:category_id>/",
         views.get_ads_by_category,
         name="ads-by-category",
     ),

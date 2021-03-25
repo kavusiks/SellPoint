@@ -8,14 +8,11 @@ import { CategoriesForFilterAds } from "../components/category/CategoryFilterAds
 export const MainPage: FunctionComponent = () => {
   const [items, setItems] = useState<Ad[]>([]);
 
-  useEffect(() => {
-    AdAPI.getAllAds().then((ads) => setItems(ads));
-  }, []);
   return (
     <>
       <Row>
         <Col md={2}>
-          <CategoriesForFilterAds filteredAds={items} setFilteredAds={setItems} />
+          <CategoriesForFilterAds setFilteredAds={setItems} />
         </Col>
         <Col md={8}>
           <AdListView ads={items} />
