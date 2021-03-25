@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { AdImage, FavoriteAd, Ad } from "../../models/ad";
+import { AdImage, FavoriteAd } from "../../models/ad";
 import "./ads.css";
 import { useSessionContext } from "../../context/Session";
 import AdAPI from "../../core/api/ad";
@@ -11,7 +11,7 @@ import {
   SpaceBetweenCenterRow,
 } from "../styled";
 import { AdComponentProps, AdModifyDialog } from "./Ads";
-import { Carousel, Image, Badge, Button, Row, Col, Toast } from "react-bootstrap";
+import { Carousel, Image, Badge, Button, Toast } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { Heart } from "react-bootstrap-icons";
 import { ConfirmModal } from "../ConfirmModal";
@@ -61,11 +61,12 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   useEffect(() => {
     if (session.user?.id) {
       AdAPI.getAllFavoritesByUserId(session.user.id).then((favorites) =>
-        favorites.filter((a) => a.favorite_ad == ad.id).length
+        favorites.filter((a) => a.favorite_ad === ad.id).length
           ? setIsFavorite(true)
           : setIsFavorite(false),
       );
     }
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [session.user]);
 
   const isThumbnail = (img: AdImage): boolean => {

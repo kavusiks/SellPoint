@@ -100,4 +100,3 @@ class UserSerializer(serializers.ModelSerializer):
             "is_staff",
             "id",
         )
-

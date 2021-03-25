@@ -12,21 +12,38 @@ urlpatterns = [
     ),
     path("list/", views.ad_all_list, name="ad-list"),
     path("list/not-sold/", views.ad_not_sold_list, name="ad-not-sold-list"),
-    
-    path("list/by-favorite/<str:pk>/", views.ad_list_by_favorite_for_user, name="ad-list-by-favorite-for-user"),
-    
+    path(
+        "list/by-favorite/<str:pk>/",
+        views.ad_list_by_favorite_for_user,
+        name="ad-list-by-favorite-for-user",
+    ),
     path("favorite/list/", views.favorite_ads_list, name="favorite-list"),
-    path("favorite/create/", views.FavoriteCreateAPIView.as_view(),
-         name="favorite-create"),
-    path("favorite/user/<str:pk>/",
-         views.favorite_detail_user, name="favorite-detail-user"),
-    path("favorite/detail/<str:user_id>-<str:ad_id>/",
-         views.favorite_detail, name="favorite-detail"),
-    path("favorite/delete/<str:user_id>-<str:ad_id>/",
-         views.favorite_delete, name="favorite-delete"),
+    path(
+        "favorite/create/",
+        views.FavoriteCreateAPIView.as_view(),
+        name="favorite-create",
+    ),
+    path(
+        "favorite/user/<str:pk>/",
+        views.favorite_detail_user,
+        name="favorite-detail-user",
+    ),
+    path(
+        "favorite/detail/<str:user_id>-<str:ad_id>/",
+        views.favorite_detail,
+        name="favorite-detail",
+    ),
+    path(
+        "favorite/delete/<str:user_id>-<str:ad_id>/",
+        views.favorite_delete,
+        name="favorite-delete",
+    ),
     path("<str:pk>/", views.AdAPIView.as_view(), name="ad-detail"),
     path("image/<str:pk>/", views.AdImageAPIView.as_view(), name="ad-detail-image"),
     path("list/self/", views.AdUserList.as_view(), name="ad-user-list"),
-    
-    path("favorite/list/self/", views.AdUserFavoriteList.as_view(), name="ad-user-favorite-list"),
+    path(
+        "favorite/list/self/",
+        views.AdUserFavoriteList.as_view(),
+        name="ad-user-favorite-list",
+    ),
 ]

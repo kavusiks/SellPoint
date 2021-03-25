@@ -61,6 +61,5 @@ export default interface User {
    */
   is_staff?: boolean;
 
-
   id?: number;
 }

@@ -4,7 +4,7 @@ import { AdListView } from "../components/ads/AdListView";
 import { ProfileDisplay } from "../components/Profile";
 import { CenteredRow, DefaultSpinner } from "../components/styled";
 import { useSessionContext } from "../context/Session";
-import { Ad, FavoriteAd } from "../models/ad";
+import { Ad } from "../models/ad";
 import AdAPI from "../core/api/ad";
 import { useParams } from "react-router";
 
@@ -49,21 +49,11 @@ const SelfAdsView: FunctionComponent = () => {
 };
 
 const SelfFavoriteAdsView: FunctionComponent = () => {
-  const session = useSessionContext();
   const [favItems, setFavItems] = useState<Ad[]>([]);
-  const [userId, setUserId] = useState<number>(0);
 
   useEffect(() => {
     AdAPI.getMyFavoriteAds().then((ads) => setFavItems(ads));
   }, []);
-  /*
-  useEffect(() => {
-    if (session.user?.id) {
-      setUserId(session.user.id);
-    }
-    AdAPI.getAllFavoriteAdsByUserId(userId).then((ads) => setFavItems(ads));
-  }, favItems);
-  */
 
   if (favItems.length === 0) {
     return (
