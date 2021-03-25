@@ -12,11 +12,6 @@ urlpatterns = [
     ),
     path("list/", views.ad_all_list, name="ad-list"),
     path("list/not-sold/", views.ad_not_sold_list, name="ad-not-sold-list"),
-    path(
-        "list/by-favorite/<str:pk>/",
-        views.ad_list_by_favorite_for_user,
-        name="ad-list-by-favorite-for-user",
-    ),
     path("favorite/list/", views.favorite_ads_list, name="favorite-list"),
     path(
         "favorite/create/",

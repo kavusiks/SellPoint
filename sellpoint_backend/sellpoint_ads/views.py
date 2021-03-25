@@ -58,7 +58,8 @@ class AdImageCreateAPIView(generics.CreateAPIView):
         if not ad.owner == request.user:
             return HttpResponseForbidden()
 
-        image = Image.objects.create(image=image_file, ad=ad, description=description)
+        image = Image.objects.create(
+            image=image_file, ad=ad, description=description)
         return Response(ImageSerializer(image).data)
 
 
@@ -190,18 +191,6 @@ def ad_all_list(request):
 
     ads = Ad.objects.all()
     serializer = AdSerializer(ads, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-def ad_list_by_favorite_for_user(request, pk):
-    favorite_ad = FavoriteAd.objects.filter(user=pk).all()
-    serializer = FavoriteAdSerializer(favorite_ad, many=True)
-    favAdsId = []
-    for item in serializer.data:
-        favAdsId.append(item.get("favorite_ad"))
-    favorite_ads = Ad.objects.filter(id__in=favAdsId)
-    serializer = AdSerializer(favorite_ads, many=True)
     return Response(serializer.data)
 
 
