@@ -58,8 +58,7 @@ class AdImageCreateAPIView(generics.CreateAPIView):
         if not ad.owner == request.user:
             return HttpResponseForbidden()
 
-        image = Image.objects.create(
-            image=image_file, ad=ad, description=description)
+        image = Image.objects.create(image=image_file, ad=ad, description=description)
         return Response(ImageSerializer(image).data)
 
 
