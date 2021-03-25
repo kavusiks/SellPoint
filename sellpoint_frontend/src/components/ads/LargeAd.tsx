@@ -50,8 +50,6 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
 }: AdComponentProps) => {
   const session = useSessionContext();
   const history = useHistory();
-  const currentLocation = window.location.href;
-  const adID = currentLocation.split("/").pop();
 
   const isThumbnail = (img: AdImage): boolean => {
     return !!ad.thumbnail && ad.thumbnail.url === img.url;
@@ -134,15 +132,19 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
         </div>
       </LeftCenterRow>
       <div>
-        {session.user?.is_staff ? (
-          <Button
-            className="adminButton"
-            href={"http://127.0.0.1:8000/admin/sellpoint_ads/ad/" + adID + "/change/"}
-            variant="outline-primary"
-          >
-            Rediger Annonse
-          </Button>
-        ) : null}
+        {
+          /*If a user is a super user, the button"Rediger Annonse" will show.
+         It will take the super user directly to the admin site for this ad,
+         where the editing can be done*/
+          session.user?.is_staff ? (
+            <Button
+              href={"http://127.0.0.1:8000/admin/sellpoint_ads/ad/" + ad.id + "/change/"}
+              variant="outline-primary"
+            >
+              Rediger Annonse
+            </Button>
+          ) : null
+        }
       </div>
       {children}
     </ShadowedContainer>

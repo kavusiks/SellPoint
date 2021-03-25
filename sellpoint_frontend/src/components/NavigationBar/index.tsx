@@ -63,8 +63,6 @@ const ProfileButton: FunctionComponent = () => {
 const NavigationBar: FunctionComponent = () => {
   const session = useSessionContext();
   const history = useHistory();
-  const currentLocation = window.location.href;
-  const adID = currentLocation.split("/").pop();
 
   const makeButtons = () => {
     if (!session.isAuthenticated) {
@@ -80,14 +78,9 @@ const NavigationBar: FunctionComponent = () => {
         </>
       );
     }
-    /*If a user has clicked on an ad and is a super user,
-    the button "Rediger Annonse" will take the super user directly to the admin site for this ad,
-    where the editing can be done*/
 
-    /* If the user hasn't clicked any ads but is a super user,
-  the button "Adminpanel" will take the super user to the general admin site.
-  
-  Neither "Rediger Annonse" og "Admin Panel" will show if the user is not a super user*/
+    /* The button "Adminpanel" will take the super user to the general admin site.
+  "Adminpanel" will not show if the user is not a super user*/
     return (
       <>
         {session.user?.is_staff ? (
