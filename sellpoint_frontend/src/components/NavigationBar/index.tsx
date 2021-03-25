@@ -1,6 +1,7 @@
 import React from "react";
 import { FunctionComponent } from "react";
-import { Navbar } from "react-bootstrap";
+import { ButtonGroup, Dropdown, Navbar } from "react-bootstrap";
+import { Person } from "react-bootstrap-icons";
 import Nav from "react-bootstrap/Nav";
 import { Button } from "react-bootstrap";
 import "./index.css";
@@ -12,6 +13,7 @@ interface PathAwareButtonProps {
   href: string;
   variant: string;
   children?: React.ReactNode;
+  className?: string;
 }
 
 /**
@@ -23,28 +25,43 @@ const PathAwareButton: FunctionComponent<PathAwareButtonProps> = ({
   href,
   variant,
   children,
+  className = "button",
 }: PathAwareButtonProps) => {
   const currentLocation = useLocation();
   const pathname = currentLocation.pathname;
 
   // Check if the current path is the one this button redirects to. If it
   // is, we can disable this button as it'd would do nothing
-  if (pathname !== href) {
-    return (
-      <Button className="button" href={href} variant={variant}>
-        {children}
-      </Button>
-    );
-  }
-
   return (
-    <Button className="button" variant={variant} disabled>
+    <Button className={className} href={href} variant={variant} disabled={pathname === href}>
       {children}
     </Button>
   );
 };
 
-const Navigationbar: FunctionComponent = () => {
+const ProfileButton: FunctionComponent = () => {
+  return (
+    <Dropdown as={ButtonGroup}>
+      <Button className="" href="/profile" variant="outline-secondary">
+        <Person size={24} style={{ margin: "-4px 5px -1px -3px" }} />
+        Din Profil
+      </Button>
+
+      <Dropdown.Toggle split variant="outline-secondary" id="profile-split" />
+
+      <Dropdown.Menu>
+        <Dropdown.Item href="/profile/personal">Personlig informasjon</Dropdown.Item>
+        <Dropdown.Item href="/profile/ads">Dine annonser</Dropdown.Item>
+        <Dropdown.Item href="/profile/favorites">Lagrede annonser</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
+
+/**
+ * Global navbar
+ */
+const NavigationBar: FunctionComponent = () => {
   const session = useSessionContext();
   const history = useHistory();
 
@@ -55,6 +72,7 @@ const Navigationbar: FunctionComponent = () => {
           <PathAwareButton href="/register" variant="outline-secondary">
             Opprett bruker
           </PathAwareButton>
+
           <PathAwareButton href="/login" variant="outline-success">
             Logg Inn
           </PathAwareButton>
@@ -70,9 +88,7 @@ const Navigationbar: FunctionComponent = () => {
           </Button>
         ) : null}
 
-        <PathAwareButton href="/profile" variant="outline-secondary">
-          Din Profil
-        </PathAwareButton>
+        <ProfileButton />
         <Button className="button" onClick={logOut} variant="outline-primary">
           Logg Ut
         </Button>
@@ -90,7 +106,6 @@ const Navigationbar: FunctionComponent = () => {
       <Navbar.Brand href="/" className="logo">
         Sell<strong>Point</strong>
       </Navbar.Brand>
-
       <Nav className="mr-auto">
         <Nav.Link href="/ad/create">Ny annonse</Nav.Link>
       </Nav>
@@ -100,4 +115,4 @@ const Navigationbar: FunctionComponent = () => {
   );
 };
 
-export default Navigationbar;
+export default NavigationBar;

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Ad, Category, Image
+from .models import Ad, Category, Image, FavoriteAd
 
 
 class ImageInline(admin.StackedInline):
@@ -13,3 +13,4 @@ class AdAdmin(admin.ModelAdmin):
 
 admin.site.register(Category)
 admin.site.register(Ad, AdAdmin)
+admin.site.register(FavoriteAd)

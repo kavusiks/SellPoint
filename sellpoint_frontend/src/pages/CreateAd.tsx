@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Container } from "react-bootstrap";
-import CreateAdForm from "../components/forms/CreateAdForm";
+import { CreateAdForm } from "../components/forms/CreateAdForm";
 import { CenteredRow, FormContainer, useErrorState } from "../components/styled";
 
 const CreateAdPage: FunctionComponent = () => {

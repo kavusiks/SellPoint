@@ -25,5 +25,5 @@ export default interface Session {
   /**
    * Updates the current redirectPath
    */
-  setRedirectPath: (path: string | undefined) => void;
+  setRedirectPath: (path: string) => void;
 }

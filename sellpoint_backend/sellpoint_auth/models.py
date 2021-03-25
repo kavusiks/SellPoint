@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from .user_manager import UserManager
+from django.db.models.deletion import CASCADE
 
 # Simple regex validator for validating a phone number
 PHONE_REGEX = RegexValidator(

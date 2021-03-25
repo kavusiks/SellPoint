@@ -83,7 +83,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     """
     Serializer for returning a user. Includes all fields except password
-    and id
     """
 
     address = AddressSerializer()
@@ -99,6 +98,7 @@ class UserSerializer(serializers.ModelSerializer):
             "address",
             "date_joined",
             "is_staff",
+            "id",
         )
 
 

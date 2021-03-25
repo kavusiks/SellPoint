@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
-import MainPage from "./components/MainPage";
-import Navigationbar from "./components/NavigationBar";
+import MainPage from "./pages/MainPage";
+import NavigationBar from "./components/NavigationBar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ProtectedRoute, { ProtectedRouteProps } from "./components/Route";
 import { useSessionContext } from "./context/Session";
@@ -11,6 +11,8 @@ import AdViewPage from "./pages/AdView";
 import CreateAdPage from "./pages/CreateAd";
 import EditProfilePage from "./pages/EditProfile";
 import EditPasswordPage from "./pages/EditPassword";
+import EditAdPage from "./pages/EditAd";
+import { NotFoundPage } from "./pages/NotFound";
 
 const App: FunctionComponent = () => {
   const session = useSessionContext();
@@ -18,24 +20,34 @@ const App: FunctionComponent = () => {
   const protectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: session.isAuthenticated,
     authenticationPath: "/login",
-    redirectPathOnAuthentication: session.redirectPath ?? "/",
     setRedirectPathOnAuthentication: session.setRedirectPath,
   };
 
   return (
     <Router>
-      <Navigationbar />
+      <NavigationBar />
       <Switch>
-        <Route path="/" exact component={MainPage} />
+        <Route path="/" component={MainPage} exact />
 
-        <Route path="/ad/create" exact component={CreateAdPage} />
-        <Route path="/ad/:id" component={AdViewPage} />
+        <ProtectedRoute {...protectedRouteProps} path="/ad/create" component={CreateAdPage} exact />
 
+        <Route path="/ad/:id" component={AdViewPage} exact />
         <Route path="/login" component={LoginPage} exact />
         <Route path="/editprofile" component={EditProfilePage} exact />
         <Route path="/register" component={RegisterPage} exact />
         <Route path="/password" component={EditPasswordPage} exact />
         <ProtectedRoute {...protectedRouteProps} path="/profile" component={ProfilePage} exact />
+
+        <ProtectedRoute
+          {...protectedRouteProps}
+          path="/profile/:page?"
+          component={ProfilePage}
+          exact
+        />
+        <ProtectedRoute {...protectedRouteProps} path="/ad/:id/edit" component={EditAdPage} exact />
+
+        {/* Leave this at the very bottom, since it will match to anything */}
+        <Route path="/" component={NotFoundPage} />
       </Switch>
     </Router>
   );
