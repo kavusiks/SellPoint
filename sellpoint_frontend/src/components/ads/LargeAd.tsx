@@ -66,7 +66,7 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
           : setIsFavorite(false),
       );
     }
-  }, []);
+  }, [session.user]);
 
   const isThumbnail = (img: AdImage): boolean => {
     return !!ad.thumbnail && ad.thumbnail.url === img.url;
