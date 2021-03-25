@@ -184,7 +184,6 @@ export const CreateAdForm: FunctionComponent<FormProps> = ({ setError }: FormPro
           setError("En uforventet error oppstod (Manglende ID)!");
           return;
         }
-        console.log(tempAd.category);
 
         const id: number = ad.id;
         Promise.all(images.map((image) => image.submit(id))).then(() =>
