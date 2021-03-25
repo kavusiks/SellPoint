@@ -199,7 +199,9 @@ def category_all_list(request):
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
-    
+
+
+@api_view(["GET"])
 def favorite_ads_list(request):
     favorite_ads = FavoriteAd.objects.all()
     serializer = FavoriteAdSerializer(favorite_ads, many=True)
@@ -211,6 +213,7 @@ def get_category(request, pk):
     category = Category.objects.get(id=pk)
     serializer = CategorySerializer(category, many=False)
     return Response(serializer.data)
+
 
 @api_view(["GET"])
 def favorite_detail_user(request, pk):
@@ -226,6 +229,7 @@ def get_ads_by_category(request, category_id):
     # category = Category.objects.get(id=pk)
     serializer = AdSerializer(ads, many=True)
     return Response(serializer.data)
+
 
 @api_view(["GET"])
 def favorite_detail(request, user_id, ad_id):

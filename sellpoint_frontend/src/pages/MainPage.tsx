@@ -1,5 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-import AdAPI from "../core/api/ad";
+import React, { FunctionComponent, useState } from "react";
 import { Ad } from "../models/ad";
 import { AdListView } from "../components/ads/AdListView";
 import { Row, Col } from "react-bootstrap";

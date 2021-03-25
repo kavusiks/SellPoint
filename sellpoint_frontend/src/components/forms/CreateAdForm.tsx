@@ -29,7 +29,7 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
   const [description, setDescription] = useState<string>(initial?.description ?? "");
   const [sold, setSold] = useState<boolean>(initial?.is_sold ?? false);
   const [validated, setValidated] = useState<boolean>(false);
-  const [category, setCategory] = useState<number | undefined>(undefined);
+  const [category, setCategory] = useState<number | undefined>(initial?.category ?? undefined);
   const [categoryTitle, setCategoryTitle] = useState<string>("Ikke valgt");
 
   // Not pretty but it will work. Either maps the existing images as their

@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from "react";
+import React, { Fragment, FunctionComponent, useEffect } from "react";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 import AdAPI from "../../core/api/ad";
 import { CategoryDropdown } from "./CategoryDropdown";
@@ -16,17 +16,19 @@ export const CategoriesForCreateAd: FunctionComponent<CreateAdCategoryProps> = (
   categoryTitle,
   setCategoryTitle,
 }) => {
+  useEffect(() => {
+    if (chosenCategory !== undefined) {
+      AdAPI.getCategoryById(chosenCategory).then((category) => setCategoryTitle(category.name));
+    } else {
+      setCategoryTitle("Ikke valgt");
+    }
+  }, [chosenCategory, setCategoryTitle]);
+
   const handleSelect = async (e: string | number | null) => {
     if (e == null) {
       throw new Error("e is null");
     }
-    if (e === "None") {
-      setChosenCategory(undefined);
-      setCategoryTitle("Ikke valgt");
-    } else {
-      setChosenCategory(e as number);
-      setCategoryTitle((await AdAPI.getCategoryById(e as number)).name);
-    }
+    setChosenCategory(e === "None" ? undefined : (e as number));
   };
 
   return (

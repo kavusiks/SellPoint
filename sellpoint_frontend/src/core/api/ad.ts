@@ -77,6 +77,7 @@ class AdAPI {
       title: ad.title,
       price: ad.price,
       description: ad.description,
+      category: ad.category === undefined ? null : ad.category,
       is_sold: ad.is_sold,
     });
     return response.data;

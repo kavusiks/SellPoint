@@ -42,7 +42,7 @@ urlpatterns = [
         "list/bycategory/<int:category_id>/",
         views.get_ads_by_category,
         name="ads-by-category",
-        ),
+    ),
     path(
         "favorite/list/self/",
         views.AdUserFavoriteList.as_view(),

@@ -41,6 +41,8 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = "__all__"
+
+
 class FavoriteAdSerializer(serializers.ModelSerializer):
     """
     Serializer for all favorite ads
