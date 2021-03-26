@@ -245,9 +245,7 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
             </p>
           </div>
           <hr style={{ width: "100%", margin: "10px 0px 10px 0px" }} />
-          <div className="ad desc">
-            <p>{ad.description}</p>
-            <hr style={{ width: "100%", margin: "10px 0px 10px 0px" }} />
+          <div className="edit ad">
             {
               /*If a user is a super user, the button"Rediger Annonse" will show.
        It will take the super user directly to the admin site for this ad,
