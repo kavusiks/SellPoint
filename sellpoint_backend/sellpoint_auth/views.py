@@ -38,23 +38,6 @@ class RegisterAPIView(generics.GenericAPIView):
         )
 
 
-class UserUpdateAPIView(generics.GenericAPIView):
-    """
-    REST API View for updating user
-    """
-
-    permission_classes = [IsAuthenticated]
-
-    def put(self, request, *args, **kwargs):
-        user_self = self.request.user
-        serializer = RegisterSerializer(user_self, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.save()
-            user_self.save()
-            return Response({"user": UserSerializer(user).data})
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
-
-
 class AddressUpdateAPIView(generics.UpdateAPIView):
     """
     REST API view for editing the address field
@@ -64,7 +47,8 @@ class AddressUpdateAPIView(generics.UpdateAPIView):
 
     def put(self, request):
         address = request.user.address
-        serializer = AddressSerializer(address, data=request.data, partial=True)
+        serializer = AddressSerializer(
+            address, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -72,8 +56,8 @@ class AddressUpdateAPIView(generics.UpdateAPIView):
 
 class SelfAPIView(generics.GenericAPIView):
     """
-    REST API view for getting the user that is currently logged in.
-    Supports GET requests
+    REST API view for getting and editing the user that is currently logged in.
+    Supports GET requests and PUT requests.
     """
 
     permission_classes = [IsAuthenticated]
@@ -81,6 +65,18 @@ class SelfAPIView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         user_self = UserSerializer(request.user, read_only=True)
         return Response(user_self.data)
+
+    def put(self, request, *args, **kwargs):
+        user_self = self.request.user
+        serializer = RegisterSerializer(
+            user_self, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        if request.data.get('password'):
+            user_self.set_password(request.data.get("password"))
+        user_self.save()
+
+        return Response({"user": UserSerializer(user_self).data})
 
 
 class ChangePasswordView(APIView):
