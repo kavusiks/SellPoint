@@ -1,3 +1,12 @@
+from .serializers import (
+    AdCreateSerializer,
+    AdSerializer,
+    ImageSerializer,
+    FavoriteAdSerializer,
+    FavoriteCreateSerializer,
+    CategorySerializer,
+)
+from .models import Ad, Image, FavoriteAd, Category
 from django.http.response import (
     HttpResponse,
     HttpResponseBadRequest,
@@ -6,8 +15,6 @@ from django.http.response import (
     HttpResponseNotFound,
 )
 from rest_framework import generics, status, mixins
-from .serializers import AdCreateSerializer, AdSerializer, ImageSerializer
-from .models import Ad, Image
 from .renderers import JPEGRenderer, PNGRenderer
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.response import Response
@@ -145,6 +152,26 @@ class AdImageAPIView(generics.GenericAPIView):
         return Response(ImageSerializer(image).data, status=status.HTTP_200_OK)
 
 
+class AdUserFavoriteList(generics.ListCreateAPIView):
+    """
+    List-view for getting all ads favorited by the currently logged in user
+    """
+
+    queryset = Ad.objects.all()
+    serializer_class = AdSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def list(self, request):
+        favorite_ad = FavoriteAd.objects.filter(user=request.user).all()
+        serializer = FavoriteAdSerializer(favorite_ad, many=True)
+        favAdsId = []
+        for item in serializer.data:
+            favAdsId.append(item.get("favorite_ad"))
+        favorite_ads = Ad.objects.filter(id__in=favAdsId)
+        serializer = AdSerializer(favorite_ads, many=True)
+        return Response(serializer.data)
+
+
 @api_view(["GET"])
 def ad_not_sold_list(request):
     """
@@ -165,3 +192,73 @@ def ad_all_list(request):
     ads = Ad.objects.all()
     serializer = AdSerializer(ads, many=True)
     return Response(serializer.data)
+
+
+@api_view(["GET"])
+def category_all_list(request):
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def favorite_ads_list(request):
+    favorite_ads = FavoriteAd.objects.all()
+    serializer = FavoriteAdSerializer(favorite_ads, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def get_category(request, pk):
+    category = Category.objects.get(id=pk)
+    serializer = CategorySerializer(category, many=False)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def favorite_detail_user(request, pk):
+    favorite_ad = FavoriteAd.objects.filter(user=pk).all()
+    serializer = FavoriteAdSerializer(favorite_ad, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def get_ads_by_category(request, category_id):
+    # ads = Ad.objects.all(category=category)
+    ads = Ad.objects.all().filter(category=category_id)
+    # category = Category.objects.get(id=pk)
+    serializer = AdSerializer(ads, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def favorite_detail(request, user_id, ad_id):
+    permission_classes = [IsAuthenticated]
+
+    favorite_ad = FavoriteAd.objects.get(user=user_id, favorite_ad=ad_id)
+    serializer = FavoriteAdSerializer(favorite_ad, many=False)
+    return Response(serializer.data)
+
+
+@api_view(["DELETE"])
+def favorite_delete(request, user_id, ad_id):
+    favorite_ad = FavoriteAd.objects.get(user=user_id, favorite_ad=ad_id)
+    favorite_ad.delete()
+    return Response("Item successfully deleted!")
+
+
+class FavoriteCreateAPIView(generics.CreateAPIView):
+    serializer_class = FavoriteCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        favorite = serializer.save()
+
+        return Response(
+            FavoriteCreateSerializer(
+                favorite, context=self.get_serializer_context()
+            ).data
+        )
