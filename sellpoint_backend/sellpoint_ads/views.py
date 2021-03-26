@@ -4,8 +4,9 @@ from .serializers import (
     ImageSerializer,
     FavoriteAdSerializer,
     FavoriteCreateSerializer,
+    CategorySerializer,
 )
-from .models import Ad, Image, FavoriteAd
+from .models import Ad, Image, FavoriteAd, Category
 from django.http.response import (
     HttpResponse,
     HttpResponseBadRequest,
@@ -194,6 +195,13 @@ def ad_all_list(request):
 
 
 @api_view(["GET"])
+def category_all_list(request):
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
 def favorite_ads_list(request):
     favorite_ads = FavoriteAd.objects.all()
     serializer = FavoriteAdSerializer(favorite_ads, many=True)
@@ -201,9 +209,25 @@ def favorite_ads_list(request):
 
 
 @api_view(["GET"])
+def get_category(request, pk):
+    category = Category.objects.get(id=pk)
+    serializer = CategorySerializer(category, many=False)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
 def favorite_detail_user(request, pk):
     favorite_ad = FavoriteAd.objects.filter(user=pk).all()
     serializer = FavoriteAdSerializer(favorite_ad, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def get_ads_by_category(request, category_id):
+    # ads = Ad.objects.all(category=category)
+    ads = Ad.objects.all().filter(category=category_id)
+    # category = Category.objects.get(id=pk)
+    serializer = AdSerializer(ads, many=True)
     return Response(serializer.data)
 
 

@@ -83,7 +83,12 @@ const NavigationBar: FunctionComponent = () => {
     return (
       <>
         {session.user?.is_staff ? (
-          <Button className="button" href="http://127.0.0.1:8000/admin/" variant="outline-primary">
+          <Button
+            className="button"
+            href="http://127.0.0.1:8000/admin/"
+            variant="outline-primary"
+            target="_blank"
+          >
             Adminpanel
           </Button>
         ) : null}

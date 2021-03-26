@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Ad, Image, FavoriteAd
+from .models import Ad, Image, FavoriteAd, Category
 from sellpoint_auth.models import User
 
 
@@ -18,8 +18,6 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class AdCreateSerializer(serializers.ModelSerializer):
-    category = serializers.IntegerField(required=False)
-
     class Meta:
         model = Ad
         fields = ["title", "description", "price", "category", "is_sold"]
@@ -36,6 +34,12 @@ class AdSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ad
+        fields = "__all__"
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
         fields = "__all__"
 
 
