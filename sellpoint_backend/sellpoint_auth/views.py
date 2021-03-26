@@ -47,8 +47,7 @@ class AddressUpdateAPIView(generics.UpdateAPIView):
 
     def put(self, request):
         address = request.user.address
-        serializer = AddressSerializer(
-            address, data=request.data, partial=True)
+        serializer = AddressSerializer(address, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -68,11 +67,10 @@ class SelfAPIView(generics.GenericAPIView):
 
     def put(self, request, *args, **kwargs):
         user_self = self.request.user
-        serializer = RegisterSerializer(
-            user_self, data=request.data, partial=True)
+        serializer = RegisterSerializer(user_self, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-        if request.data.get('password'):
+        if request.data.get("password"):
             user_self.set_password(request.data.get("password"))
         user_self.save()
 
