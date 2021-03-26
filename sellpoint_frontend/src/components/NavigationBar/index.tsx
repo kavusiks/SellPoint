@@ -80,6 +80,8 @@ const NavigationBar: FunctionComponent = () => {
       );
     }
 
+    /* The button "Adminpanel" will take the super user to the general admin site.
+  "Adminpanel" will not show if the user is not a super user*/
     return (
       <>
         {session.user?.is_staff ? (
