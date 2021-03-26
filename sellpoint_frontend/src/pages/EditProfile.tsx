@@ -31,8 +31,7 @@ const EditProfilePage: FunctionComponent = () => {
       <CenteredRow noGutters>
         <FormContainer fluid>
           <CenteredRow noGutters>
-            <h1>Rediger Bruker</h1>
-            <h1>{session.user?.first_name}</h1>
+            <h1>Rediger din bruker</h1>
           </CenteredRow>
           <CenteredRow noGutters>
             <EditProfileForm setError={setError} logIn rememberLogIn />

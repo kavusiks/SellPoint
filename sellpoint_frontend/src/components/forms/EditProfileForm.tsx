@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 import { Button, Col, Form, InputGroup } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { useSessionContext } from "../../context/Session";
-import AuthenticationService from "../../core/auth";
+import UserAPI from "../../core/api/user";
 import User, { Address } from "../../models/user";
 import { CenteredRow } from "../styled";
 import { AddressFormPart, FormProps } from "./FormParts";
@@ -54,12 +54,13 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
     // We use a state for this so that validation doesn't display
     // until after the first submission attempt
     setValidated(true);
-
     e.preventDefault();
 
+    setAddress(session.user?.address); //midlertidig
     const form = e.target as HTMLFormElement;
     if (!form.checkValidity() || !address || password !== confirmPassword) {
       e.stopPropagation();
+      console.log("feil:" + e);
       return;
     }
 
@@ -70,96 +71,109 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
       phone_number: phoneNumber,
       address: address,
     };
-
-    /*
-    AuthenticationService.signUp(user, password, logIn, rememberLogIn)
-      .then(() => {
-        session
-          .updateSelfUser()
-          .then(() => history.push(logIn ? session.redirectPath ?? "/" : "/login"))
+    UserAPI.editUser(user, password)
+      .then((res) => console.log(res))
+      /*
+          .then(() => {
+          session
+          .then(() => history.push(logIn ? session.redirectPath ?? "/" : "/profile"))
           .catch((error) => {
             setPassword("");
             setConfirmPassword("");
             setError("En uforventet error oppstod!");
           });
-      })
+      })*/
       .catch((error) => {
         setPassword("");
         setConfirmPassword("");
         setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
       });
-      */
   };
 
   return (
     <Form noValidate validated={validated} onSubmit={onSubmit}>
       <Form.Row>
-        <Form.Group as={Col} controlId="form-signup-first-name">
+        <Form.Group as={Col} controlId="form-edit-first-name">
           <Form.Label>Fornavn</Form.Label>
           <Form.Control
-            value={session.user?.first_name}
+            defaultValue={session.user?.first_name}
             autoFocus
             type="text"
             pattern="^[a-zA-Z\p{L}]+$"
             minLength={2}
-            placeholder="Ola"
             onChange={(e) => setFirstName(e.target.value)}
             required
           />
         </Form.Group>
 
-        <Form.Group as={Col} controlId="form-signup-last-name">
+        <Form.Group as={Col} controlId="form-edit-last-name">
           <Form.Label>Etternavn</Form.Label>
           <Form.Control
-            value={session.user?.last_name}
+            defaultValue={session.user?.last_name}
             type="text"
             pattern="^[a-zA-Z\p{L}]+$"
             minLength={2}
-            placeholder="Nordmann"
             onChange={(e) => setLastName(e.target.value)}
             required
           />
         </Form.Group>
       </Form.Row>
 
-      <Form.Group controlId="form-signup-email">
+      <Form.Group controlId="form-edit-email">
         <Form.Label>Email</Form.Label>
         <Form.Control
-          value={session.user?.first_name}
+          defaultValue={session.user?.email}
           type="email"
           minLength={7}
-          placeholder="example@gmail.com"
           onChange={(e) => setEmail(e.target.value)}
           required
         />
       </Form.Group>
 
-      <Form.Group controlId="form-signup-phonenumber">
+      <Form.Group controlId="form-edit-phonenumber">
         <Form.Label>Telefonnummer</Form.Label>
         <InputGroup>
           <InputGroup.Prepend>
             <InputGroup.Text id="basic-addon1">+47</InputGroup.Text>
           </InputGroup.Prepend>
           <Form.Control
+            defaultValue={session.user?.phone_number}
             type="text"
             pattern="[0-9]*"
             minLength={8}
             maxLength={17}
-            placeholder="Telefonnummer"
-            onChange={(e) => setPhoneNumber("+47" + e.target.value)}
+            onChange={(e) => setPhoneNumber(e.target.value)}
             required
           />
         </InputGroup>
       </Form.Group>
-
-      <AddressFormPart onChange={setAddress} />
+      <Form.Group controlId="form-edit-password">
+        <Form.Label>Passord</Form.Label>
+        <Form.Control
+          type="password"
+          minLength={8}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          isInvalid={validated && password !== confirmPassword}
+          required
+        />
+      </Form.Group>
+      <Form.Group controlId="form-edit-confirm-password">
+        <Form.Label>Gjenta Passord</Form.Label>
+        <Form.Control
+          type="password"
+          minLength={8}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          isInvalid={validated && password !== confirmPassword}
+          required
+        />
+      </Form.Group>
+      {/* <AddressFormPart onChange={setAddress} /> */}
 
       <CenteredRow noGutters>
-        <StyledButton variant="secondary" href="/profile">
-          Rediger profilinformasjon
-        </StyledButton>
-        <StyledButton variant="primary" type="submit" href="/password">
-          Endre passord
+        <StyledButton variant="primary" type="submit">
+          Rediger
         </StyledButton>
       </CenteredRow>
     </Form>

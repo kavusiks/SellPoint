@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Container, Tab, Nav, Col, Row, Button } from "react-bootstrap";
 import { AdListView } from "../components/ads/AdListView";
 import { ProfileDisplay } from "../components/Profile";
-import { CenteredRow, DefaultSpinner} from "../components/styled";
+import { CenteredRow, DefaultSpinner } from "../components/styled";
 import { useSessionContext } from "../context/Session";
 import { Ad } from "../models/ad";
 import AdAPI from "../core/api/ad";
@@ -108,6 +108,9 @@ const ProfilePage: FunctionComponent = () => {
             <Tab.Pane eventKey="personal">
               <ProfilePageTab title="Personlig Informasjon">
                 {session.user ? <ProfileDisplay user={session.user} /> : <DefaultSpinner />}
+                <Button variant="outline-info" href="/editprofile">
+                  Edit
+                </Button>
               </ProfilePageTab>
             </Tab.Pane>
             <Tab.Pane eventKey="ads">
