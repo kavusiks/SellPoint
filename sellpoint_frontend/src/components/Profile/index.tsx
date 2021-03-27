@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { CenteredRow, formatDate, LeftCenterRow, LeftTopRow } from "../styled";
+import { formatDate, LeftCenterRow, LeftTopRow } from "../styled";
 import User from "../../models/user";
 import default_avatar from "../../static/profile_picture_holder.png";
 import "./index.css";
