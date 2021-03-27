@@ -65,10 +65,6 @@ export interface ProfileDisplayProps {
 export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
   user,
 }: ProfileDisplayProps) => {
-  const session = useSessionContext();
-
-  console.log(user.address.geocode);
-
   return (
     <>
       <LeftTopRow className="profile-display" xs={12}>
@@ -84,19 +80,21 @@ export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
             <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
             <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
             <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
-            {session.user?.address ? (
-              <ProfileField title="Addresse">
-                {user.address.line1}
-                {user.address.line2 ? (
-                  <>
-                    <br /> {user.address.line2}
-                  </>
-                ) : null}
-                <br />
-                {user.address.postalcode} {user.address.city} {user.address.country}
-              </ProfileField>
+            {user.address ? (
+              <>
+                <ProfileField title="Addresse">
+                  {user.address.line1}
+                  {user.address.line2 ? (
+                    <>
+                      <br /> {user.address.line2}
+                    </>
+                  ) : null}
+                  <br />
+                  {user.address.postalcode} {user.address.city} {user.address.country}
+                </ProfileField>
+                {user.address.geocode && <MarkedMap position={user.address.geocode} />}
+              </>
             ) : null}
-            {user.address.geocode && <MarkedMap position={user.address.geocode} />}
           </Container>
         </Col>
       </LeftTopRow>
