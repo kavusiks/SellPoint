@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { formatDate, LeftCenterRow, LeftTopRow } from "../styled";
+import { CenteredRow, formatDate, LeftCenterRow, LeftTopRow } from "../styled";
 import User from "../../models/user";
 import default_avatar from "../../static/profile_picture_holder.png";
 import "./index.css";
 import { useSessionContext } from "../../context/Session";
+import MarkedMap from "../Map";
 
 /**
  * Props for a profile field
@@ -66,34 +67,39 @@ export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
 }: ProfileDisplayProps) => {
   const session = useSessionContext();
 
+  console.log(user.address.geocode);
+
   return (
-    <LeftTopRow className="profile-display" xs={12}>
-      <Col xs={3}>
-        <img style={{ width: "100%", height: "auto" }} alt="Profilbilde" src={default_avatar} />
-      </Col>
-      <Col xs={9}>
-        <Container>
-          <LeftCenterRow>
-            <h2>{user.first_name + " " + user.last_name}</h2>
-          </LeftCenterRow>
-          <ProfileField title="Email">{user.email}</ProfileField>
-          <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
-          <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
-          <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
-          {session.user?.address ? (
-            <ProfileField title="Addresse">
-              {user.address.line1}
-              {user.address.line2 ? (
-                <>
-                  <br /> {user.address.line2}
-                </>
-              ) : null}
-              <br />
-              {user.address.postalcode} {user.address.city} {user.address.country}
-            </ProfileField>
-          ) : null}
-        </Container>
-      </Col>
-    </LeftTopRow>
+    <>
+      <LeftTopRow className="profile-display" xs={12}>
+        <Col xs={3}>
+          <img style={{ width: "100%", height: "auto" }} alt="Profilbilde" src={default_avatar} />
+        </Col>
+        <Col xs={9}>
+          <Container>
+            <LeftCenterRow>
+              <h2>{user.first_name + " " + user.last_name}</h2>
+            </LeftCenterRow>
+            <ProfileField title="Email">{user.email}</ProfileField>
+            <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
+            <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
+            <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
+            {session.user?.address ? (
+              <ProfileField title="Addresse">
+                {user.address.line1}
+                {user.address.line2 ? (
+                  <>
+                    <br /> {user.address.line2}
+                  </>
+                ) : null}
+                <br />
+                {user.address.postalcode} {user.address.city} {user.address.country}
+              </ProfileField>
+            ) : null}
+            {user.address.geocode && <MarkedMap position={user.address.geocode} />}
+          </Container>
+        </Col>
+      </LeftTopRow>
+    </>
   );
 };

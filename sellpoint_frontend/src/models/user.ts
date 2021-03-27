@@ -1,3 +1,5 @@
+import { Position } from "./geocode";
+
 /**
  * The physical address of a {@link User}
  */
@@ -22,6 +24,10 @@ export interface Address {
    * Country name
    */
   country: string;
+  /**
+   * This addresses position. Supplied by backend.
+   */
+  geocode?: Position;
 }
 
 /**
