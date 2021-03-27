@@ -12,7 +12,8 @@ class AddressSerializer(serializers.ModelSerializer):
     """
     Serializes an address, excluding the user field
     """
-    geocode = serializers.DictField(source="get_geocode")
+
+    geocode = serializers.DictField(source="get_geocode", read_only=True)
 
     class Meta:
         model = Address
