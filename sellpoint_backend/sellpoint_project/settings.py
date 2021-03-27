@@ -23,6 +23,8 @@ BASE_URL = "http://localhost:8000"
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "m$_ywnjkhfe9o=%w85$^pin2a41b+xx%*o$*3@+x^^647ntv!4"
+# SECURITY WARNING: This is connected to a personal account, please do not abuse <3
+GOOGLE_MAPS_KEY = "AIzaSyA2oKDapXDTY2mvKCYUPnESCik1BVvsU5U"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
