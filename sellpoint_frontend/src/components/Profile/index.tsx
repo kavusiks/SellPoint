@@ -4,7 +4,6 @@ import { formatDate, LeftCenterRow, LeftTopRow } from "../styled";
 import User from "../../models/user";
 import default_avatar from "../../static/profile_picture_holder.png";
 import "./index.css";
-import { useSessionContext } from "../../context/Session";
 import MarkedMap from "../Map";
 
 /**
