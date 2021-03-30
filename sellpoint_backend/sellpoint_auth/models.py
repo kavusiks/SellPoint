@@ -94,6 +94,8 @@ class Address(models.Model):
         if not (self_geo and other_geo):
             return -1
 
-        return round(geopy.distance.geodesic(
-            (self_geo["lat"], self_geo["lng"]), (other_geo["lat"], self_geo["lng"])
-        ).km)
+        return round(
+            geopy.distance.geodesic(
+                (self_geo["lat"], self_geo["lng"]), (other_geo["lat"], self_geo["lng"])
+            ).km
+        )
