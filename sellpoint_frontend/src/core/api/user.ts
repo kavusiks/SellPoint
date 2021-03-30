@@ -12,8 +12,8 @@ class UserAPI {
     const response = await client.get("auth/self/");
     return response.data;
   }
-  async getUserToVisit(email: string): Promise<User> {
-    const response = await client.get(`auth/user/${email}/`);
+  async getUserToVisit(id: number): Promise<User> {
+    const response = await client.get(`auth/user/${id}/`);
     return response.data;
   }
 }

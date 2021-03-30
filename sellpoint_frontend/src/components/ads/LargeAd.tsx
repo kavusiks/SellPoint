@@ -60,11 +60,10 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   const [adCategoryName, setAdCategoryName] = useState<string>("");
 
   useEffect(() => {
-    ad.category
-      ? AdAPI.getCategoryById(ad.category).then((categoryName) =>
-          setAdCategoryName(categoryName.name),
-        )
-      : void 0;
+    if (!ad.category) {
+      return;
+    }
+    AdAPI.getCategoryById(ad.category).then((categoryName) => setAdCategoryName(categoryName.name));
   }, [ad.category]);
 
   useEffect(() => {
@@ -211,27 +210,19 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
 
         {
           // Check if this is our own ad, if so we should display edit buttons etc.
-          session.user && ad.owner?.email === session.user.email ? (
-            <SpaceBetweenCenterRow noGutters>
-              <h2>
-                {ad.title} {ad.category ? <Badge variant="info">{adCategoryName}</Badge> : null}{" "}
-                {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
-              </h2>
+          <SpaceBetweenCenterRow noGutters>
+            <h2>
+              {ad.title} {ad.category ? <Badge variant="info">{adCategoryName}</Badge> : null}{" "}
+              {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+            </h2>
+            {session.user && ad.owner?.email === session.user.email ? (
               <RightCenterRow noGutters>
                 <AdModifyDialog ad={ad} onDeleted={() => history.push("/")} />
               </RightCenterRow>
+            ) : (
               <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
-            </SpaceBetweenCenterRow>
-          ) : (
-            <LeftCenterRow noGutters>
-              <div className="ad title">
-                <h1>
-                  {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
-                </h1>
-              </div>
-              <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
-            </LeftCenterRow>
-          )
+            )}
+          </SpaceBetweenCenterRow>
         }
 
         <LeftCenterRow noGutters>
@@ -248,7 +239,7 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
               <strong>Pris:</strong> {ad.price},-
               <br />
               <strong>Selger: </strong>{" "}
-              <a href={`/visit-profile/${ad.id}`}>
+              <a href={`/visit-profile/${ad.owner?.id}`}>
                 {ad.owner?.first_name} {ad.owner?.last_name}
               </a>
               <br />
@@ -268,6 +259,7 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
                 <Button
                   href={"http://127.0.0.1:8000/admin/sellpoint_ads/ad/" + ad.id + "/change/"}
                   variant="outline-primary"
+                  target="_blank"
                 >
                   Rediger Annonse
                 </Button>

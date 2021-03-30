@@ -237,11 +237,9 @@ def favorite_detail_user(request, pk):
 @api_view(["GET"])
 def get_ads_by_category(request, category_id):
     """
-    Fetcges all ads with the given category
+    Fetches all ads with the given category
     """
-    # ads = Ad.objects.all(category=category)
     ads = Ad.objects.all().filter(category=category_id)
-    # category = Category.objects.get(id=pk)
     serializer = AdSerializer(ads, many=True)
     return Response(serializer.data)
 

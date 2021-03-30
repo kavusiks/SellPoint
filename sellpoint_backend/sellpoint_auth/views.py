@@ -55,7 +55,7 @@ class VisitUserAPIView(generics.GenericAPIView):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get(self, request, email, *args, **kwargs):
-        user = get_user_model().objects.get(email=email)
+    def get(self, request, id, *args, **kwargs):
+        user = get_user_model().objects.get(id=id)
         user_self = UserSerializer(user, read_only=True)
         return Response(user_self.data)

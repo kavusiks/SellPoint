@@ -2,8 +2,6 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { ProfileDisplay } from "../components/Profile";
 import { CenteredRow, DefaultSpinner, useErrorState } from "../components/styled";
-import { Ad } from "../models/ad";
-import AdAPI from "../core/api/ad";
 import UserAPI from "../core/api/user";
 import { useParams } from "react-router";
 import User from "../models/user";
@@ -14,23 +12,13 @@ interface AdOwnerViewParams {
 const VisitProfilePage: FunctionComponent = () => {
   const { id } = useParams<AdOwnerViewParams>();
   const { error, setError } = useErrorState();
-  const [ad, setAd] = useState<Ad | undefined>(undefined);
   const [user, setUser] = useState<User | undefined>(undefined);
 
   useEffect(() => {
-    AdAPI.getById(+id)
-      .then((ad) => setAd(ad))
+    UserAPI.getUserToVisit(+id)
+      .then((user) => setUser(user))
       .catch((error) => setError("En error oppstod!"));
   }, [id, setError]);
-
-  useEffect(() => {
-    if (ad !== undefined) {
-      if (ad.owner !== undefined) {
-        UserAPI.getUserToVisit(ad.owner.email).then((user) => setUser(user));
-        console.log(user?.email);
-      }
-    }
-  }, [ad, setAd, user?.email]);
 
   return (
     <Container fluid>
