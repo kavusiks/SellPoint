@@ -65,7 +65,7 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
           setAdCategoryName(categoryName.name),
         )
       : void 0;
-  }, []);
+  }, [ad.category]);
 
   useEffect(() => {
     if (session.user?.id) {

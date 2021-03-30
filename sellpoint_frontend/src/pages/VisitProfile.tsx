@@ -21,12 +21,6 @@ const VisitProfilePage: FunctionComponent = () => {
     AdAPI.getById(+id)
       .then((ad) => setAd(ad))
       .catch((error) => setError("En error oppstod!"));
-
-    if (ad !== undefined) {
-      if (ad.owner?.email !== undefined) {
-        UserAPI.getUserToVisit(ad.owner.email).then((user) => setUser(user));
-      }
-    }
   }, [id, setError]);
 
   useEffect(() => {
@@ -36,7 +30,7 @@ const VisitProfilePage: FunctionComponent = () => {
         console.log(user?.email);
       }
     }
-  }, [ad, setAd]);
+  }, [ad, setAd, user?.email]);
 
   return (
     <Container fluid>
