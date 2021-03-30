@@ -96,7 +96,7 @@ class AdAPIView(mixins.RetrieveModelMixin, generics.GenericAPIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         serializer.save()
-        return Response(AdSerializer(ad).data)
+        return Response(AdSerializer(ad, context=self.get_serializer_context()).data)
 
 
 class AdUserList(generics.ListCreateAPIView):
@@ -146,8 +146,6 @@ class AdImageAPIView(generics.GenericAPIView):
         description = request.data.get("description")
         image.description = description
         image.save()
-
-        print("Updating the thing!")
 
         return Response(ImageSerializer(image).data, status=status.HTTP_200_OK)
 
