@@ -10,6 +10,8 @@ Django==3.1.6
 django-cors-headers==3.7.0
 djangorestframework==3.12.2
 djangorestframework-simplejwt==4.6.0
+geographiclib==1.50
+geopy==2.1.0
 googlemaps==4.4.5
 idna==2.10
 isort==5.7.0
