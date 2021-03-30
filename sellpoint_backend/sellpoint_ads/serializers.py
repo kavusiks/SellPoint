@@ -31,6 +31,16 @@ class AdSerializer(serializers.ModelSerializer):
     owner = LimitedUserSerializer()
     thumbnail = ImageSerializer(source="get_thumbnail", required=False)
     images = ImageSerializer(source="get_images", many=True, required=False)
+    distance = serializers.SerializerMethodField()
+
+    def get_distance(self, obj):
+        user = self.context["request"].user
+        if not user:
+            return -1
+
+        owner_address = obj.owner.address
+        self_address = user.address
+        return max(1, owner_address.distance(self_address))
 
     class Meta:
         model = Ad

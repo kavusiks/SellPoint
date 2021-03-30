@@ -6,6 +6,7 @@ from django.utils import timezone
 from .user_manager import UserManager
 from django.db.models.deletion import CASCADE
 from sellpoint_project.maps import gmaps
+import geopy.distance
 
 # Simple regex validator for validating a phone number
 PHONE_REGEX = RegexValidator(
@@ -85,3 +86,14 @@ class Address(models.Model):
         if not geocode:
             return None
         return geocode[0]["geometry"]["location"]
+
+    def distance(self, other):
+        self_geo = self.get_geocode()
+        other_geo = other.get_geocode()
+
+        if not (self_geo and other_geo):
+            return -1
+
+        return round(geopy.distance.geodesic(
+            (self_geo["lat"], self_geo["lng"]), (other_geo["lat"], self_geo["lng"])
+        ).km)

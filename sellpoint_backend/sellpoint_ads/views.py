@@ -172,6 +172,16 @@ class AdUserFavoriteList(generics.ListCreateAPIView):
         return Response(serializer.data)
 
 
+class AdListView(generics.ListAPIView):
+    """
+    Fetches all ads
+    """
+
+    queryset = Ad.objects.all()
+    serializer_class = AdSerializer
+    permission_classes = (IsAuthenticated,)
+
+
 @api_view(["GET"])
 def ad_not_sold_list(request):
     """
@@ -179,17 +189,6 @@ def ad_not_sold_list(request):
     """
 
     ads = Ad.objects.all().filter(is_sold=False)
-    serializer = AdSerializer(ads, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-def ad_all_list(request):
-    """
-    Fetches all ads
-    """
-
-    ads = Ad.objects.all()
     serializer = AdSerializer(ads, many=True)
     return Response(serializer.data)
 

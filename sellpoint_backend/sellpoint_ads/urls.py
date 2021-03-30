@@ -10,7 +10,7 @@ urlpatterns = [
         views.AdImageCreateAPIView.as_view(),
         name="ad-create-image",
     ),
-    path("list/", views.ad_all_list, name="ad-list"),
+    path("list/", views.AdListView.as_view(), name="ad-list"),
     path("list/not-sold/", views.ad_not_sold_list, name="ad-not-sold-list"),
     path("category/list/", views.category_all_list, name="category-list"),
     path("category/<str:pk>/", views.get_category, name="category"),
