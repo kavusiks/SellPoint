@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { Position } from "../../models/geocode";
+import { Position } from "../models/geocode";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
 // Please do not abuse <3
@@ -7,15 +7,16 @@ const MAPS_API_KEY = "AIzaSyBFKGZqoHV5JYKkkp8-von2FEBXPpdQkbc";
 
 export interface MarkedMapProps {
   position: Position;
+  children?: React.ReactNode;
 }
 
 const containerStyle = {
   width: "100%",
-  height: "100%",
-  minHeight: "500px",
+  minHeight: "400px",
+  maxHeight: "100%",
 };
 
-const MarkedMap: FunctionComponent<MarkedMapProps> = ({ position }) => {
+const MarkedMap: FunctionComponent<MarkedMapProps> = ({ position, children }) => {
   const { isLoaded, loadError } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: MAPS_API_KEY,
@@ -32,6 +33,7 @@ const MarkedMap: FunctionComponent<MarkedMapProps> = ({ position }) => {
   return isLoaded ? (
     <GoogleMap mapContainerStyle={containerStyle} center={position} zoom={14}>
       <Marker position={position} />
+      {children}
     </GoogleMap>
   ) : (
     <></>

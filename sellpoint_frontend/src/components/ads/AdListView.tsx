@@ -3,7 +3,7 @@ import { Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Ad } from "../../models/ad";
-import SmallAd, { SelfSmallAd } from "../../components/ads/SmallAd";
+import { OtherSmallAd, SelfSmallAd } from "../../components/ads/SmallAd";
 
 const AdContainer = styled(Row)`
   flex-wrap: wrap;
@@ -76,7 +76,7 @@ export const AdListView: FunctionComponent<AdListViewProps> = ({
 
         return (
           <AdLink key={item.id} to={`/ad/${item.id}`} style={{ flex: `0 ${width}%` }}>
-            <SmallAd ad={item} />
+            <OtherSmallAd ad={item} />
           </AdLink>
         );
       })}
