@@ -110,7 +110,7 @@ class AdUserList(generics.ListCreateAPIView):
 
     def list(self, request):
         ads = self.get_queryset().filter(owner=request.user)
-        serializer = AdSerializer(ads, many=True)
+        serializer = AdSerializer(ads, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 
 
@@ -163,12 +163,11 @@ class AdUserFavoriteList(generics.ListCreateAPIView):
 
     def list(self, request):
         favorite_ad = FavoriteAd.objects.filter(user=request.user).all()
-        serializer = FavoriteAdSerializer(favorite_ad, many=True)
-        favAdsId = []
-        for item in serializer.data:
-            favAdsId.append(item.get("favorite_ad"))
-        favorite_ads = Ad.objects.filter(id__in=favAdsId)
-        serializer = AdSerializer(favorite_ads, many=True)
+        serializer = AdSerializer(
+            (fav.favorite_ad for fav in favorite_ad),
+            many=True,
+            context=self.get_serializer_context(),
+        )
         return Response(serializer.data)
 
 
