@@ -57,6 +57,15 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   const [isFavorite, setIsFavorite] = useState<boolean>();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showToast, setToast] = useState(false);
+  const [adCategoryName, setAdCategoryName] = useState<string>("");
+
+  useEffect(() => {
+    ad.category
+      ? AdAPI.getCategoryById(ad.category).then((categoryName) =>
+          setAdCategoryName(categoryName.name),
+        )
+      : void 0;
+  }, []);
 
   useEffect(() => {
     if (session.user?.id) {
@@ -158,12 +167,6 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
               <Heart /> Lagre annonsen
             </Button>
             <br />
-
-            <hr style={{ width: "100%", margin: "10px 0px 10px 0px" }} />
-            <div className="ad desc">
-              <p>{ad.description}</p>
-            </div>
-            {children}
           </>
         )
       ) : null
@@ -211,7 +214,8 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
           session.user && ad.owner?.email === session.user.email ? (
             <SpaceBetweenCenterRow noGutters>
               <h2>
-                {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+                {ad.title} {ad.category ? <Badge variant="info">{adCategoryName}</Badge> : null}{" "}
+                {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
               </h2>
               <RightCenterRow noGutters>
                 <AdModifyDialog ad={ad} onDeleted={() => history.push("/")} />
@@ -234,9 +238,19 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
           <div className="ad info">
             <p>
               {makeFavoriteButton()}
+              <>
+                <hr style={{ width: "100%", margin: "10px 0px 10px 0px" }} />
+                <div className="ad desc">
+                  <p>{ad.description}</p>
+                </div>
+                {children}
+              </>
               <strong>Pris:</strong> {ad.price},-
               <br />
-              <strong>Selger: </strong> {ad.owner?.first_name} {ad.owner?.last_name}
+              <strong>Selger: </strong>{" "}
+              <a href={`/visit-profile/${ad.id}`}>
+                {ad.owner?.first_name} {ad.owner?.last_name}
+              </a>
               <br />
               <strong>Telefonnummer: </strong> {ad.owner?.phone_number}
               <br />

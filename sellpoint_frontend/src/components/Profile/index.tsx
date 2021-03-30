@@ -80,7 +80,7 @@ export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
           <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
           <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
           <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
-          {session.user?.address ? (
+          {user?.address ? (
             <ProfileField title="Addresse">
               {user.address.line1}
               {user.address.line2 ? (
