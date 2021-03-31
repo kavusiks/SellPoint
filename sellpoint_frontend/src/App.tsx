@@ -33,7 +33,12 @@ const App: FunctionComponent = () => {
         <Route path="/ad/:id" component={AdViewPage} exact />
         <Route path="/login" component={LoginPage} exact />
         <Route path="/register" component={RegisterPage} exact />
-        <Route path="/visit-profile/:id" component={VisitProfilePage} exact />
+        <ProtectedRoute
+          {...protectedRouteProps}
+          path="/visit-profile/:id"
+          component={VisitProfilePage}
+          exact
+        />
 
         <ProtectedRoute
           {...protectedRouteProps}

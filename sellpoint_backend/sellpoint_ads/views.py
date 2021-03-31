@@ -195,6 +195,17 @@ def ad_all_list(request):
 
 
 @api_view(["GET"])
+def ad_all_by_user_list(request, id):
+    """
+    Fetches all ads by the given user
+    """
+
+    ads = Ad.objects.all().filter(owner=id)
+    serializer = AdSerializer(ads, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
 def category_all_list(request):
     """
     Fetches all categories

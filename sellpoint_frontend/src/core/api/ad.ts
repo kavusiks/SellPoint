@@ -31,6 +31,14 @@ class AdAPI {
   }
 
   /**
+   * @returns All ads belonging to the given user
+   */
+  async getAllAdsByUser(id: number): Promise<Ad[]> {
+    const response = await client.get(`ad/list-by-user/${id}/`);
+    return response.data;
+  }
+
+  /**
    * @returns All favorite ads belonging to the currently authenticated user
    */
   async getMyFavoriteAds(): Promise<Ad[]> {
