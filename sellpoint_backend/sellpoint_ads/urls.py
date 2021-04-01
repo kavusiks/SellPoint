@@ -40,7 +40,7 @@ urlpatterns = [
     path("list/self/", views.AdUserList.as_view(), name="ad-user-list"),
     path(
         "list/bycategory/<int:category_id>/",
-        views.get_ads_by_category,
+        views.CategoryAdsView.as_view(),
         name="ads-by-category",
     ),
     path(
