@@ -218,17 +218,9 @@ def favorite_detail_user(request, pk):
     return Response(serializer.data)
 
 
-@api_view(["GET"])
-def get_ads_by_category(request, category_id):
-    # ads = Ad.objects.all(category=category)
-    ads = Ad.objects.all().filter(category=category_id)
-    # category = Category.objects.get(id=pk)
-    serializer = AdSerializer(ads, many=True)
-    return Response(serializer.data)
-
 class CategoryAdsView(generics.GenericAPIView):
     serializer_class = AdSerializer
-    
+
     def get(self, request, category_id):
         ads = Ad.objects.all().filter(category=category_id)
         serializer = AdSerializer(ads, many=True, context=self.get_serializer_context())
