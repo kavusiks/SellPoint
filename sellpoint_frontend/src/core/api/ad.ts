@@ -1,4 +1,4 @@
-import { Ad, AdImage, FavoriteAd } from "../../models/ad";
+import { Ad, AdImage, Category, FavoriteAd } from "../../models/ad";
 import client from "../client";
 
 /**
@@ -60,6 +60,7 @@ class AdAPI {
       title: ad.title,
       price: ad.price,
       description: ad.description,
+      category: ad.category,
       is_sold: ad.is_sold,
     });
     return response.data;
@@ -76,6 +77,7 @@ class AdAPI {
       title: ad.title,
       price: ad.price,
       description: ad.description,
+      category: ad.category === undefined ? null : ad.category,
       is_sold: ad.is_sold,
     });
     return response.data;
@@ -110,6 +112,34 @@ class AdAPI {
     return response.data;
   }
 
+  /**
+   * @returns All existing categories
+   */
+  async getAllCategories(): Promise<Category[]> {
+    const response = await client.get(`ad/category/list/`);
+    return response.data;
+  }
+
+  /**
+   * Fetches all information about the cagtegory with the given id
+   *
+   * @param id - The ID
+   * @returns Extensive information about the category
+   */
+  async getCategoryById(id: number): Promise<Category> {
+    const response = await client.get(`ad/category/${id}/`);
+    return response.data;
+  }
+  /**
+   * Fetches all information about the cagtegory with the given id
+   *
+   * @param categoryId - The category Id
+   * @returns All existing ads with the given id
+   */
+  async getAdsbyCategoryId(categoryId: number): Promise<Ad[]> {
+    const response = await client.get(`ad/list/bycategory/${categoryId}/`);
+    return response.data;
+  }
   async getAllFavorites(): Promise<FavoriteAd[]> {
     const response = await client.get(`favorite/list/`);
     return response.data;

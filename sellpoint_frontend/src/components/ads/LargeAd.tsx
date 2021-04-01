@@ -66,8 +66,7 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
           : setIsFavorite(false),
       );
     }
-    /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  }, [session.user]);
+  }, [session.user, ad.id]);
 
   const isThumbnail = (img: AdImage): boolean => {
     return !!ad.thumbnail && ad.thumbnail.url === img.url;
@@ -159,6 +158,12 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
               <Heart /> Lagre annonsen
             </Button>
             <br />
+
+            <hr style={{ width: "100%", margin: "10px 0px 10px 0px" }} />
+            <div className="ad desc">
+              <p>{ad.description}</p>
+            </div>
+            {children}
           </>
         )
       ) : null
@@ -240,8 +245,20 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
             </p>
           </div>
           <hr style={{ width: "100%", margin: "10px 0px 10px 0px" }} />
-          <div className="ad desc">
-            <p>{ad.description}</p>
+          <div className="edit ad">
+            {
+              /*If a user is a super user, the button"Rediger Annonse" will show.
+       It will take the super user directly to the admin site for this ad,
+       where the editing can be done*/
+              session.user?.is_staff ? (
+                <Button
+                  href={"http://127.0.0.1:8000/admin/sellpoint_ads/ad/" + ad.id + "/change/"}
+                  variant="outline-primary"
+                >
+                  Rediger Annonse
+                </Button>
+              ) : null
+            }
           </div>
         </LeftCenterRow>
         {children}

@@ -5,6 +5,7 @@ import AdAPI from "../../core/api/ad";
 import { readDjangoError } from "../../core/client";
 import { Ad } from "../../models/ad";
 import { FormProps } from "./FormParts";
+import { CategoriesForCreateAd } from "../category/CategoriesCreateAd";
 import { AdImageMultipleFormPart, ImageFormData } from "./AdImageForm";
 
 interface EditAdFormProps extends FormProps {
@@ -28,6 +29,8 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
   const [description, setDescription] = useState<string>(initial?.description ?? "");
   const [sold, setSold] = useState<boolean>(initial?.is_sold ?? false);
   const [validated, setValidated] = useState<boolean>(false);
+  const [category, setCategory] = useState<number | undefined>(initial?.category ?? undefined);
+  const [categoryTitle, setCategoryTitle] = useState<string>("Ikke valgt");
 
   // Not pretty but it will work. Either maps the existing images as their
   // form part object representations or just makes a new empty list.
@@ -54,6 +57,7 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
       title: title,
       price: price,
       description: description,
+      category: category,
       is_sold: sold,
     };
 
@@ -102,6 +106,16 @@ const BaseAdForm: FunctionComponent<BaseFormProps> = ({
           required
         />
       </Form.Group>
+      <Form.Group as={Col} controlId="create-ad-category">
+        <Form.Label>Velg en kategori</Form.Label>
+        <CategoriesForCreateAd
+          chosenCategory={category}
+          setChosenCategory={setCategory}
+          categoryTitle={categoryTitle}
+          setCategoryTitle={setCategoryTitle}
+        />
+      </Form.Group>
+
       <Form.Group as={Col} controlId="form-ad-sold">
         <FormCheck>
           <FormCheck.Input checked={sold} onChange={() => setSold(!sold)} />
