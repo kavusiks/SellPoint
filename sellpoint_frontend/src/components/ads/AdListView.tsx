@@ -65,7 +65,7 @@ export const AdListView: FunctionComponent<AdListViewProps> = ({
   return (
     <AdContainer noGutters>
       {children}
-      {ads.reverse().map((item) => {
+      {ads.map((item) => {
         if (self) {
           return (
             <AdDiv key={item.id} style={{ flex: `0 ${width}%` }}>
