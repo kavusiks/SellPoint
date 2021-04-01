@@ -1,30 +1,25 @@
 import React, { FunctionComponent } from "react";
-import { Button, Container } from "react-bootstrap";
-import { useHistory } from "react-router";
+import { Container } from "react-bootstrap";
+//import { useHistory } from "react-router";
 import { EditProfileForm } from "../components/forms/EditProfileForm";
-import {
-  CenteredRow,
-  FormContainer,
-  useAuthenticationPage,
-  useErrorState,
-} from "../components/styled";
+import { CenteredRow, FormContainer, useErrorState } from "../components/styled";
 import { useSessionContext } from "../context/Session";
-
-/*const EditProfile: FunctionComponent = () => {
-    const session = useSessionContext();
-    const history = useHistory();
-  
-    const goBack = () => {
-      session.updateSelfUser().then(() => history.push("/"));
-    };
-*/
 
 const EditProfilePage: FunctionComponent = () => {
   const { error, setError } = useErrorState();
   const session = useSessionContext();
-  const history = useHistory();
+  //const history = useHistory();
+  //const [user, setUser] = useState<User>();
 
   //useAuthenticationPage();
+
+  /*
+  useEffect(() => {
+    if (session.user) {
+      setUser(session.user);
+    }
+  }, [session.user]);
+  */
 
   return (
     <Container fluid>
@@ -34,7 +29,7 @@ const EditProfilePage: FunctionComponent = () => {
             <h1>Rediger din bruker</h1>
           </CenteredRow>
           <CenteredRow noGutters>
-            <EditProfileForm setError={setError} logIn rememberLogIn />
+            {session.user ? <EditProfileForm setError={setError} user={session.user} /> : <br />}
           </CenteredRow>
         </FormContainer>
       </CenteredRow>

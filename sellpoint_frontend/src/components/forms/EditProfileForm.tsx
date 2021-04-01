@@ -1,7 +1,6 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import { Button, Col, Form, InputGroup } from "react-bootstrap";
 import { useHistory } from "react-router";
-import { useSessionContext } from "../../context/Session";
 import UserAPI from "../../core/api/user";
 import User, { Address } from "../../models/user";
 import { CenteredRow } from "../styled";
@@ -27,6 +26,8 @@ export interface EditProfileFormProps extends FormProps {
    * unless `logIn` is set to `true`.
    */
   rememberLogIn?: boolean;
+
+  user: User;
 }
 
 /**
@@ -36,31 +37,39 @@ export interface EditProfileFormProps extends FormProps {
  */
 export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
   setError,
-  logIn,
-  rememberLogIn,
+  user,
 }: EditProfileFormProps) => {
-  const session = useSessionContext();
   const history = useHistory();
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const [firstName, setFirstName] = useState<string>(user.first_name);
+  const [lastName, setLastName] = useState<string>(user.last_name);
+  const [email, setEmail] = useState<string>(user.email);
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [address, setAddress] = useState<Address | undefined>(undefined);
   const [validated, setValidated] = useState<boolean>(false);
 
+  useEffect(() => {
+    //setAddress(user.address);
+    if (user.phone_number) {
+      setPhoneNumber(user.phone_number);
+    }
+  }, [user.phone_number]);
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("KJører onSUbmit");
     // We use a state for this so that validation doesn't display
     // until after the first submission attempt
     setValidated(true);
     e.preventDefault();
 
-    setAddress(session.user?.address); //midlertidig
     const form = e.target as HTMLFormElement;
     if (!form.checkValidity() || !address || password !== confirmPassword) {
       e.stopPropagation();
       console.log("feil:" + e);
+      console.log(address);
+      console.log(password === confirmPassword);
+      console.log(form.checkValidity);
       return;
     }
 
@@ -71,18 +80,10 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
       phone_number: phoneNumber,
       address: address,
     };
-    UserAPI.editUser(user, password)
-      .then((res) => console.log(res))
-      /*
-          .then(() => {
-          session
-          .then(() => history.push(logIn ? session.redirectPath ?? "/" : "/profile"))
-          .catch((error) => {
-            setPassword("");
-            setConfirmPassword("");
-            setError("En uforventet error oppstod!");
-          });
-      })*/
+
+    console.log(user.first_name, "test");
+    UserAPI.editUser(user, password, address)
+      .then(() => history.push("/login"))
       .catch((error) => {
         setPassword("");
         setConfirmPassword("");
@@ -95,8 +96,9 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
       <Form.Row>
         <Form.Group as={Col} controlId="form-edit-first-name">
           <Form.Label>Fornavn</Form.Label>
+
           <Form.Control
-            defaultValue={session.user?.first_name}
+            defaultValue={firstName}
             autoFocus
             type="text"
             pattern="^[a-zA-Z\p{L}]+$"
@@ -108,8 +110,9 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
 
         <Form.Group as={Col} controlId="form-edit-last-name">
           <Form.Label>Etternavn</Form.Label>
+
           <Form.Control
-            defaultValue={session.user?.last_name}
+            defaultValue={lastName}
             type="text"
             pattern="^[a-zA-Z\p{L}]+$"
             minLength={2}
@@ -122,7 +125,7 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
       <Form.Group controlId="form-edit-email">
         <Form.Label>Email</Form.Label>
         <Form.Control
-          defaultValue={session.user?.email}
+          defaultValue={email}
           type="email"
           minLength={7}
           onChange={(e) => setEmail(e.target.value)}
@@ -137,12 +140,12 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
             <InputGroup.Text id="basic-addon1">+47</InputGroup.Text>
           </InputGroup.Prepend>
           <Form.Control
-            defaultValue={session.user?.phone_number}
+            defaultValue={phoneNumber.replace("+47", "")}
             type="text"
             pattern="[0-9]*"
             minLength={8}
             maxLength={17}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            onChange={(e) => setPhoneNumber("+47" + e.target.value)}
             required
           />
         </InputGroup>
@@ -169,7 +172,8 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
           required
         />
       </Form.Group>
-      {/* <AddressFormPart onChange={setAddress} /> */}
+
+      {!user.is_staff ? <AddressFormPart onChange={setAddress} editingUser={user} /> : <br />}
 
       <CenteredRow noGutters>
         <StyledButton variant="primary" type="submit">

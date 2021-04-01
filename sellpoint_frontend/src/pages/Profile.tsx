@@ -108,7 +108,18 @@ const ProfilePage: FunctionComponent = () => {
             <Tab.Pane eventKey="personal">
               <ProfilePageTab title="Personlig Informasjon">
                 {session.user ? <ProfileDisplay user={session.user} /> : <DefaultSpinner />}
-                <Button variant="outline-info" href="/editprofile">
+                <Button
+                  variant="outline-info"
+                  href={
+                    session.user
+                      ? !session.user.is_staff
+                        ? "/editprofile"
+                        : "http://127.0.0.1:8000/admin/sellpoint_auth/user/" +
+                          session.user.id +
+                          "/change/"
+                      : void 0
+                  }
+                >
                   Edit
                 </Button>
               </ProfilePageTab>

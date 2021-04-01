@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Col, Form } from "react-bootstrap";
-import { Address } from "../../models/user";
+import User, { Address } from "../../models/user";
 import "./forms.css";
 
 /**
@@ -24,6 +24,9 @@ export interface AddressFormPartProps {
    *
    * @param address - The new address
    */
+
+  editingUser?: User;
+
   onChange: (address: Address) => void;
 }
 
@@ -35,13 +38,19 @@ export interface AddressFormPartProps {
  * @param props - The props
  */
 export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
+  editingUser,
   onChange,
 }: AddressFormPartProps) => {
-  const [line1, setLine1] = useState<string>("");
-  const [line2, setLine2] = useState<string>("");
-  const [city, setCity] = useState<string>("");
-  const [country, setCountry] = useState<string>("");
-  const [postalcode, setPostalcode] = useState<string>("");
+  const [line1, setLine1] = useState<string>(editingUser ? editingUser.address.line1 : "");
+  const [line2, setLine2] = useState<string>(
+    editingUser?.address.line2 ? editingUser.address.line2 : "",
+  );
+
+  const [city, setCity] = useState<string>(editingUser ? editingUser.address.city : "");
+  const [country, setCountry] = useState<string>(editingUser ? editingUser.address.country : "");
+  const [postalcode, setPostalcode] = useState<string>(
+    editingUser ? editingUser.address.postalcode : "",
+  );
 
   // Since useEffect is called when its dependencies change, this will
   // be called whenever a field is updated
@@ -62,6 +71,7 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
       <Form.Group controlId="form-address-line-1">
         <Form.Label>Addresselinje 1</Form.Label>
         <Form.Control
+          defaultValue={line1}
           type="text"
           pattern="^[a-zA-Z\p{L}0-9\s]+$"
           minLength={4}
@@ -74,6 +84,7 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
       <Form.Group controlId="form-address-line-2">
         <Form.Label>Addresselinje 2</Form.Label>
         <Form.Control
+          defaultValue={line2}
           type="text"
           pattern="^[a-zA-Z\p{L}0-9\s]+$"
           minLength={4}
@@ -86,6 +97,7 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
         <Form.Group as={Col} controlId="form-address-country">
           <Form.Label>Land</Form.Label>
           <Form.Control
+            defaultValue={country}
             type="text"
             pattern="^[a-zA-Z\p{L}]+$"
             minLength={4}
@@ -98,6 +110,7 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
         <Form.Group as={Col} controlId="form-address-zip-code" style={{ maxWidth: "200px" }}>
           <Form.Label>Postkode</Form.Label>
           <Form.Control
+            defaultValue={postalcode}
             type="text"
             pattern="[0-9]*"
             maxLength={4}
@@ -113,6 +126,7 @@ export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
         <Form.Group as={Col} controlId="form-address-city">
           <Form.Label>By</Form.Label>
           <Form.Control
+            defaultValue={city}
             type="text"
             pattern="^[a-zA-Z\p{L}]+$"
             minLength={4}

@@ -1,11 +1,11 @@
 import React, { FunctionComponent, useState } from "react";
-import { Button, Col, Form, InputGroup } from "react-bootstrap";
+import { Button, Form, InputGroup } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { useSessionContext } from "../../context/Session";
 import AuthenticationService from "../../core/auth";
 import User, { Address } from "../../models/user";
 import { CenteredRow } from "../styled";
-import { AddressFormPart, FormProps } from "./FormParts";
+import { FormProps } from "./FormParts";
 import { readDjangoError } from "../../core/client";
 import styled from "styled-components";
 
@@ -41,13 +41,13 @@ export const EditPasswordForm: FunctionComponent<EditPasswordProps> = ({
 }: EditPasswordProps) => {
   const session = useSessionContext();
   const history = useHistory();
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const [firstName] = useState<string>("");
+  const [lastName] = useState<string>("");
+  const [email] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [address, setAddress] = useState<Address | undefined>(undefined);
+  const [address] = useState<Address | undefined>(undefined);
   const [validated, setValidated] = useState<boolean>(false);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
