@@ -36,7 +36,7 @@ class AdSerializer(serializers.ModelSerializer):
     def get_distance(self, obj):
         try:
             user = self.context["request"].user
-            if not user:
+            if not user.is_authenticated:
                 return -1
 
             owner_address = obj.owner.address

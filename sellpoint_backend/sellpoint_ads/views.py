@@ -176,18 +176,15 @@ class AdListView(generics.ListAPIView):
 
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
-    permission_classes = (IsAuthenticated,)
 
 
-@api_view(["GET"])
-def ad_not_sold_list(request):
+class AdNotSoldListView(generics.ListAPIView):
     """
     Fetches all ads that are not sold
     """
 
-    ads = Ad.objects.all().filter(is_sold=False)
-    serializer = AdSerializer(ads, many=True)
-    return Response(serializer.data)
+    queryset = Ad.objects.all().filter(is_sold=False)
+    serializer_class = AdSerializer
 
 
 @api_view(["GET"])
