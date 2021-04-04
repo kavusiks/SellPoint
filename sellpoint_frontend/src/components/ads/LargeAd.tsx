@@ -61,9 +61,7 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   useEffect(() => {
     if (session.user?.id) {
       AdAPI.getAllFavoritesByUserId(session.user.id).then((favorites) =>
-        favorites.filter((a) => a.favorite_ad === ad.id).length
-          ? setIsFavorite(true)
-          : setIsFavorite(false),
+        setIsFavorite(favorites.filter((a) => a.favorite_ad === ad.id).length !== 0),
       );
     }
   }, [session.user, ad.id]);
@@ -170,6 +168,8 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
     ) : null;
   };
 
+  const dist = ad.distance ?? 0;
+
   return (
     <>
       <ShadowedContainer className="ad large">
@@ -206,29 +206,26 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
           </Toast.Header>
         </Toast>
 
-        {
-          // Check if this is our own ad, if so we should display edit buttons etc.
-          session.user && ad.owner?.email === session.user.email ? (
-            <SpaceBetweenCenterRow noGutters>
-              <h2>
-                {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
-              </h2>
-              <RightCenterRow noGutters>
+        <SpaceBetweenCenterRow noGutters>
+          <h2>
+            {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+          </h2>
+          <RightCenterRow noGutters>
+            {
+              // Check if this is our own ad, if so we should display edit buttons etc.
+              session.user && ad.owner?.email === session.user.email ? (
                 <AdModifyDialog ad={ad} onDeleted={() => history.push("/")} />
-              </RightCenterRow>
-              <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
-            </SpaceBetweenCenterRow>
-          ) : (
-            <LeftCenterRow noGutters>
-              <div className="ad title">
-                <h1>
-                  {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
-                </h1>
-              </div>
-              <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
-            </LeftCenterRow>
-          )
-        }
+              ) : (
+                <p>
+                  {dist <= 0
+                    ? null
+                    : (dist <= 1 ? "< 1 " : `~${ad.distance}`) + " km unna din addresse"}
+                </p>
+              )
+            }
+          </RightCenterRow>
+          <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
+        </SpaceBetweenCenterRow>
 
         <LeftCenterRow noGutters>
           <div className="ad info">

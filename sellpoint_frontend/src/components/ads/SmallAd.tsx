@@ -56,9 +56,10 @@ const SmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }: AdCompon
 };
 
 export const OtherSmallAd: FunctionComponent<AdComponentProps> = ({ ad, children }) => {
+  const dist = ad.distance ?? -1;
   return (
     <SmallAd ad={ad}>
-      <p>{(ad.distance ?? 1) <= 1 ? "< 1 km" : `~${ad.distance}km`}</p>
+      <p>{dist <= 0 ? null : dist <= 1 ? "< 1 km" : `~${ad.distance}km`}</p>
     </SmallAd>
   );
 };

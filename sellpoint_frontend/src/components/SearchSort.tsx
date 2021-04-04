@@ -15,6 +15,10 @@ export interface SortingMethod {
    * The actual sorting method, implemented to be used on an array
    */
   sort: (a: Ad, b: Ad) => number;
+  /**
+   * Does this sorting method require authentication?
+   */
+  requireAuthenticated: boolean;
 }
 
 /**
@@ -29,6 +33,7 @@ export const SORTING_METHODS: SortingMethod[] = [
     ),
     sort: (a: Ad, b: Ad) =>
       (a.distance ?? Number.MAX_SAFE_INTEGER) - (b.distance ?? Number.MAX_SAFE_INTEGER),
+    requireAuthenticated: true,
   },
   {
     name: (
@@ -38,6 +43,7 @@ export const SORTING_METHODS: SortingMethod[] = [
     ),
     sort: (a: Ad, b: Ad) =>
       (b.distance ?? Number.MAX_SAFE_INTEGER) - (a.distance ?? Number.MAX_SAFE_INTEGER),
+    requireAuthenticated: true,
   },
   {
     name: (
@@ -46,6 +52,7 @@ export const SORTING_METHODS: SortingMethod[] = [
       </span>
     ),
     sort: (a: Ad, b: Ad) => a.price - b.price,
+    requireAuthenticated: false,
   },
   {
     name: (
@@ -54,6 +61,7 @@ export const SORTING_METHODS: SortingMethod[] = [
       </span>
     ),
     sort: (a: Ad, b: Ad) => b.price - a.price,
+    requireAuthenticated: false,
   },
 ];
 
@@ -69,6 +77,10 @@ export interface SortingSelectorProps {
    * Updates the current sorting method with the newly selected one
    */
   setSortingMethod: (method: SortingMethod) => void;
+  /**
+   * If there is a user currently authenticated
+   */
+  authenticated: boolean;
 }
 
 /**
@@ -79,6 +91,7 @@ export interface SortingSelectorProps {
 export const SortingSelector: FunctionComponent<SortingSelectorProps> = ({
   selected,
   setSortingMethod,
+  authenticated,
 }) => {
   const select = (id: string | null) => {
     if (!id) {
@@ -98,7 +111,11 @@ export const SortingSelector: FunctionComponent<SortingSelectorProps> = ({
         <Dropdown.Menu>
           {SORTING_METHODS.map((method, idx) => {
             return (
-              <Dropdown.Item key={idx} eventKey={String(idx)} disabled={method === selected}>
+              <Dropdown.Item
+                key={idx}
+                eventKey={String(idx)}
+                disabled={method === selected || (!authenticated && method.requireAuthenticated)}
+              >
                 {method.name}
               </Dropdown.Item>
             );
