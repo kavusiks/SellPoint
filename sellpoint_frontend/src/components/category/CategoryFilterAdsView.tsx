@@ -1,8 +1,10 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { ButtonGroup, DropdownButton, Button } from "react-bootstrap";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { ButtonGroup, Button, Dropdown } from "react-bootstrap";
 import AdAPI from "../../core/api/ad";
 import { Ad, Category } from "../../models/ad";
+import { CenteredRow } from "../styled";
 import { CategoryDropdown } from "./CategoryDropdown";
+import { X } from "react-bootstrap-icons";
 
 export interface FilterAdsByCategoryProps {
   setFilteredAds: (filteredAds: Ad[]) => void;
@@ -42,18 +44,31 @@ export const CategoriesForFilterAds: FunctionComponent<FilterAdsByCategoryProps>
   };
 
   const makeChosenCategoriesButtons = () => {
-    return chosenCategories.map((category) => {
+    if (chosenCategories.length === 0) {
       return (
-        <Button
-          variant="success"
-          onClick={handleRemoveCategory}
-          key={category.id}
-          id={(category.id as unknown) as string}
-        >
-          {category.name + " x"}
-        </Button>
+        <CenteredRow className="w-75 m-1">
+          <p>Ingen kategorier valgt!</p>
+        </CenteredRow>
       );
-    });
+    }
+
+    return (
+      <ButtonGroup className="w-75" vertical>
+        {chosenCategories.map((category) => {
+          return (
+            <Button
+              className="w-100 m-1"
+              variant="success"
+              onClick={handleRemoveCategory}
+              key={category.id}
+              id={(category.id as unknown) as string}
+            >
+              {category.name} <X size={24} />
+            </Button>
+          );
+        })}
+      </ButtonGroup>
+    );
   };
 
   const handleRemoveCategory = async (e: any) => {
@@ -67,18 +82,18 @@ export const CategoriesForFilterAds: FunctionComponent<FilterAdsByCategoryProps>
   };
 
   return (
-    <Fragment>
-      <br />
-      <DropdownButton
-        title="Velg kategorier"
-        variant="outline-success"
-        id="dropdown-basic"
-        onSelect={handleSelect}
-      >
-        <CategoryDropdown />
-      </DropdownButton>
-      <br />
-      <ButtonGroup vertical>{makeChosenCategoriesButtons()}</ButtonGroup>
-    </Fragment>
+    <>
+      <Dropdown onSelect={handleSelect}>
+        <Dropdown.Toggle className="w-75 m-1" variant="outline-success" id="category-selector">
+          Velg kategorier
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <CategoryDropdown />
+        </Dropdown.Menu>
+      </Dropdown>
+
+      {makeChosenCategoriesButtons()}
+    </>
   );
 };

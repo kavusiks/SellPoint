@@ -4,6 +4,9 @@ import { formatDate, LeftCenterRow, LeftTopRow } from "../styled";
 import User from "../../models/user";
 import default_avatar from "../../static/profile_picture_holder.png";
 import "./index.css";
+import MarkedMap from "../Map";
+import { Ad } from "../../models/ad";
+import { AdListView } from "../ads/AdListView";
 
 /**
  * Props for a profile field
@@ -53,6 +56,10 @@ export interface ProfileDisplayProps {
    * The user that owns this profile
    */
   user: User;
+  /**
+   * The user's posted ads
+   */
+  ads?: Ad[];
 }
 
 /**
@@ -62,37 +69,47 @@ export interface ProfileDisplayProps {
  */
 export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
   user,
+  ads,
 }: ProfileDisplayProps) => {
   return (
-    <LeftTopRow className="profile-display" xs={12}>
-      <Col xs={3}>
-        <img style={{ width: "100%", height: "auto" }} alt="Profilbilde" src={default_avatar} />
-      </Col>
-      <Col xs={9}>
-        <Container>
-          <LeftCenterRow>
-            <h2>{user.first_name + " " + user.last_name}</h2>
-          </LeftCenterRow>
-          <ProfileField title="Email">{user.email}</ProfileField>
-          <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
-          <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
-          <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
-          {user?.address ? (
-            <ProfileField title="Addresse">
-              {user.address.line1}
-              {user.address.line2 ? (
-                <>
-                  <br /> {user.address.line2}
-                </>
-              ) : null}
-              <br />
-              {user.address.postalcode} {user.address.city} {user.address.country}
-            </ProfileField>
-          ) : null}
-          {/*<ProfileField title="Vurdering:">Insert user's rating here */
-          /*<ProfileField> */}
-        </Container>
-      </Col>
-    </LeftTopRow>
+    <>
+      <LeftTopRow className="profile-display" xs={12}>
+        <Col xs={3}>
+          <img style={{ width: "100%", height: "auto" }} alt="Profilbilde" src={default_avatar} />
+        </Col>
+        <Col xs={9}>
+          <Container>
+            <LeftCenterRow>
+              <h2>{user.first_name + " " + user.last_name}</h2>
+            </LeftCenterRow>
+            <ProfileField title="Email">{user.email}</ProfileField>
+            <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
+            <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
+            <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
+            {user.address ? (
+              <>
+                <ProfileField title="Addresse">
+                  {user.address.line1}
+                  {user.address.line2 ? (
+                    <>
+                      <br /> {user.address.line2}
+                    </>
+                  ) : null}
+                  <br />
+                  {user.address.postalcode} {user.address.city} {user.address.country}
+                </ProfileField>
+                {user.address.geocode && <MarkedMap position={user.address.geocode} />}
+              </>
+            ) : null}
+            {ads ? (
+              <>
+                <ProfileField title="Brukerenes Annonser" />
+                <AdListView perRow={1} ads={ads} />
+              </>
+            ) : null}
+          </Container>
+        </Col>
+      </LeftTopRow>
+    </>
   );
 };

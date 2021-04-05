@@ -96,7 +96,7 @@ class AdAPIView(mixins.RetrieveModelMixin, generics.GenericAPIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         serializer.save()
-        return Response(AdSerializer(ad).data)
+        return Response(AdSerializer(ad, context=self.get_serializer_context()).data)
 
 
 class AdUserList(generics.ListCreateAPIView):
@@ -110,7 +110,7 @@ class AdUserList(generics.ListCreateAPIView):
 
     def list(self, request):
         ads = self.get_queryset().filter(owner=request.user)
-        serializer = AdSerializer(ads, many=True)
+        serializer = AdSerializer(ads, many=True, context=self.get_serializer_context())
         return Response(serializer.data)
 
 
@@ -147,8 +147,6 @@ class AdImageAPIView(generics.GenericAPIView):
         image.description = description
         image.save()
 
-        print("Updating the thing!")
-
         return Response(ImageSerializer(image).data, status=status.HTTP_200_OK)
 
 
@@ -163,46 +161,41 @@ class AdUserFavoriteList(generics.ListCreateAPIView):
 
     def list(self, request):
         favorite_ad = FavoriteAd.objects.filter(user=request.user).all()
-        serializer = FavoriteAdSerializer(favorite_ad, many=True)
-        favAdsId = []
-        for item in serializer.data:
-            favAdsId.append(item.get("favorite_ad"))
-        favorite_ads = Ad.objects.filter(id__in=favAdsId)
-        serializer = AdSerializer(favorite_ads, many=True)
+        serializer = AdSerializer(
+            (fav.favorite_ad for fav in favorite_ad),
+            many=True,
+            context=self.get_serializer_context(),
+        )
         return Response(serializer.data)
 
 
-@api_view(["GET"])
-def ad_not_sold_list(request):
-    """
-    Fetches all ads that are not sold
-    """
-
-    ads = Ad.objects.all().filter(is_sold=False)
-    serializer = AdSerializer(ads, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-def ad_all_list(request):
+class AdListView(generics.ListAPIView):
     """
     Fetches all ads
     """
 
-    ads = Ad.objects.all()
-    serializer = AdSerializer(ads, many=True)
-    return Response(serializer.data)
+    queryset = Ad.objects.all()
+    serializer_class = AdSerializer
 
 
-@api_view(["GET"])
-def ad_all_by_user_list(request, id):
+class AdNotSoldListView(generics.ListAPIView):
+    """
+    Fetches all ads that are not sold
+    """
+
+    queryset = Ad.objects.all().filter(is_sold=False)
+    serializer_class = AdSerializer
+
+
+class AdAllByUserListView(generics.GenericAPIView):
     """
     Fetches all ads by the given user
     """
 
-    ads = Ad.objects.all().filter(owner=id)
-    serializer = AdSerializer(ads, many=True)
-    return Response(serializer.data)
+    def get(self, request, id):
+        ads = Ad.objects.all().filter(owner=id)
+        serializer = AdSerializer(ads, many=True, context=self.get_serializer_context())
+        return Response(serializer.data)
 
 
 @api_view(["GET"])
@@ -245,14 +238,13 @@ def favorite_detail_user(request, pk):
     return Response(serializer.data)
 
 
-@api_view(["GET"])
-def get_ads_by_category(request, category_id):
-    """
-    Fetches all ads with the given category
-    """
-    ads = Ad.objects.all().filter(category=category_id)
-    serializer = AdSerializer(ads, many=True)
-    return Response(serializer.data)
+class CategoryAdsView(generics.GenericAPIView):
+    serializer_class = AdSerializer
+
+    def get(self, request, category_id):
+        ads = Ad.objects.all().filter(category=category_id)
+        serializer = AdSerializer(ads, many=True, context=self.get_serializer_context())
+        return Response(serializer.data)
 
 
 @api_view(["GET"])

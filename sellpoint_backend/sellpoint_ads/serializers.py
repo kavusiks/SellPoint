@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Ad, Image, FavoriteAd, Category
-from sellpoint_auth.models import User
+from sellpoint_auth.models import Address, User
 
 
 class LimitedUserSerializer(serializers.ModelSerializer):
@@ -31,6 +31,19 @@ class AdSerializer(serializers.ModelSerializer):
     owner = LimitedUserSerializer()
     thumbnail = ImageSerializer(source="get_thumbnail", required=False)
     images = ImageSerializer(source="get_images", many=True, required=False)
+    distance = serializers.SerializerMethodField(read_only=True)
+
+    def get_distance(self, obj):
+        try:
+            user = self.context["request"].user
+            if not user.is_authenticated:
+                return -1
+
+            owner_address = obj.owner.address
+            self_address = user.address
+            return max(1, owner_address.distance(self_address))
+        except Address.DoesNotExist:
+            return 0
 
     class Meta:
         model = Ad

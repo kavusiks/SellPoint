@@ -10,9 +10,13 @@ urlpatterns = [
         views.AdImageCreateAPIView.as_view(),
         name="ad-create-image",
     ),
-    path("list/", views.ad_all_list, name="ad-list"),
-    path("list/not-sold/", views.ad_not_sold_list, name="ad-not-sold-list"),
-    path("list-by-user/<int:id>/", views.ad_all_by_user_list, name="ad-by-user-list"),
+    path("list/", views.AdListView.as_view(), name="ad-list"),
+    path("list/not-sold/", views.AdNotSoldListView.as_view(), name="ad-not-sold-list"),
+    path(
+        "list-by-user/<int:id>/",
+        views.AdAllByUserListView.as_view(),
+        name="ad-by-user-list",
+    ),
     path("category/list/", views.category_all_list, name="category-list"),
     path("category/<str:pk>/", views.get_category, name="category"),
     path("favorite/list/", views.favorite_ads_list, name="favorite-list"),
@@ -41,7 +45,7 @@ urlpatterns = [
     path("list/self/", views.AdUserList.as_view(), name="ad-user-list"),
     path(
         "list/bycategory/<int:category_id>/",
-        views.get_ads_by_category,
+        views.CategoryAdsView.as_view(),
         name="ads-by-category",
     ),
     path(
