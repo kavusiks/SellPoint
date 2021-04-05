@@ -4,7 +4,6 @@ import { formatDate, LeftCenterRow, LeftTopRow } from "../styled";
 import User from "../../models/user";
 import default_avatar from "../../static/profile_picture_holder.png";
 import "./index.css";
-import { useSessionContext } from "../../context/Session";
 
 /**
  * Props for a profile field
@@ -64,8 +63,6 @@ export interface ProfileDisplayProps {
 export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
   user,
 }: ProfileDisplayProps) => {
-  const session = useSessionContext();
-
   return (
     <LeftTopRow className="profile-display" xs={12}>
       <Col xs={3}>
@@ -80,7 +77,7 @@ export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
           <ProfileField title="Telefonnummer">{user.phone_number}</ProfileField>
           <ProfileField title="Bruker opprettet">{formatDate(user.date_joined)}</ProfileField>
           <ProfileField title="Siste innlogging">{formatDate(user.last_login)}</ProfileField>
-          {session.user?.address ? (
+          {user?.address ? (
             <ProfileField title="Addresse">
               {user.address.line1}
               {user.address.line2 ? (
@@ -92,6 +89,8 @@ export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
               {user.address.postalcode} {user.address.city} {user.address.country}
             </ProfileField>
           ) : null}
+          {/*<ProfileField title="Vurdering:">Insert user's rating here */
+          /*<ProfileField> */}
         </Container>
       </Col>
     </LeftTopRow>

@@ -10,6 +10,7 @@ import ProfilePage from "./pages/Profile";
 import AdViewPage from "./pages/AdView";
 import CreateAdPage from "./pages/CreateAd";
 import EditAdPage from "./pages/EditAd";
+import VisitProfilePage from "./pages/VisitProfile";
 import { NotFoundPage } from "./pages/NotFound";
 
 const App: FunctionComponent = () => {
@@ -32,6 +33,12 @@ const App: FunctionComponent = () => {
         <Route path="/ad/:id" component={AdViewPage} exact />
         <Route path="/login" component={LoginPage} exact />
         <Route path="/register" component={RegisterPage} exact />
+        <ProtectedRoute
+          {...protectedRouteProps}
+          path="/visit-profile/:id"
+          component={VisitProfilePage}
+          exact
+        />
 
         <ProtectedRoute
           {...protectedRouteProps}

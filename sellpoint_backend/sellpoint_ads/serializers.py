@@ -6,7 +6,7 @@ from sellpoint_auth.models import User
 class LimitedUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["email", "first_name", "last_name", "phone_number"]
+        fields = ["id", "email", "first_name", "last_name", "phone_number"]
 
 
 class ImageSerializer(serializers.ModelSerializer):

@@ -12,6 +12,7 @@ urlpatterns = [
     ),
     path("list/", views.ad_all_list, name="ad-list"),
     path("list/not-sold/", views.ad_not_sold_list, name="ad-not-sold-list"),
+    path("list-by-user/<int:id>/", views.ad_all_by_user_list, name="ad-by-user-list"),
     path("category/list/", views.category_all_list, name="category-list"),
     path("category/<str:pk>/", views.get_category, name="category"),
     path("favorite/list/", views.favorite_ads_list, name="favorite-list"),
