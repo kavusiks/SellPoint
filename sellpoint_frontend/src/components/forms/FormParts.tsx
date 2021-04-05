@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Col, Form } from "react-bootstrap";
-import User, { Address } from "../../models/user";
+import { Address } from "../../models/user";
 import "./forms.css";
 
 /**
@@ -25,7 +25,7 @@ export interface AddressFormPartProps {
    * @param address - The new address
    */
 
-  editingUser?: User;
+  initial?: Address;
 
   onChange: (address: Address) => void;
 }
@@ -38,19 +38,15 @@ export interface AddressFormPartProps {
  * @param props - The props
  */
 export const AddressFormPart: FunctionComponent<AddressFormPartProps> = ({
-  editingUser,
+  initial,
   onChange,
 }: AddressFormPartProps) => {
-  const [line1, setLine1] = useState<string>(editingUser ? editingUser.address.line1 : "");
-  const [line2, setLine2] = useState<string>(
-    editingUser?.address.line2 ? editingUser.address.line2 : "",
-  );
+  const [line1, setLine1] = useState<string>(initial ? initial.line1 : "");
+  const [line2, setLine2] = useState<string>(initial?.line2 ? initial.line2 : "");
 
-  const [city, setCity] = useState<string>(editingUser ? editingUser.address.city : "");
-  const [country, setCountry] = useState<string>(editingUser ? editingUser.address.country : "");
-  const [postalcode, setPostalcode] = useState<string>(
-    editingUser ? editingUser.address.postalcode : "",
-  );
+  const [city, setCity] = useState<string>(initial ? initial.city : "");
+  const [country, setCountry] = useState<string>(initial ? initial.country : "");
+  const [postalcode, setPostalcode] = useState<string>(initial ? initial.postalcode : "");
 
   // Since useEffect is called when its dependencies change, this will
   // be called whenever a field is updated

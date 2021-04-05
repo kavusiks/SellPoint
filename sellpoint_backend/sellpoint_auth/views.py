@@ -67,43 +67,20 @@ class SelfAPIView(generics.GenericAPIView):
         return Response(user_self.data)
 
     def put(self, request, *args, **kwargs):
-        # user_self = self.request.user
-        user_self = get_user_model().objects.get(id=request.user.id)
+        user_to_modify = get_user_model().objects.get(id=request.user.id)
+        print(user_to_modify.first_name)
 
-        # serializer = RegisterSerializer(user_self, data=request.data, partial=True)
-        # if serializer.is_valid(raise_exception=True):
-        # serializer.save()
         if request.data.get("password"):
-            print(user_self.first_name)
-            print(request.data.get("password"))
-            print(user_self.check_password(request.data.get("password")))
-            print(user_self)
-            if not user_self.check_password(request.data.get("password")):
+            if not user_to_modify.check_password(request.data.get("password")):
                 return Response(
                     {"password": ["Feil passord"]}, status=status.HTTP_400_BAD_REQUEST
                 )
-            # user_self.set_password(request.data.get("password"))
-        user_self.save()
 
-        return Response({"user": UserSerializer(user_self).data})
-
-    """
-    def put(self, request, *args, **kwargs):
-        user_self = self.request.user
-        #user_self1 = get_user_model.object.get(id=user_self)
-        serializer = RegisterSerializer(user_self, data=request.data, partial=True)
+        serializer = UserSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-        
-        if not user_self.check_password("MellomBar123"):
 
-            return Response({"password": ["Feil passord"]},status=status.HTTP_400_BAD_REQUEST)
-        
-        user_self.save()
-        
-
-        return Response({"user": UserSerializer(user_self).data})
-    """
+        return Response({"user": UserSerializer(request.user).data})
 
 
 class ChangePasswordView(APIView):

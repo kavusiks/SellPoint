@@ -20,30 +20,6 @@ class UserAPI {
    * @param address -  the users address with may edited fields
    * @returns the edited user
    */
-  /*
-  async editUser(user: User, password: string, address: Address): Promise<User> {
-    const addressResponse = await client.put("auth/edit/address/", {
-      line1: address.line1,
-      line2: address.line2,
-      postalcode: address.postalcode,
-      city: address.city,
-      country: address.country,
-    });
-
-    if (addressResponse.statusText === "OK") {
-      const userResponse = await client.put("auth/self/", {
-        email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        phone_number: user.phone_number,
-        password: password,
-      });
-      return userResponse.data;
-    } else {
-      return addressResponse.data;
-    }
-  }
-  */
 
   async editUser(user: User, password: string, address: Address): Promise<User> {
     const userResponse = await client.put("auth/self/", {
@@ -54,7 +30,7 @@ class UserAPI {
       password: password,
     });
 
-    if (userResponse.statusText === "OK") {
+    if (userResponse.status === 200) {
       const addressResponse = await client.put("auth/edit/address/", {
         line1: address.line1,
         line2: address.line2,

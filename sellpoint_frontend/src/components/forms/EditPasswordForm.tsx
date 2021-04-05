@@ -12,34 +12,15 @@ const StyledButton = styled(Button)`
 `;
 
 /**
- * The props for the {@link EditPasswordForm}
- */
-export interface EditPasswordProps extends FormProps {
-  /**
-   * If the user should be logged in automatically after registering,
-   * if registration is successful.
-   */
-  logIn?: boolean;
-  /**
-   * If the user should stay logged in. This option will not do anything
-   * unless `logIn` is set to `true`.
-   */
-  rememberLogIn?: boolean;
-}
-
-/**
  * A form for registering a new user
  *
  * @param props - The props
  */
-export const EditPasswordForm: FunctionComponent<EditPasswordProps> = ({
-  setError,
-  logIn,
-  rememberLogIn,
-}: EditPasswordProps) => {
+export const EditPasswordForm: FunctionComponent<FormProps> = ({ setError }: FormProps) => {
   const history = useHistory();
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
   const [validated, setValidated] = useState<boolean>(false);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -50,16 +31,20 @@ export const EditPasswordForm: FunctionComponent<EditPasswordProps> = ({
     e.preventDefault();
 
     const form = e.target as HTMLFormElement;
-    if (!form.checkValidity()) {
+
+    if (!form.checkValidity() || newPassword !== confirmNewPassword) {
       e.stopPropagation();
+      if (newPassword !== confirmNewPassword)
+        setError("Det nye passordet er ikke lik bekreftelsen av passordet.");
       return;
     }
 
     UserAPI.editPassword(oldPassword, newPassword)
-      .then(() => history.push("/profile"))
+      .then(() => history.push("/login"))
       .catch((error) => {
         setOldPassword("");
         setNewPassword("");
+        setConfirmNewPassword("");
         setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
       });
   };
@@ -72,7 +57,10 @@ export const EditPasswordForm: FunctionComponent<EditPasswordProps> = ({
           type="password"
           minLength={8}
           value={oldPassword}
-          onChange={(e) => setOldPassword(e.target.value)}
+          onChange={(e) => {
+            setOldPassword(e.target.value);
+            setError("");
+          }}
           isInvalid={validated}
           required
         />
@@ -83,8 +71,25 @@ export const EditPasswordForm: FunctionComponent<EditPasswordProps> = ({
           type="password"
           minLength={8}
           value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          isInvalid={validated}
+          onChange={(e) => {
+            setNewPassword(e.target.value);
+            setError("");
+          }}
+          isInvalid={validated && newPassword !== confirmNewPassword}
+          required
+        />
+      </Form.Group>
+      <Form.Group controlId="form-edit-confirm-password">
+        <Form.Label>Bekreft nytt passord</Form.Label>
+        <Form.Control
+          type="password"
+          minLength={8}
+          value={confirmNewPassword}
+          onChange={(e) => {
+            setConfirmNewPassword(e.target.value);
+            setError("");
+          }}
+          isInvalid={validated && newPassword !== confirmNewPassword}
           required
         />
       </Form.Group>

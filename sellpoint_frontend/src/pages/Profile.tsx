@@ -84,9 +84,6 @@ const ProfilePage: FunctionComponent = () => {
     window.history.replaceState(null, "SellPoint", `/profile/${key}`);
   };
 
-  //const goEditProfile = () => {
-  //session.updateSelfUser().then(() => history.push("/editprofile"));
-  //};
   return (
     <Tab.Container id="profile-tabs" defaultActiveKey={page ?? "personal"} onSelect={updateUrl}>
       <Row noGutters>

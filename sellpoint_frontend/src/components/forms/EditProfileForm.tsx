@@ -7,7 +7,6 @@ import { CenteredRow } from "../styled";
 import { AddressFormPart, FormProps } from "./FormParts";
 import { readDjangoError } from "../../core/client";
 import styled from "styled-components";
-import { useSessionContext } from "../../context/Session";
 
 const StyledButton = styled(Button)`
   margin: 10px;
@@ -18,16 +17,8 @@ const StyledButton = styled(Button)`
  */
 export interface EditProfileFormProps extends FormProps {
   /**
-   * If the user should be logged in automatically after registering,
-   * if registration is successful.
+   * The user that want to edit their profile
    */
-  logIn?: boolean;
-  /**
-   * If the user should stay logged in. This option will not do anything
-   * unless `logIn` is set to `true`.
-   */
-  rememberLogIn?: boolean;
-
   user: User;
 }
 
@@ -41,7 +32,6 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
   user,
 }: EditProfileFormProps) => {
   const history = useHistory();
-  const session = useSessionContext();
   const [firstName, setFirstName] = useState<string>(user.first_name);
   const [lastName, setLastName] = useState<string>(user.last_name);
   const [email, setEmail] = useState<string>(user.email);
@@ -79,7 +69,7 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
     };
 
     UserAPI.editUser(user, password, address)
-      .then(() => history.push("/profile"))
+      .then(() => history.push("/login"))
       .catch((error) => {
         setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
       });
@@ -145,7 +135,7 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
         </InputGroup>
       </Form.Group>
 
-      {!user.is_staff ? <AddressFormPart onChange={setAddress} editingUser={user} /> : <br />}
+      {user.address ? <AddressFormPart onChange={setAddress} initial={user.address} /> : <br />}
 
       <Form.Group controlId="form-edit-password">
         <Form.Label>Bekreft passord</Form.Label>
@@ -161,18 +151,7 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
           <StyledButton variant="primary" type="submit">
             Rediger bruker
           </StyledButton>
-          <Button
-            variant="outline-info"
-            href={
-              session.user
-                ? !session.user.is_staff
-                  ? "/password"
-                  : "http://127.0.0.1:8000/admin/sellpoint_auth/user/" +
-                    session.user.id +
-                    "/change/"
-                : void 0
-            }
-          >
+          <Button variant="outline-info" href={"/editpassword"}>
             Rediger passord
           </Button>
         </CenteredRow>

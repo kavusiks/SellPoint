@@ -8,18 +8,6 @@ import { useSessionContext } from "../context/Session";
 const EditProfilePage: FunctionComponent = () => {
   const { error, setError } = useErrorState();
   const session = useSessionContext();
-  //const history = useHistory();
-  //const [user, setUser] = useState<User>();
-
-  //useAuthenticationPage();
-
-  /*
-  useEffect(() => {
-    if (session.user) {
-      setUser(session.user);
-    }
-  }, [session.user]);
-  */
 
   return (
     <Container fluid>
