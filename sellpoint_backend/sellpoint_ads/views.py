@@ -188,7 +188,21 @@ class AdNotSoldListView(generics.ListAPIView):
 
 
 @api_view(["GET"])
+def ad_all_by_user_list(request, id):
+    """
+    Fetches all ads by the given user
+    """
+
+    ads = Ad.objects.all().filter(owner=id)
+    serializer = AdSerializer(ads, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
 def category_all_list(request):
+    """
+    Fetches all categories
+    """
     categories = Category.objects.all()
     serializer = CategorySerializer(categories, many=True)
     return Response(serializer.data)
@@ -196,6 +210,9 @@ def category_all_list(request):
 
 @api_view(["GET"])
 def favorite_ads_list(request):
+    """
+    Fetches all FavorteeAd
+    """
     favorite_ads = FavoriteAd.objects.all()
     serializer = FavoriteAdSerializer(favorite_ads, many=True)
     return Response(serializer.data)
@@ -203,6 +220,9 @@ def favorite_ads_list(request):
 
 @api_view(["GET"])
 def get_category(request, pk):
+    """
+    Fetches category with the given id
+    """
     category = Category.objects.get(id=pk)
     serializer = CategorySerializer(category, many=False)
     return Response(serializer.data)
@@ -210,6 +230,9 @@ def get_category(request, pk):
 
 @api_view(["GET"])
 def favorite_detail_user(request, pk):
+    """
+    Fetches all FavoriteAd for the given user
+    """
     favorite_ad = FavoriteAd.objects.filter(user=pk).all()
     serializer = FavoriteAdSerializer(favorite_ad, many=True)
     return Response(serializer.data)
