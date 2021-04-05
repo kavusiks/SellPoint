@@ -187,15 +187,15 @@ class AdNotSoldListView(generics.ListAPIView):
     serializer_class = AdSerializer
 
 
-@api_view(["GET"])
-def ad_all_by_user_list(request, id):
+class AdAllByUserListView(generics.GenericAPIView):
     """
     Fetches all ads by the given user
     """
 
-    ads = Ad.objects.all().filter(owner=id)
-    serializer = AdSerializer(ads, many=True)
-    return Response(serializer.data)
+    def get(self, request, id):
+        ads = Ad.objects.all().filter(owner=id)
+        serializer = AdSerializer(ads, many=True, context=self.get_serializer_context())
+        return Response(serializer.data)
 
 
 @api_view(["GET"])
