@@ -5,6 +5,8 @@ import User from "../../models/user";
 import default_avatar from "../../static/profile_picture_holder.png";
 import "./index.css";
 import MarkedMap from "../Map";
+import { Ad } from "../../models/ad";
+import { AdListView } from "../ads/AdListView";
 
 /**
  * Props for a profile field
@@ -54,6 +56,10 @@ export interface ProfileDisplayProps {
    * The user that owns this profile
    */
   user: User;
+  /**
+   * The user's posted ads
+   */
+  ads?: Ad[];
 }
 
 /**
@@ -63,6 +69,7 @@ export interface ProfileDisplayProps {
  */
 export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
   user,
+  ads,
 }: ProfileDisplayProps) => {
   return (
     <>
@@ -92,6 +99,12 @@ export const ProfileDisplay: FunctionComponent<ProfileDisplayProps> = ({
                   {user.address.postalcode} {user.address.city} {user.address.country}
                 </ProfileField>
                 {user.address.geocode && <MarkedMap position={user.address.geocode} />}
+              </>
+            ) : null}
+            {ads ? (
+              <>
+                <ProfileField title="Brukerenes Annonser" />
+                <AdListView perRow={1} ads={ads} />
               </>
             ) : null}
           </Container>
