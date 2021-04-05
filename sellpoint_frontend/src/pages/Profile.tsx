@@ -120,7 +120,7 @@ const ProfilePage: FunctionComponent = () => {
                       : void 0
                   }
                 >
-                  Edit
+                  Rediger bruker
                 </Button>
               </ProfilePageTab>
             </Tab.Pane>

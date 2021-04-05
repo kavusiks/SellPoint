@@ -8,6 +8,7 @@ import { CenteredRow } from "../styled";
 import { FormProps } from "./FormParts";
 import { readDjangoError } from "../../core/client";
 import styled from "styled-components";
+import UserAPI from "../../core/api/user";
 
 const StyledButton = styled(Button)`
   margin: 10px;
@@ -41,13 +42,8 @@ export const EditPasswordForm: FunctionComponent<EditPasswordProps> = ({
 }: EditPasswordProps) => {
   const session = useSessionContext();
   const history = useHistory();
-  const [firstName] = useState<string>("");
-  const [lastName] = useState<string>("");
-  const [email] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [address] = useState<Address | undefined>(undefined);
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
   const [validated, setValidated] = useState<boolean>(false);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -58,76 +54,48 @@ export const EditPasswordForm: FunctionComponent<EditPasswordProps> = ({
     e.preventDefault();
 
     const form = e.target as HTMLFormElement;
-    if (!form.checkValidity() || !address || password !== confirmPassword) {
+    if (!form.checkValidity()) {
       e.stopPropagation();
       return;
     }
 
-    const user: User = {
-      email: email,
-      first_name: firstName,
-      last_name: lastName,
-      phone_number: phoneNumber,
-      address: address,
-    };
-
-    AuthenticationService.signUp(user, password, logIn, rememberLogIn)
-      .then(() => {
-        session
-          .updateSelfUser()
-          .then(() => history.push(logIn ? session.redirectPath ?? "/" : "/login"))
-          .catch((error) => {
-            setPassword("");
-            setConfirmPassword("");
-            setError("En uforventet error oppstod!");
-          });
-      })
+    UserAPI.editPassword(oldPassword, newPassword)
+      .then(() => history.push("/profile"))
       .catch((error) => {
-        setPassword("");
-        setConfirmPassword("");
+        setOldPassword("");
+        setNewPassword("");
         setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
       });
   };
 
   return (
     <Form noValidate validated={validated} onSubmit={onSubmit}>
-      <Form.Group controlId="form-signup-confirm-password">
-        <Form.Label>Gjenta passord</Form.Label>
+      <Form.Group controlId="form-edit-password">
+        <Form.Label>Gammelt passord</Form.Label>
         <Form.Control
           type="password"
-          placeholder="Passord"
           minLength={8}
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          isInvalid={validated && password !== confirmPassword}
+          value={oldPassword}
+          onChange={(e) => setOldPassword(e.target.value)}
+          isInvalid={validated}
+          required
+        />
+      </Form.Group>
+      <Form.Group controlId="form-edit-confirm-password">
+        <Form.Label>Nytt passord</Form.Label>
+        <Form.Control
+          type="password"
+          minLength={8}
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          isInvalid={validated}
           required
         />
       </Form.Group>
 
-      <Form.Group controlId="form-signup-phonenumber">
-        <Form.Label>Telefonnummer</Form.Label>
-        <InputGroup>
-          <InputGroup.Prepend>
-            <InputGroup.Text id="basic-addon1">+47</InputGroup.Text>
-          </InputGroup.Prepend>
-          <Form.Control
-            type="text"
-            pattern="[0-9]*"
-            minLength={8}
-            maxLength={17}
-            placeholder="Telefonnummer"
-            onChange={(e) => setPhoneNumber("+47" + e.target.value)}
-            required
-          />
-        </InputGroup>
-      </Form.Group>
-
       <CenteredRow noGutters>
-        <StyledButton variant="secondary" href="/login">
-          Log Inn
-        </StyledButton>
         <StyledButton variant="primary" type="submit">
-          Registrer
+          Endre passord
         </StyledButton>
       </CenteredRow>
     </Form>

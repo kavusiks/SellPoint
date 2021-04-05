@@ -7,6 +7,7 @@ import { CenteredRow } from "../styled";
 import { AddressFormPart, FormProps } from "./FormParts";
 import { readDjangoError } from "../../core/client";
 import styled from "styled-components";
+import { useSessionContext } from "../../context/Session";
 
 const StyledButton = styled(Button)`
   margin: 10px;
@@ -40,12 +41,12 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
   user,
 }: EditProfileFormProps) => {
   const history = useHistory();
+  const session = useSessionContext();
   const [firstName, setFirstName] = useState<string>(user.first_name);
   const [lastName, setLastName] = useState<string>(user.last_name);
   const [email, setEmail] = useState<string>(user.email);
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [address, setAddress] = useState<Address | undefined>(undefined);
   const [validated, setValidated] = useState<boolean>(false);
 
@@ -64,12 +65,8 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
     e.preventDefault();
 
     const form = e.target as HTMLFormElement;
-    if (!form.checkValidity() || !address || password !== confirmPassword) {
+    if (!form.checkValidity() || !address) {
       e.stopPropagation();
-      console.log("feil:" + e);
-      console.log(address);
-      console.log(password === confirmPassword);
-      console.log(form.checkValidity);
       return;
     }
 
@@ -81,12 +78,9 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
       address: address,
     };
 
-    console.log(user.first_name, "test");
     UserAPI.editUser(user, password, address)
-      .then(() => history.push("/login"))
+      .then(() => history.push("/profile"))
       .catch((error) => {
-        setPassword("");
-        setConfirmPassword("");
         setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
       });
   };
@@ -150,36 +144,39 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
           />
         </InputGroup>
       </Form.Group>
+
+      {!user.is_staff ? <AddressFormPart onChange={setAddress} editingUser={user} /> : <br />}
+
       <Form.Group controlId="form-edit-password">
-        <Form.Label>Passord</Form.Label>
+        <Form.Label>Bekreft passord</Form.Label>
         <Form.Control
           type="password"
           minLength={8}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          isInvalid={validated && password !== confirmPassword}
+          isInvalid={validated}
           required
         />
+        <CenteredRow noGutters>
+          <StyledButton variant="primary" type="submit">
+            Rediger bruker
+          </StyledButton>
+          <Button
+            variant="outline-info"
+            href={
+              session.user
+                ? !session.user.is_staff
+                  ? "/password"
+                  : "http://127.0.0.1:8000/admin/sellpoint_auth/user/" +
+                    session.user.id +
+                    "/change/"
+                : void 0
+            }
+          >
+            Rediger passord
+          </Button>
+        </CenteredRow>
       </Form.Group>
-      <Form.Group controlId="form-edit-confirm-password">
-        <Form.Label>Gjenta Passord</Form.Label>
-        <Form.Control
-          type="password"
-          minLength={8}
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          isInvalid={validated && password !== confirmPassword}
-          required
-        />
-      </Form.Group>
-
-      {!user.is_staff ? <AddressFormPart onChange={setAddress} editingUser={user} /> : <br />}
-
-      <CenteredRow noGutters>
-        <StyledButton variant="primary" type="submit">
-          Rediger
-        </StyledButton>
-      </CenteredRow>
     </Form>
   );
 };

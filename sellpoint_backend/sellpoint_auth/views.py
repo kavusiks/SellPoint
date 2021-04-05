@@ -12,6 +12,7 @@ from .serializer import (
     ChangePasswordSerializer,
 )
 from django.contrib.auth.models import User
+from django.contrib.auth.models import get_user_model
 
 
 class RegisterAPIView(generics.GenericAPIView):
@@ -67,12 +68,21 @@ class SelfAPIView(generics.GenericAPIView):
 
     def put(self, request, *args, **kwargs):
         user_self = self.request.user
+        #user_self1 = get_user_model.object.get(id=user_self)
         serializer = RegisterSerializer(user_self, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-        if request.data.get("password"):
-            user_self.set_password(request.data.get("password"))
+        
+       #if not user_self.check_password(request.user.password):
+        if 
+            print(self.request.user.password)
+            return Response(
+                {"password": ["Feil passord"]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
         user_self.save()
+        
 
         return Response({"user": UserSerializer(user_self).data})
 

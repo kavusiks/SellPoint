@@ -17,16 +17,10 @@ class UserAPI {
    * Edits the currenly logged in user.
    *
    * @param user-the user object with may edited fields
-   * @param password -the users password
    * @param address -  the users address with may edited fields
    * @returns the edited user
    */
   async editUser(user: User, password: string, address: Address): Promise<User> {
-    console.log("edituser " + user.email);
-    console.log(user.first_name);
-    console.log(user.last_name);
-    console.log(user.phone_number);
-
     const addressResponse = await client.put("auth/edit/address/", {
       line1: address.line1,
       line2: address.line2,
@@ -43,11 +37,18 @@ class UserAPI {
         phone_number: user.phone_number,
         password: password,
       });
-      console.log("i put request", userResponse.data);
       return userResponse.data;
     } else {
       return addressResponse.data;
     }
+  }
+
+  async editPassword(oldPassword: string, newPassword: string): Promise<any> {
+    const passwordResponse = await client.put("auth/change/password/", {
+      old_password: oldPassword,
+      new_password: newPassword,
+    });
+    return passwordResponse.data;
   }
 }
 
