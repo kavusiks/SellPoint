@@ -1,9 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
-import { Button, Form, InputGroup } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { useHistory } from "react-router";
-import { useSessionContext } from "../../context/Session";
-import AuthenticationService from "../../core/auth";
-import User, { Address } from "../../models/user";
 import { CenteredRow } from "../styled";
 import { FormProps } from "./FormParts";
 import { readDjangoError } from "../../core/client";
@@ -40,7 +37,6 @@ export const EditPasswordForm: FunctionComponent<EditPasswordProps> = ({
   logIn,
   rememberLogIn,
 }: EditPasswordProps) => {
-  const session = useSessionContext();
   const history = useHistory();
   const [oldPassword, setOldPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
