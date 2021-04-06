@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializer import (
@@ -112,3 +112,17 @@ class ChangePasswordView(APIView):
             self.object.save()
             return Response(status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VisitUserAPIView(generics.GenericAPIView):
+    """
+    REST API view for getting a user by the given email.
+    Supports GET requests
+    """
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get(self, request, id, *args, **kwargs):
+        user = get_user_model().objects.get(id=id)
+        user_self = UserSerializer(user, read_only=True)
+        return Response(user_self.data)

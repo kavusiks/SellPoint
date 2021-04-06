@@ -5,6 +5,7 @@ from .views import (
     RegisterAPIView,
     ChangePasswordView,
     AddressUpdateAPIView,
+    VisitUserAPIView,
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path("self/", SelfAPIView.as_view(), name="user-self"),
     path("change/password/", ChangePasswordView.as_view(), name="change-password"),
     path("edit/address/", AddressUpdateAPIView.as_view(), name="addres-edit"),
+    path("user/<int:id>/", VisitUserAPIView.as_view(), name="user-self"),
 ]

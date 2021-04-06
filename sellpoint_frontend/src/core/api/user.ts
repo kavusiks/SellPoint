@@ -51,6 +51,11 @@ class UserAPI {
     });
     return passwordResponse.data;
   }
+
+  async getUserToVisit(id: number): Promise<User> {
+    const response = await client.get(`auth/user/${id}/`);
+    return response.data;
+  }
 }
 
 export default new UserAPI();

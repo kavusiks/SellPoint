@@ -33,15 +33,15 @@ export interface Ad {
   /**
    * The title of the ad
    */
-  title?: string;
+  title: string;
   /**
    * The price
    */
-  price?: number;
+  price: number;
   /**
    * Description of the ad
    */
-  description?: string;
+  description: string;
   /**
    * When the ad was created
    */
@@ -63,7 +63,14 @@ export interface Ad {
    * All images uploaded for this ad
    */
   images?: AdImage[];
+  /**
+   * The category this ad is in
+   */
   category?: number;
+  /**
+   * The distance to this ad's owner
+   */
+  distance?: number;
 }
 
 export interface Category {

@@ -57,13 +57,19 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
   const [isFavorite, setIsFavorite] = useState<boolean>();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showToast, setToast] = useState(false);
+  const [adCategoryName, setAdCategoryName] = useState<string>("");
+
+  useEffect(() => {
+    if (!ad.category) {
+      return;
+    }
+    AdAPI.getCategoryById(ad.category).then((categoryName) => setAdCategoryName(categoryName.name));
+  }, [ad.category]);
 
   useEffect(() => {
     if (session.user?.id) {
       AdAPI.getAllFavoritesByUserId(session.user.id).then((favorites) =>
-        favorites.filter((a) => a.favorite_ad === ad.id).length
-          ? setIsFavorite(true)
-          : setIsFavorite(false),
+        setIsFavorite(favorites.filter((a) => a.favorite_ad === ad.id).length !== 0),
       );
     }
   }, [session.user, ad.id]);
@@ -158,17 +164,13 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
               <Heart /> Lagre annonsen
             </Button>
             <br />
-
-            <hr style={{ width: "100%", margin: "10px 0px 10px 0px" }} />
-            <div className="ad desc">
-              <p>{ad.description}</p>
-            </div>
-            {children}
           </>
         )
       ) : null
     ) : null;
   };
+
+  const dist = ad.distance ?? 0;
 
   return (
     <>
@@ -206,37 +208,45 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
           </Toast.Header>
         </Toast>
 
-        {
-          // Check if this is our own ad, if so we should display edit buttons etc.
-          session.user && ad.owner?.email === session.user.email ? (
-            <SpaceBetweenCenterRow noGutters>
-              <h2>
-                {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
-              </h2>
-              <RightCenterRow noGutters>
+        <SpaceBetweenCenterRow noGutters>
+          <h2>
+            {ad.title} {ad.category ? <Badge variant="info">{adCategoryName}</Badge> : null}{" "}
+            {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
+          </h2>
+          <RightCenterRow noGutters>
+            {
+              // Check if this is our own ad, if so we should display edit buttons etc.
+              session.user && ad.owner?.email === session.user.email ? (
                 <AdModifyDialog ad={ad} onDeleted={() => history.push("/")} />
-              </RightCenterRow>
-              <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
-            </SpaceBetweenCenterRow>
-          ) : (
-            <LeftCenterRow noGutters>
-              <div className="ad title">
-                <h1>
-                  {ad.title} {ad.is_sold ? <Badge variant="success">Solgt!</Badge> : null}
-                </h1>
-              </div>
-              <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
-            </LeftCenterRow>
-          )
-        }
+              ) : (
+                <p>
+                  {dist <= 0
+                    ? null
+                    : (dist <= 1 ? "< 1 " : `~${ad.distance}`) + " km unna din addresse"}
+                </p>
+              )
+            }
+          </RightCenterRow>
+          <hr style={{ width: "100%", margin: "0px 0px 10px 0px" }} />
+        </SpaceBetweenCenterRow>
 
         <LeftCenterRow noGutters>
           <div className="ad info">
             <p>
               {makeFavoriteButton()}
+              <>
+                <hr style={{ width: "100%", margin: "10px 0px 10px 0px" }} />
+                <div className="ad desc">
+                  <p>{ad.description}</p>
+                </div>
+                {children}
+              </>
               <strong>Pris:</strong> {ad.price},-
               <br />
-              <strong>Selger: </strong> {ad.owner?.first_name} {ad.owner?.last_name}
+              <strong>Selger: </strong>{" "}
+              <a href={`/visit-profile/${ad.owner?.id}`}>
+                {ad.owner?.first_name} {ad.owner?.last_name}
+              </a>
               <br />
               <strong>Telefonnummer: </strong> {ad.owner?.phone_number}
               <br />
@@ -254,6 +264,7 @@ export const LargeAd: FunctionComponent<AdComponentProps> = ({
                 <Button
                   href={"http://127.0.0.1:8000/admin/sellpoint_ads/ad/" + ad.id + "/change/"}
                   variant="outline-primary"
+                  target="_blank"
                 >
                   Rediger Annonse
                 </Button>

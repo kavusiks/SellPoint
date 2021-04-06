@@ -43,8 +43,6 @@ export const EditPasswordForm: FunctionComponent<FormProps> = ({ setError }: For
       .then(() => history.push("/login"))
       .catch((error) => {
         setOldPassword("");
-        setNewPassword("");
-        setConfirmNewPassword("");
         setError(error.response ? readDjangoError(error.response) : "En uforventet error oppstod!");
       });
   };
