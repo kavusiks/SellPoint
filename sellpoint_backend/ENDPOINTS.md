@@ -109,25 +109,25 @@ Returns the user with the given id
 
 ```json
 {
-    "email": "user@email.com",
-    "first_name": "Firstname",
-    "last_name": "Lastname",
-    "phone_number": "+4799999998",
-    "last_login": null,
-    "address": {
-        "line1": "Address line1",
-        "line2": "Address line2 (optional)",
-        "postalcode": "postalcode",
-        "city": "City",
-        "country": "Country",
-        "geocode": {
-            "lat": 59.9138688,
-            "lng": 10.7522454
-        }
-    },
-    "date_joined": "2021-03-31T22:00:53Z",
-    "is_staff": false,
-    "id": 2
+  "email": "user@email.com",
+  "first_name": "Firstname",
+  "last_name": "Lastname",
+  "phone_number": "+4799999998",
+  "last_login": null,
+  "address": {
+    "line1": "Address line1",
+    "line2": "Address line2 (optional)",
+    "postalcode": "postalcode",
+    "city": "City",
+    "country": "Country",
+    "geocode": {
+      "lat": 59.9138688,
+      "lng": 10.7522454
+    }
+  },
+  "date_joined": "2021-03-31T22:00:53Z",
+  "is_staff": false,
+  "id": 2
 }
 ```
 
@@ -144,6 +144,91 @@ Fetch information about the currently logged in user.
   "last_name": "Last Name",
   "phone_number": "Phone Number",
   "last_login": "2021-02-17T14:59:08.337785Z",
+  "address": {
+    "line1": "Address line 1",
+    "line2": "Address line 2 (Optional)",
+    "postalcode": "1234",
+    "city": "City",
+    "country": "Country"
+  }
+}
+```
+
+## PUT auth/self/
+
+Edit the user
+
+### Request
+
+```json
+{
+  "email": "your@email.com",
+  "first_name": "First Name",
+  "last_name": "Last Name",
+  "phone_number": "Phone Number",
+  "last_login": "2021-02-17T14:59:08.337785Z"
+}
+```
+
+### Response
+
+```json
+{
+  "user": {
+    "email": "your@email.com",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "phone_number": "Phone Number",
+    "last_login": "2021-02-17T14:59:08.337785Z",
+    "address": {
+      "line1": "Address line 1",
+      "line2": "Address line 2 (Optional)",
+      "postalcode": "1234",
+      "city": "City",
+      "country": "Country"
+    },
+    "date_joined": "2021-04-06T13:39:37.766908Z",
+    "is_staff": true,
+    "id": 8
+  }
+}
+```
+
+## PUT auth/change/password/
+
+Edit he user's password.
+
+## Request
+
+```json
+{
+  "old_password": "password123",
+  "new_password": "password12345679"
+}
+```
+
+## PUT auth/edit/address/
+
+Edit the user's address.
+
+## Request
+
+```json
+{
+  "address": {
+    "line1": "Address line 1",
+    "line2": "Address line 2 (Optional)",
+    "postalcode": "1234",
+    "city": "City",
+    "country": "Country"
+  }
+}
+```
+
+## Response
+
+```json
+{
   "address": {
     "line1": "Address line 1",
     "line2": "Address line 2 (Optional)",
@@ -423,7 +508,6 @@ Return a list with all the ads created by given user
     },
 ```
 
-
 ## POST ad/create/image/$id/
 
 Create an image
@@ -464,7 +548,6 @@ Update the description of an image. Accepts form data "description".
 
 Delete the given image.
 
-
 ## GET ad/category/list/
 
 Returns a list of all the possible categories.
@@ -473,18 +556,18 @@ Returns a list of all the possible categories.
 
 ```json
 [
-    {
-        "id": 1,
-        "name": "Bil"
-    },
-    {
-        "id": 2,
-        "name": "Fritid"
-    },
-    {
-        "id": 3,
-        "name": "Dyr"
-    }
+  {
+    "id": 1,
+    "name": "Bil"
+  },
+  {
+    "id": 2,
+    "name": "Fritid"
+  },
+  {
+    "id": 3,
+    "name": "Dyr"
+  }
 ]
 ```
 
@@ -495,10 +578,9 @@ Returns the given category.
 ### Response
 
 ```json
-
 {
-    "id": 1,
-    "name": "Bil"
+  "id": 1,
+  "name": "Bil"
 }
 ```
 
@@ -509,17 +591,16 @@ Returns a list of all exisiting favorited ads by user combination.
 ### Response
 
 ```json
-
 [
-    {
-        "id": 1,
-        "user": 7,
-        "favorite_ad": 5
-    },
-        {
-        "id": 2,
-        "user": 5,
-        "favorite_ad": 4
-    }
+  {
+    "id": 1,
+    "user": 7,
+    "favorite_ad": 5
+  },
+  {
+    "id": 2,
+    "user": 5,
+    "favorite_ad": 4
+  }
 ]
 ```
