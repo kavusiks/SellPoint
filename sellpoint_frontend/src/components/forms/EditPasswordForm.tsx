@@ -93,6 +93,9 @@ export const EditPasswordForm: FunctionComponent<FormProps> = ({ setError }: For
       </Form.Group>
 
       <CenteredRow noGutters>
+        <StyledButton variant="secondary" href="/editprofile">
+          Gå tilbake
+        </StyledButton>
         <StyledButton variant="primary" type="submit">
           Endre passord
         </StyledButton>

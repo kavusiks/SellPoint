@@ -148,6 +148,9 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
           required
         />
         <CenteredRow noGutters>
+          <StyledButton variant="secondary" href="/profile">
+            Gå tilbake
+          </StyledButton>
           <StyledButton variant="primary" type="submit">
             Rediger bruker
           </StyledButton>
