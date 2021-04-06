@@ -165,7 +165,7 @@ Edit the user
   "email": "your@email.com",
   "first_name": "First Name",
   "last_name": "Last Name",
-  "phone_number": "Phone Number",
+  "phone_number": "+4799889988",
   "last_login": "2021-02-17T14:59:08.337785Z"
 }
 ```
@@ -178,7 +178,7 @@ Edit the user
     "email": "your@email.com",
     "first_name": "First Name",
     "last_name": "Last Name",
-    "phone_number": "Phone Number",
+    "phone_number": "+4799889988",
     "last_login": "2021-02-17T14:59:08.337785Z",
     "address": {
       "line1": "Address line 1",
@@ -206,6 +206,10 @@ Edit he user's password.
   "new_password": "password12345679"
 }
 ```
+
+## Response
+
+HTTP_204_NO_CONTENT
 
 ## PUT auth/edit/address/
 
@@ -583,10 +587,53 @@ Returns the given category.
   "name": "Bil"
 }
 ```
+## GET ad/list/bycategory/$category_id/
+
+Returns a list of all ads with the given category.
+
+### Response
+
+The same as `ad/list/`, but filtered on `category = category_id`.
+
+## POST /ad/favorite/create/
+
+Creates a favorited-ad-by-user with the given request details.
+
+### Request
+
+Accepts `application/json`.
+
+```json
+{
+    "user": 7,
+    "favorite_ad": 4
+}
+```
+
+### Response
+
+Returns the favorited-ad-by-user that was created.
+
+```json
+{
+    "user": 7,
+    "favorite_ad": 4
+}
+```
+
+## DELETE /ad/favorite/$user_id-$ad_id/
+
+Deletes the given favorited-ad-by-user.
+
+
+### Response
+
+"Item successfully deleted!"
+
 
 ## GET ad/favorite/list/
 
-Returns a list of all exisiting favorited ads by user combination.
+Returns a list of all exisiting favorited-ads-by-user combinations.
 
 ### Response
 
@@ -603,4 +650,36 @@ Returns a list of all exisiting favorited ads by user combination.
     "favorite_ad": 4
   }
 ]
+```
+
+## GET ad/favorite/list/self/
+
+Returns a list of all favorited-ads-by-user combinations for the user sending the request .
+
+### Response
+
+The same as `ad/favorite/list`, but filtered on `user = requesting_user.id`.
+
+
+## GET ad/favorite/user/$id/
+
+Returns a list of all favorited-ads-by-user combinations for the given user .
+
+### Response
+
+The same as `ad/favorite/list`, but filtered on `user = user.id`.
+
+
+## GET ad/favorite/detail/$user_id-$ad_id/
+
+Returns favorited-ads-by-user combination the given user and ad .
+
+### Response
+
+```json
+{
+    "id": 2,
+    "user": 7,
+    "favorite_ad": 5
+}
 ```
