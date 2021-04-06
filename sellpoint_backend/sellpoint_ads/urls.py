@@ -18,7 +18,7 @@ urlpatterns = [
         name="ad-by-user-list",
     ),
     path("category/list/", views.category_all_list, name="category-list"),
-    path("category/<str:pk>/", views.get_category, name="category"),
+    path("category/<str:id>/", views.get_category, name="category"),
     path("favorite/list/", views.favorite_ads_list, name="favorite-list"),
     path(
         "favorite/create/",

@@ -191,6 +191,7 @@ class AdAllByUserListView(generics.GenericAPIView):
     """
     Fetches all ads by the given user
     """
+
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
