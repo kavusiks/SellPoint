@@ -101,6 +101,36 @@ Register a new user
 }
 ```
 
+## GET /auth/user/$id/
+
+Returns the user with the given id
+
+### Response
+
+```json
+{
+    "email": "user@email.com",
+    "first_name": "Firstname",
+    "last_name": "Lastname",
+    "phone_number": "+4799999998",
+    "last_login": null,
+    "address": {
+        "line1": "Address line1",
+        "line2": "Address line2 (optional)",
+        "postalcode": "postalcode",
+        "city": "City",
+        "country": "Country",
+        "geocode": {
+            "lat": 59.9138688,
+            "lng": 10.7522454
+        }
+    },
+    "date_joined": "2021-03-31T22:00:53Z",
+    "is_staff": false,
+    "id": 2
+}
+```
+
 ## GET auth/self/
 
 Fetch information about the currently logged in user.
@@ -319,6 +349,81 @@ Return a list with all the ads created by user logged in
 ]
 ```
 
+## GET ad/list-by-user/$id/
+
+Return a list with all the ads created by given user
+
+### Response
+
+```json
+{
+        "id": 1,
+        "owner": {
+            "id": 1,
+            "email": "user@email.com",
+            "first_name": "user",
+            "last_name": "account",
+            "phone_number": "+4799999999"
+        },
+        "thumbnail": {
+            "id": 1,
+            "url": "http://localhost:8000/ad/image/1/",
+            "description": null
+        },
+        "images": [
+            {
+                "id": 1,
+                "url": "http://localhost:8000/ad/image/1/",
+                "description": null
+            }
+        ],
+        "distance": -1,
+        "title": "dyr",
+        "description": "Test1",
+        "price": 100,
+        "created_at": "2021-04-05T07:45:04.464893Z",
+        "last_modified": "2021-04-05T07:45:04.464932Z",
+        "is_sold": false,
+        "category": 1
+    },
+    {
+        "id": 1,
+        "owner": {
+            "id": 1,
+            "email": "user@email.com",
+            "first_name": "user",
+            "last_name": "account",
+            "phone_number": "+4799999999"
+        },
+        "thumbnail": {
+            "id": 2,
+            "url": "http://localhost:8000/ad/image/2/",
+            "description": "21 gir"
+        },
+        "images": [
+            {
+                "id": 2,
+                "url": "http://localhost:8000/ad/image/2/",
+                "description": "god som ny"
+            },
+            {
+                "id": 3,
+                "url": "http://localhost:8000/ad/image/3/",
+                "description": "ubrukt"
+            }
+        ],
+        "distance": -1,
+        "title": "Sykkel",
+        "description": "Ubrukt sykkel",
+        "price": 1000,
+        "created_at": "2021-04-05T07:45:47.257834Z",
+        "last_modified": "2021-04-05T07:45:47.257927Z",
+        "is_sold": false,
+        "category": 1
+    },
+```
+
+
 ## POST ad/create/image/$id/
 
 Create an image
@@ -358,3 +463,63 @@ Update the description of an image. Accepts form data "description".
 ## DELETE ad/image/$id/
 
 Delete the given image.
+
+
+## GET ad/category/list/
+
+Returns a list of all the possible categories.
+
+### Response
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Bil"
+    },
+    {
+        "id": 2,
+        "name": "Fritid"
+    },
+    {
+        "id": 3,
+        "name": "Dyr"
+    }
+]
+```
+
+## GET ad/category/$id/
+
+Returns the given category.
+
+### Response
+
+```json
+
+{
+    "id": 1,
+    "name": "Bil"
+}
+```
+
+## GET ad/favorite/list/
+
+Returns a list of all exisiting favorited ads by user combination.
+
+### Response
+
+```json
+
+[
+    {
+        "id": 1,
+        "user": 7,
+        "favorite_ad": 5
+    },
+        {
+        "id": 2,
+        "user": 5,
+        "favorite_ad": 4
+    }
+]
+```
