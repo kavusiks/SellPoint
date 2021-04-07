@@ -48,7 +48,6 @@ export const EditProfileForm: FunctionComponent<EditProfileFormProps> = ({
   }, [user.phone_number]);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("KJører onSUbmit");
     // We use a state for this so that validation doesn't display
     // until after the first submission attempt
     setValidated(true);
