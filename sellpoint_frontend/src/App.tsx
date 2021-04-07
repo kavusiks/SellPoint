@@ -9,6 +9,8 @@ import RegisterPage from "./pages/Register";
 import ProfilePage from "./pages/Profile";
 import AdViewPage from "./pages/AdView";
 import CreateAdPage from "./pages/CreateAd";
+import EditProfilePage from "./pages/EditProfile";
+import EditPasswordPage from "./pages/EditPassword";
 import EditAdPage from "./pages/EditAd";
 import VisitProfilePage from "./pages/VisitProfile";
 import { NotFoundPage } from "./pages/NotFound";
@@ -32,7 +34,20 @@ const App: FunctionComponent = () => {
 
         <Route path="/ad/:id" component={AdViewPage} exact />
         <Route path="/login" component={LoginPage} exact />
+        <ProtectedRoute
+          {...protectedRouteProps}
+          path="/editprofile"
+          component={EditProfilePage}
+          exact
+        />
         <Route path="/register" component={RegisterPage} exact />
+        <ProtectedRoute
+          {...protectedRouteProps}
+          path="/editpassword"
+          component={EditPasswordPage}
+          exact
+        />
+        <ProtectedRoute {...protectedRouteProps} path="/profile" component={ProfilePage} exact />
         <ProtectedRoute
           {...protectedRouteProps}
           path="/visit-profile/:id"

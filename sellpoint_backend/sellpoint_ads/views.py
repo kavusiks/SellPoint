@@ -192,6 +192,10 @@ class AdAllByUserListView(generics.GenericAPIView):
     Fetches all ads by the given user
     """
 
+    queryset = Ad.objects.all()
+    serializer_class = AdSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
     def get(self, request, id):
         ads = Ad.objects.all().filter(owner=id)
         serializer = AdSerializer(ads, many=True, context=self.get_serializer_context())
@@ -219,11 +223,11 @@ def favorite_ads_list(request):
 
 
 @api_view(["GET"])
-def get_category(request, pk):
+def get_category(request, id):
     """
     Fetches category with the given id
     """
-    category = Category.objects.get(id=pk)
+    category = Category.objects.get(id=id)
     serializer = CategorySerializer(category, many=False)
     return Response(serializer.data)
 
