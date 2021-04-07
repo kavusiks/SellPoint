@@ -43,7 +43,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def update(self, instance, validated_data):
-        print("kaller update")
         instance.email = validated_data.get("email", instance.email)
         instance.password = validated_data.get("password", instance.password)
         instance.first_name = validated_data.get("first_name", instance.first_name)
